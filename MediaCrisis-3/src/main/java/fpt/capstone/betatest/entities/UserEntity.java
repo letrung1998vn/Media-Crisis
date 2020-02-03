@@ -7,29 +7,29 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Login1")
+@Table(name="[User]")
 public class UserEntity {
 	@Id
-	@GeneratedValue
-	@Column(name="ID", nullable=false)
-	private Long id;
+//	@GeneratedValue
+//	@Column(name="ID", nullable=false)
+//	private Long id;
 	
-	@Column(name="username", nullable=false)
+	@Column(name="UserName", nullable=false)
 	private String username;
 	
-	@Column(name="password", nullable=false)
+	@Column(name="Password", nullable=false)
 	private String password;
 	
-	@Column(name="role", nullable=false)
+	@Column(name="Role", nullable=false)
 	private String role;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	public String getUsername() {
 		return username;
@@ -57,7 +57,8 @@ public class UserEntity {
 
 	@Override
 	public String toString() {
-		return "UserEntity [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+//		return "UserEntity [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
+		return "UserEntity [username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
 	
 	

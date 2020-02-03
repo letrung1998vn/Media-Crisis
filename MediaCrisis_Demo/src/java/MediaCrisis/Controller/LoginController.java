@@ -46,7 +46,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://192.168.1.18:8080/login/?"; 
+            String url = "http://192.168.1.173:8181/login/?"; 
             String nextPage = "";
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
@@ -75,7 +75,7 @@ public class LoginController extends HttpServlet {
         UserLogin userDTO = new UserLogin();
             try {
                 JSONObject jobj = new JSONObject(rp.toString());
-                userDTO.setId(Integer.parseInt(jobj.get("id").toString()));
+//                userDTO.setId(Integer.parseInt(jobj.get("id").toString()));
                 userDTO.setUsername(jobj.get("username").toString());
                 userDTO.setPassword(jobj.get("password").toString());
                 userDTO.setRole(jobj.get("role").toString());

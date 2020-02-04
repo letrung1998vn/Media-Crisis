@@ -46,7 +46,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://192.168.1.173:8181/login/?"; 
+            String url = "https://media-crisis-api.herokuapp.com/login/?"; 
             String nextPage = "";
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
@@ -67,9 +67,9 @@ public class LoginController extends HttpServlet {
         while ((readLine = in.readLine()) != null) {
             rp.append(readLine);
         } in.close();
-        System.out.println("JSON String Result " + rp.toString());
+//        System.out.println("JSON String Result " + rp.toString());
     } else {
-        System.out.println("Không kết nối được với api");
+//        System.out.println("Không kết nối được với api");
         nextPage = error;
     }
         UserLogin userDTO = new UserLogin();

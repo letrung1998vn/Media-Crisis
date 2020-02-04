@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -29,7 +30,8 @@ public class MainController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String loginController = "LoginController";
-    private final String loginPage = "login.html";
+    private final String loginPage = "login_JSP.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -41,6 +43,10 @@ public class MainController extends HttpServlet {
                 //do nothing
             } else if (button.equals("Login")) {
                 url = loginController;
+            } else if (button.equals("LogOut")) {
+                HttpSession session = request.getSession();
+                session.invalidate();
+                url = loginPage;
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

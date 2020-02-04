@@ -21,5 +21,8 @@
         <%
             out.print("Your role is: "+ result.getRole()); 
         %> 
+        <form action="MainController">
+            <input type="submit" value="LogOut" name="btnAction" />
+        </form>
     </body>
 </html>

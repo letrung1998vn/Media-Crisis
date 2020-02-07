@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -43,7 +46,7 @@ public class LoginController extends HttpServlet {
     private final String error = "error.html";
     private final String mainPage = "mainPage_JSP.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, JSONException {
+            throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String url = "https://media-crisis-api.herokuapp.com/login/?"; 
@@ -53,7 +56,17 @@ public class LoginController extends HttpServlet {
             url += "username=";
             url += username;
             url += "&password=";
-            url += password;
+            
+            //Hash password
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : passwordInByte) {
+                sb.append(String.format("%02x", b));
+            }
+            url += sb.toString();
+            System.out.println(url);
+            
             URL urlForGetRequest = new URL(url);
     String readLine = null;        
     HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
@@ -106,6 +119,8 @@ public class LoginController extends HttpServlet {
             processRequest(request, response);
         } catch (JSONException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -123,6 +138,8 @@ public class LoginController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (JSONException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

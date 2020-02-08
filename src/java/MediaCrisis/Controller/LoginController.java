@@ -45,18 +45,19 @@ public class LoginController extends HttpServlet {
      */
     private final String error = "error.html";
     private final String mainPage = "mainPage_JSP.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/login/?"; 
+            String url = "https://media-crisis-api.herokuapp.com/login/?";
             String nextPage = "";
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
             url += "username=";
             url += username;
             url += "&password=";
-            
+
             //Hash password
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -66,26 +67,27 @@ public class LoginController extends HttpServlet {
             }
             url += sb.toString();
             System.out.println(url);
-            
+
             URL urlForGetRequest = new URL(url);
-    String readLine = null;        
-    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-    conection.setRequestMethod("GET");
-    int responseCode = conection.getResponseCode();
-    StringBuffer rp = new StringBuffer();
-    
-    if (responseCode == HttpURLConnection.HTTP_OK) {
-        BufferedReader in = new BufferedReader(
-        new InputStreamReader(conection.getInputStream()));
-        while ((readLine = in.readLine()) != null) {
-            rp.append(readLine);
-        } in.close();
-//        System.out.println("JSON String Result " + rp.toString());
-    } else {
-//        System.out.println("Không kết nối được với api");
-        nextPage = error;
-    }
-        UserLogin userDTO = new UserLogin();
+            String readLine = null;
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("GET");
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+        System.out.println("JSON String Result " + rp.toString());
+            } else {
+        System.out.println("Không kết nối được với api");
+                nextPage = error;
+            }
+            UserLogin userDTO = new UserLogin();
             try {
                 JSONObject jobj = new JSONObject(rp.toString());
 //                userDTO.setId(Integer.parseInt(jobj.get("id").toString()));
@@ -96,10 +98,10 @@ public class LoginController extends HttpServlet {
             } catch (Exception e) {
                 nextPage = error;
             }
-        HttpSession session = request.getSession();
-        session.setAttribute("USERLOGIN", userDTO);
-    RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-    rd.forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("USERLOGIN", userDTO);
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

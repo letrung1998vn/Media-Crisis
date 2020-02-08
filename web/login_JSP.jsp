@@ -39,14 +39,14 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form" action="MainController" method="post">
+				<form class="login100-form validate-form-login" action="MainController" method="post">
 					<span class="login100-form-title p-b-26">
 						Welcome
 					</span>
 					<span class="login100-form-title p-b-48">
 						<img src="images/logoMC.jpg" class="logoMC"/>
 					</span>
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">
 						<input class="input100" type="text" name="txtUsername">
 						<span class="focus-input100" data-placeholder="Username"></span>
 					</div>
@@ -73,7 +73,7 @@
 							Don't have an account?
 						</span>
 
-						<a class="txt2" href="#">
+						<a class="txt2" href="signup_JSP.jsp">
 							Sign Up
 						</a>
 					</div>

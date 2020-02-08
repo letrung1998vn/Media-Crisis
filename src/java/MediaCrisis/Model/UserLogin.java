@@ -10,25 +10,15 @@ package MediaCrisis.Model;
  * @author Administrator
  */
 public class UserLogin {
-    private int id;
     String username, password, role;
 
     public UserLogin() {
     }
 
-    public UserLogin(int id, String username, String password, String role) {
-        this.id = id;
+    public UserLogin(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -57,7 +47,7 @@ public class UserLogin {
 
     @Override
     public String toString() {
-        return "UserLogin{" + "id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + '}';
+        return "UserLogin{" + " username=" + username + ", password=" + password + ", role=" + role + '}';
     }
     
     

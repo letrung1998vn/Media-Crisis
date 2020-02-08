@@ -25,7 +25,7 @@
         var check = true;
 
         for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
+            if(validateLogin(input[i]) == false){
                 showValidate(input[i]);
                 check=false;
             }
@@ -38,7 +38,7 @@
         var check = true;
 
         for(var i=0; i<input.length; i++) {
-            if(validate(input[i]) == false){
+            if(validateSignup(input[i]) == false){
                 showValidate(input[i]);
                 check=false;
             }
@@ -58,7 +58,7 @@
            hideValidate(this);
         });
     });
-    function validate (input) {
+    function validateSignup (input) {
         if($(input).attr('type') == 'email' || $(input).attr('name') == 'txtEmail') {
             if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
                 return false;
@@ -76,6 +76,14 @@
                 return false;
             }
         }
+    }
+    
+    function validateLogin (input) {
+
+            if($(input).val().trim() == ''){
+                return false;
+            }
+
     }
 
     function showValidate(input) {

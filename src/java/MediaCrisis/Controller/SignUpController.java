@@ -7,18 +7,18 @@ package MediaCrisis.Controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Administrator
  */
-public class MainController extends HttpServlet {
+@WebServlet(name = "SignUpController", urlPatterns = {"/SignUpController"})
+public class SignUpController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,30 +29,15 @@ public class MainController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String loginController = "LoginController";
-    private final String signupController = "SignUpController";
-    private final String loginPage = "login_JSP.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String button = request.getParameter("btnAction");
-            String url = loginPage;
-            if (button == null) {
-                System.out.println("Btn bị null");
-                //do nothing
-            } else if (button.equals("Login")) {
-                url = loginController;
-            } else if (button.equals("SignUp")) {
-                url = signupController;
-            } else if (button.equals("LogOut")) {
-                HttpSession session = request.getSession();
-                session.invalidate();
-                url = loginPage;
-            }
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            /* TODO output your page here. You may use following sample code. */
+            String username = request.getParameter("txtUsername");
+            String password = request.getParameter("txtPassword");
+            String name = request.getParameter("txtName");
+            String email = request.getParameter("txtEmail");
         }
     }
 

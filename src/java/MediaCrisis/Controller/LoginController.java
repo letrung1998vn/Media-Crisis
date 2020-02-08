@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/login/?";
+            String url = "https://media-crisis-api.herokuapp.com/user/login/?";
             String nextPage = "";
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
@@ -74,7 +74,8 @@ public class LoginController extends HttpServlet {
             conection.setRequestMethod("GET");
             int responseCode = conection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-
+            UserLogin userDTO = new UserLogin();
+            
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(conection.getInputStream()));
@@ -82,20 +83,19 @@ public class LoginController extends HttpServlet {
                     rp.append(readLine);
                 }
                 in.close();
-        System.out.println("JSON String Result " + rp.toString());
+                System.out.println("JSON String Result " + rp.toString());
+                try {
+                    JSONObject jobj = new JSONObject(rp.toString());
+                    userDTO.setUsername(jobj.get("userName").toString());
+                    userDTO.setPassword(jobj.get("password").toString());
+                    userDTO.setRole(jobj.get("role").toString());
+                    nextPage = mainPage;
+                } catch (Exception e) {
+                    System.out.println("ko parse duoc ve json object");
+                    nextPage = error;
+                }
             } else {
         System.out.println("Không kết nối được với api");
-                nextPage = error;
-            }
-            UserLogin userDTO = new UserLogin();
-            try {
-                JSONObject jobj = new JSONObject(rp.toString());
-//                userDTO.setId(Integer.parseInt(jobj.get("id").toString()));
-                userDTO.setUsername(jobj.get("username").toString());
-                userDTO.setPassword(jobj.get("password").toString());
-                userDTO.setRole(jobj.get("role").toString());
-                nextPage = mainPage;
-            } catch (Exception e) {
                 nextPage = error;
             }
             HttpSession session = request.getSession();

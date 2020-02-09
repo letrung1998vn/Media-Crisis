@@ -7,6 +7,11 @@ package MediaCrisis.Controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +35,7 @@ public class SignUpController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -38,6 +43,26 @@ public class SignUpController extends HttpServlet {
             String password = request.getParameter("txtPassword");
             String name = request.getParameter("txtName");
             String email = request.getParameter("txtEmail");
+            String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
+            String nextPage = "";
+
+            url += "username=";
+            url += username;
+            url += "&password=";
+
+            //Hash password
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : passwordInByte) {
+                sb.append(String.format("%02x", b));
+            }
+            url += sb.toString();
+            url += "&name=";
+            url += name;
+            url += "&email=";
+            url += email;
+            System.out.println(url);
         }
     }
 
@@ -53,7 +78,11 @@ public class SignUpController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -67,7 +96,11 @@ public class SignUpController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

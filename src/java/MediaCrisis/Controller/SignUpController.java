@@ -5,18 +5,25 @@
  */
 package MediaCrisis.Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
@@ -34,6 +41,10 @@ public class SignUpController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    private final String error = "error.html";
+    private final String loginPage = "login_JSP.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
@@ -44,7 +55,7 @@ public class SignUpController extends HttpServlet {
             String name = request.getParameter("txtName");
             String email = request.getParameter("txtEmail");
             String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
-            String nextPage = "";
+            String nextPage = loginPage;
 
             url += "username=";
             url += username;
@@ -62,7 +73,36 @@ public class SignUpController extends HttpServlet {
             url += name;
             url += "&email=";
             url += email;
-            System.out.println(url);
+            URL urlForGetRequest = new URL(url);
+            String readLine = null;
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+                try {
+                    //Gửi mail verify email
+                } catch (Exception e) {
+                    System.out.println("Gui mail fail");
+                    nextPage = error;
+                }
+                nextPage = loginPage;
+                request.setAttribute("SIGNUP_MESSAGE", "Signed up successfully, please login!");
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+            HttpSession session = request.getSession();
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

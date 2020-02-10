@@ -95,7 +95,7 @@ public class LoginController extends HttpServlet {
                     nextPage = error;
                 }
             } else {
-        System.out.println("Không kết nối được với api");
+                System.out.println("Loi api roi");
                 nextPage = error;
             }
             HttpSession session = request.getSession();

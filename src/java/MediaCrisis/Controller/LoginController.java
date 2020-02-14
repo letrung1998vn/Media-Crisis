@@ -5,7 +5,7 @@
  */
 package MediaCrisis.Controller;
 
-import MediaCrisis.Model.UserLogin;
+import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -74,7 +74,7 @@ public class LoginController extends HttpServlet {
             conection.setRequestMethod("GET");
             int responseCode = conection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-            UserLogin userDTO = new UserLogin();
+            User userDTO = new User();
             
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
@@ -86,9 +86,15 @@ public class LoginController extends HttpServlet {
                 System.out.println("JSON String Result " + rp.toString());
                 try {
                     JSONObject jobj = new JSONObject(rp.toString());
-                    userDTO.setUsername(jobj.get("userName").toString());
-                    userDTO.setPassword(jobj.get("password").toString());
-                    userDTO.setRole(jobj.get("role").toString());
+                    System.out.println("JSONObj after parse" + jobj.toString());
+                    userDTO.setName(jobj.get("name").toString());
+                    userDTO.setUsername(jobj.get("userId").toString());
+                    JSONObject jobj1 = new JSONObject(jobj.get("user").toString());
+                    System.out.println("JSONObj inside" + jobj1.toString());
+                    userDTO.setPassword(jobj1.get("password").toString());
+                    userDTO.setRole(jobj1.get("role").toString());
+                    userDTO.setEmail(jobj.get("email").toString());
+                    System.out.println(userDTO.toString());
                     nextPage = mainPage;
                 } catch (Exception e) {
                     System.out.println("ko parse duoc ve json object");

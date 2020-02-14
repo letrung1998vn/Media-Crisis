@@ -41,13 +41,13 @@
                 <div class="sidebar-wrapper">
                     <div class="logo">
                         <a href="http://www.creative-tim.com" class="simple-text">
-                            Media Crisis Detection
+                            Media Crisis Detect Application
                         </a>
                     </div>
 
                     <ul class="nav">
                         <li class="active">
-                            <a href="dashboard.html">
+                            <a href="mainPage_JSP.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -59,9 +59,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="table.html">
+                            <a href="Keyword_JSP.jsp">
                                 <i class="pe-7s-note2"></i>
-                                <p>Table List</p>
+                                <p>Keyword</p>
                             </a>
                         </li>
                         <li>
@@ -108,16 +108,16 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Dashboard</a>
+                            <a class="navbar-brand" href="mainPage_JSP.jsp">Dashboard</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
-                                <li>
+<!--                                <li>
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-dashboard"></i>
                                         <p class="hidden-lg hidden-md">Dashboard</p>
                                     </a>
-                                </li>
+                                </li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-globe"></i>
@@ -136,12 +136,12 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-                                <li>
+<!--                                <li>
                                     <a href="">
                                         <i class="fa fa-search"></i>
                                         <p class="hidden-lg hidden-md">Search</p>
                                     </a>
-                                </li>
+                                </li>-->
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -150,7 +150,7 @@
                                         <p>Account</p>
                                     </a>
                                 </li>
-                                <li class="dropdown">
+<!--                                <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <p>
                                             Dropdown
@@ -167,7 +167,7 @@
                                         <li class="divider"></li>
                                         <li><a href="#">Separated link</a></li>
                                     </ul>
-                                </li>
+                                </li>-->
                                 <li>
                                     <a href="#">
                                         <p>Log out</p>
@@ -396,7 +396,7 @@
                         <nav class="pull-left">
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="mainPage_JSP.jsp">
                                         Home
                                     </a>
                                 </li>
@@ -405,20 +405,20 @@
                                         Company
                                     </a>
                                 </li>
-                                <li>
+<!--                                <li>
                                     <a href="#">
                                         Portfolio
                                     </a>
-                                </li>
-                                <li>
+                                </li>-->
+<!--                                <li>
                                     <a href="#">
                                         Blog
                                     </a>
-                                </li>
+                                </li>-->
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Media Crisis</a>, for your better business 
                         </p>
                     </div>
                 </footer>

@@ -41,13 +41,13 @@
                 <div class="sidebar-wrapper">
                     <div class="logo">
                         <a href="http://www.creative-tim.com" class="simple-text">
-                            Creative Tim
+                            Media Crisis Detect Application
                         </a>
                     </div>
 
                     <ul class="nav">
                         <li>
-                            <a href="dashboard.html">
+                            <a href="mainPage_JSP.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -59,9 +59,9 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="table.html">
+                            <a href="Keyword_JSP.jsp">
                                 <i class="pe-7s-note2"></i>
-                                <p>Table List</p>
+                                <p>Keyword</p>
                             </a>
                         </li>
                         <li>
@@ -108,16 +108,16 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Table List</a>
+                            <a class="navbar-brand" href="#">Key Word List</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
-                                <li>
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-dashboard"></i>
-                                        <p class="hidden-lg hidden-md">Dashboard</p>
-                                    </a>
-                                </li>
+                                <!--                                <li>
+                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                                        <i class="fa fa-dashboard"></i>
+                                                                        <p class="hidden-lg hidden-md">Dashboard</p>
+                                                                    </a>
+                                                                </li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-globe"></i>
@@ -136,38 +136,38 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="">
-                                        <i class="fa fa-search"></i>
-                                        <p class="hidden-lg hidden-md">Search</p>
-                                    </a>
-                                </li>
+                                <!--                                <li>
+                                                                    <a href="Search_JSP.jsp">
+                                                                        <i class="fa fa-search"></i>
+                                                                        <p class="hidden-lg hidden-md">Search</p>
+                                                                    </a>
+                                                                </li>-->
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="">
+                                    <a href="user.html">
                                         <p>Account</p>
                                     </a>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <p>
-                                            Dropdown
-                                            <b class="caret"></b>
-                                        </p>
-
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a></li>
-                                    </ul>
-                                </li>
+                                <!--                                <li class="dropdown">
+                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                                        <p>
+                                                                            Dropdown
+                                                                            <b class="caret"></b>
+                                                                        </p>
+                                
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#">Action</a></li>
+                                                                        <li><a href="#">Another action</a></li>
+                                                                        <li><a href="#">Something</a></li>
+                                                                        <li><a href="#">Another action</a></li>
+                                                                        <li><a href="#">Something</a></li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="#">Separated link</a></li>
+                                                                    </ul>
+                                                                </li>-->
                                 <li>
                                     <a href="#">
                                         <p>Log out</p>
@@ -185,60 +185,64 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Striped Table with Hover</h4>
-                                        <p class="category">Here is a subtitle for this table</p>
+                                        <h4 class="title">Search Keyword</h4>
+                                    </div>
+                                    <div class="content">
+                                        <form>
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" placeholder="Enter Keyword">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-fill pull-right">Search</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="content table-responsive table-full-width">
                                         <table class="table table-hover table-striped">
                                             <thead>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Salary</th>
-                                            <th>Country</th>
-                                            <th>City</th>
+                                            <th>Keyword</th>
+                                            <th>User Id</th>
+                                            <th></th>
                                             </thead>
                                             <tbody>
                                                 <tr>
                                                     <td>1</td>
                                                     <td>Dakota Rice</td>
                                                     <td>$36,738</td>
-                                                    <td>Niger</td>
-                                                    <td>Oud-Turnhout</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>2</td>
                                                     <td>Minerva Hooper</td>
                                                     <td>$23,789</td>
-                                                    <td>Curaçao</td>
-                                                    <td>Sinaai-Waas</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>3</td>
                                                     <td>Sage Rodriguez</td>
                                                     <td>$56,142</td>
-                                                    <td>Netherlands</td>
-                                                    <td>Baileux</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>4</td>
                                                     <td>Philip Chaney</td>
                                                     <td>$38,735</td>
-                                                    <td>Korea, South</td>
-                                                    <td>Overland Park</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>5</td>
                                                     <td>Doris Greene</td>
                                                     <td>$63,542</td>
-                                                    <td>Malawi</td>
-                                                    <td>Feldkirchen in Kärnten</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>6</td>
                                                     <td>Mason Porter</td>
                                                     <td>$78,615</td>
-                                                    <td>Chile</td>
-                                                    <td>Gloucester</td>
+                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -246,73 +250,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div class="col-md-12">
-                                <div class="card card-plain">
-                                    <div class="header">
-                                        <h4 class="title">Table on Plain Background</h4>
-                                        <p class="category">Here is a subtitle for this table</p>
-                                    </div>
-                                    <div class="content table-responsive table-full-width">
-                                        <table class="table table-hover">
-                                            <thead>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Salary</th>
-                                            <th>Country</th>
-                                            <th>City</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Dakota Rice</td>
-                                                    <td>$36,738</td>
-                                                    <td>Niger</td>
-                                                    <td>Oud-Turnhout</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Minerva Hooper</td>
-                                                    <td>$23,789</td>
-                                                    <td>Curaçao</td>
-                                                    <td>Sinaai-Waas</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Sage Rodriguez</td>
-                                                    <td>$56,142</td>
-                                                    <td>Netherlands</td>
-                                                    <td>Baileux</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Philip Chaney</td>
-                                                    <td>$38,735</td>
-                                                    <td>Korea, South</td>
-                                                    <td>Overland Park</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Doris Greene</td>
-                                                    <td>$63,542</td>
-                                                    <td>Malawi</td>
-                                                    <td>Feldkirchen in Kärnten</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Mason Porter</td>
-                                                    <td>$78,615</td>
-                                                    <td>Chile</td>
-                                                    <td>Gloucester</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
-                            </div>
-
 
                         </div>
                     </div>
@@ -323,7 +260,7 @@
                         <nav class="pull-left">
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="mainPage_JSP.jsp">
                                         Home
                                     </a>
                                 </li>
@@ -332,20 +269,20 @@
                                         Company
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#">
-                                        Portfolio
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Blog
-                                    </a>
-                                </li>
+                                <!--                                <li>
+                                                                    <a href="#">
+                                                                        Portfolio
+                                                                    </a>
+                                                                </li>-->
+                                <!--                                <li>
+                                                                    <a href="#">
+                                                                        Blog
+                                                                    </a>
+                                                                </li>-->
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Media Crisis</a>, for your better business 
                         </p>
                     </div>
                 </footer>

@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="Keyword_JSP.jsp">
+                            <a href="GetAllKeywordController">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>

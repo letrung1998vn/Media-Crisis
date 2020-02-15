@@ -1,3 +1,5 @@
+<%@page import="MediaCrisis.Model.Keyword"%>
+<%@page import="java.util.List"%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -186,53 +188,30 @@
                                 <div class="card">
                                     <div class="header">
                                         <h4 class="title">Striped Table with Hover</h4>
-                                        <p class="category">Here is a subtitle for this table</p>
                                     </div>
                                     <div class="content table-responsive table-full-width">
                                         <table class="table table-hover table-striped">
                                             <thead>
-                                            <th>ID</th>
+                                            <th>NO</th>
                                             <th>Keyword</th>
                                             <th>User Id</th>
                                             <th></th>
                                             </thead>
                                             <tbody>
+                                                <% List<Keyword> list = (List) request.getAttribute("LISTKEYWORD");
+                                                    if (list != null) {
+                                                %>
+                                                <% for (int i = 0; i < list.size(); i++) {%>
+                                                <% Keyword keywordDTO = list.get(i);%>
+                                                
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>Dakota Rice</td>
-                                                    <td>$36,738</td>
+                                                    <td><%= i+1%></td>
+                                                    <td><%= keywordDTO.getKeyword()%></td>
+                                                    <td><%= keywordDTO.getUserId()%></td>
                                                     <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Minerva Hooper</td>
-                                                    <td>$23,789</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Sage Rodriguez</td>
-                                                    <td>$56,142</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Philip Chaney</td>
-                                                    <td>$38,735</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Doris Greene</td>
-                                                    <td>$63,542</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Mason Porter</td>
-                                                    <td>$78,615</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
+                                                <% } %>
+                                                <% } %>
                                             </tbody>
                                         </table>
 

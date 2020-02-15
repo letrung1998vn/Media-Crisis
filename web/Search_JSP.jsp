@@ -214,36 +214,7 @@
                                                     <td>$36,738</td>
                                                     <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Minerva Hooper</td>
-                                                    <td>$23,789</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Sage Rodriguez</td>
-                                                    <td>$56,142</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Philip Chaney</td>
-                                                    <td>$38,735</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Doris Greene</td>
-                                                    <td>$63,542</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Mason Porter</td>
-                                                    <td>$78,615</td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
 

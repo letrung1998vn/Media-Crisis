@@ -106,6 +106,7 @@ public class LoginController extends HttpServlet {
             }
             HttpSession session = request.getSession();
             session.setAttribute("USERLOGIN", userDTO);
+            session.setAttribute("USERID", userDTO.getUsername());
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

@@ -187,7 +187,7 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Striped Table with Hover</h4>
+                                        <h4 class="title">Key word List</h4>
                                     </div>
                                     <div class="content table-responsive table-full-width">
                                         <table class="table table-hover table-striped">

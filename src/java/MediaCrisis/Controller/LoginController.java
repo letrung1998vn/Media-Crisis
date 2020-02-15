@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller;
 
+import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -75,7 +78,8 @@ public class LoginController extends HttpServlet {
             int responseCode = conection.getResponseCode();
             StringBuffer rp = new StringBuffer();
             User userDTO = new User();
-            
+            List<Keyword> listKeyword = new ArrayList<>();
+
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(conection.getInputStream()));
@@ -85,19 +89,33 @@ public class LoginController extends HttpServlet {
                 in.close();
                 System.out.println("JSON String Result " + rp.toString());
                 try {
-                    JSONObject jobj = new JSONObject(rp.toString());
-                    System.out.println("JSONObj after parse" + jobj.toString());
-                    userDTO.setName(jobj.get("name").toString());
-                    userDTO.setUsername(jobj.get("userId").toString());
-                    JSONObject jobj1 = new JSONObject(jobj.get("user").toString());
-                    System.out.println("JSONObj inside" + jobj1.toString());
-                    userDTO.setPassword(jobj1.get("password").toString());
-                    userDTO.setRole(jobj1.get("role").toString());
-                    userDTO.setEmail(jobj.get("email").toString());
-                    System.out.println(userDTO.toString());
+                    String listJsonOutPutString = rp.toString();
+                    listJsonOutPutString = listJsonOutPutString.replace("[", "");
+                    listJsonOutPutString = listJsonOutPutString.replace("]", "");
+                    List<JSONObject> list = new ArrayList<JSONObject>();
+                    int count = 0;
+                    while (listJsonOutPutString.contains("{") && listJsonOutPutString.contains("}")) {
+                        String jsonObj = listJsonOutPutString.substring(listJsonOutPutString.indexOf("{"), listJsonOutPutString.indexOf("}") + 1);
+                        listJsonOutPutString = listJsonOutPutString.replace(jsonObj, "");
+                        list.add(new JSONObject(jsonObj));
+                    }
+                    for (int i = 0; i < list.size(); i++) {
+                        JSONObject jobj = new JSONObject(list.get(i).toString());
+                        userDTO.setPassword(jobj.get("password").toString());
+                        userDTO.setRole(jobj.get("role").toString());
+                        userDTO.setName(jobj.get("name").toString());
+                        userDTO.setUsername(jobj.get("userId").toString());
+                        userDTO.setEmail(jobj.get("email").toString());
+                        if (list.get(i).getInt("keywordId") != 0) {
+                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), list.get(i).get("keyword").toString(), 
+                                list.get(i).get("userId").toString());
+                        listKeyword.add(keyWord);
+                        }
+                    }
                     nextPage = mainPage;
                 } catch (Exception e) {
                     System.out.println("ko parse duoc ve json object");
+                    e.printStackTrace();
                     nextPage = error;
                 }
             } else {
@@ -107,6 +125,8 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("USERLOGIN", userDTO);
             session.setAttribute("USERID", userDTO.getUsername());
+            session.setAttribute("LISTKEYWORD", listKeyword);
+            session.setAttribute("COUNT", listKeyword.size());
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

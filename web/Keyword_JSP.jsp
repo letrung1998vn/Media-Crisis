@@ -31,6 +31,8 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+        <script>
+    </script>
     </head>
     <body>
 
@@ -61,7 +63,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="MainController?btnAction=ShowKeyword">
+                            <a href="Keyword_JSP.jsp">
 <!--                            <a href="Keyword_JSP.jsp">-->
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
@@ -194,10 +196,24 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
+                                        <h4 class="title">Search Keyword</h4>
+                                    </div>
+                                    <div class="content">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                                    </div>
+                                                </div>
+                                                <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1">Search</button>
+                                                
+                                            </div>
+                                    </div>
+                                    <div class="header">
                                         <h4 class="title">Key word List</h4>
                                     </div>
                                     <div class="content table-responsive table-full-width">
-                                        <table class="table table-hover table-striped">
+                                        <table id="myTable" class="table table-hover table-striped">
                                             <thead>
                                             <th>NO</th>
                                             <th>Keyword</th>
@@ -213,7 +229,7 @@
                                                 
                                                 <tr>
                                                     <td><%= i+1%></td>
-                                                    <td><%= keywordDTO.getKeyword()%></td>
+                                                    <td class="keywords"><%= keywordDTO.getKeyword()%></td>
                                                     <td><%= keywordDTO.getUserId()%></td>
                                                     <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
@@ -275,7 +291,8 @@
 
     <!--  Charts Plugin -->
     <script src="assets/js/chartist.min.js"></script>
-
+    
+    <script src="js/main.js"></script>
     <!--  Notifications Plugin    -->
     <script src="assets/js/bootstrap-notify.js"></script>
 

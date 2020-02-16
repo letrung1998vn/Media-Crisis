@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowKeyword">
+                            <a href="Keyword_JSP.jsp">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>

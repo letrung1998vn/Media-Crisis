@@ -31,6 +31,7 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+        
         <script>
         </script>
     </head>
@@ -194,14 +195,15 @@
                                             <h4 class="title">Create New Keyword</h4>
                                         </div>
                                         <div class="content">
-                                            <form action="MainController" method="POST">
+                                            <form class="login100-form validate-form-add-keyword" action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-5">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" placeholder="Enter Keyword" name="txtKeyword">
-
+                                                        
+                                                        <div class="wrap-input100 validate-input" data-validate = "">
+                                                            <input class="input100" type="text" name="txtKeyword">
+                                                            <span class="focus-input100"></span>
                                                         </div>
-                                                        <button class="login100-form-btn" type="submit" value="CreateKeyword" name="btnAction">
+                                                        <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeyword" name="btnAction">
                                                             Add
                                                         </button>
                                                     </div>
@@ -298,6 +300,21 @@
     <!--  Charts Plugin -->
     <script src="assets/js/chartist.min.js"></script>
 
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
     <script src="js/main.js"></script>
     <!--  Notifications Plugin    -->
     <script src="assets/js/bootstrap-notify.js"></script>
@@ -311,22 +328,22 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
-                                    $(document).ready(function () {
-                                        if (<%=request.getAttribute("SEND")%>) {
-                                            $.notify({
-                                                icon: "pe-7s-bell",
-                                                message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                                $(document).ready(function () {
+                                    if (<%=request.getAttribute("SEND")%>) {
+                                        $.notify({
+                                            icon: "pe-7s-bell",
+                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
 
-                                            }, {
-                                                type: type[<%=request.getAttribute("RESULT")%>],
-                                                timer: 4000,
-                                                placement: {
-                                                    from: 'top',
-                                                    align: 'left'
-                                                }
-                                            });
-                                        }
-                                    });
+                                        }, {
+                                            type: type[<%=request.getAttribute("RESULT")%>],
+                                            timer: 4000,
+                                            placement: {
+                                                from: 'top',
+                                                align: 'left'
+                                            }
+                                        });
+                                    }
+                                });
     </script>
 
 </html>

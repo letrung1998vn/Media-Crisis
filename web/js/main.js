@@ -25,6 +25,12 @@
         }
     })
 
+    $('.btn-add-new-keyword').on('click', function () {
+        if ($('.keyword-input').val() == "") {
+            alert('null');
+        }
+    })
+
     $('.search-keyword').on('input', function () {
         var keywordsinput = $('.search-keyword').val().toLowerCase();
         $('#myTable td.keywords').each(function () {
@@ -43,8 +49,19 @@
         var check = true;
 
         for (var i = 0; i < input.length; i++) {
-            if (validateLogin(input[i]) == false) {
+            if (validateLogin()(input[i]) == false) {
                 showValidate(input[i]);
+                check = false;
+            }
+        }
+
+        return check;
+    });
+
+    $('.validate-form-add-keyword').on('submit', function () {
+        var check = true;
+        for (var i = 0; i < input.length; i++) {
+            if (validateAddKeyword(input[i]) == false) {
                 check = false;
             }
         }
@@ -102,6 +119,48 @@
             return false;
         }
 
+    }
+
+    function validateAddKeyword(input) {
+
+        if ($(input).val().trim() == '') {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: 'Keyword field is empty, can not add'
+
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            return false;
+        } else {
+            var keywordsinput = $('.search-keyword').val().toLowerCase();
+            var checkExist = true;
+            $('#myTable td.keywords').each(function () {
+                if ($(this).html().toLowerCase() == $(input).val().trim()) {
+                    checkExist = false;
+                }
+            });
+            if (!checkExist) {
+                $.notify({
+                    icon: "pe-7s-bell",
+                    message: 'This keyword is existed!'
+
+                }, {
+                    type: type[4],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
+                return false;
+            }
+        }
     }
 
     function showValidate(input) {

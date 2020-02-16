@@ -14,14 +14,24 @@
             }
         })
     });
-    
+
+    $('.addKeywordDropdown').on('click', function () {
+        if ($('.dropdown-create-keyword').hasClass("hide")) {
+            $('.dropdown-create-keyword').removeClass("hide");
+//            alert('had');
+        } else {
+            $('.dropdown-create-keyword').addClass("hide");
+//            alert('hadnot');
+        }
+    })
+
     $('.search-keyword').on('input', function () {
         var keywordsinput = $('.search-keyword').val().toLowerCase();
-            $('#myTable td.keywords').each(function() {  
-                $(this).parent().removeClass("hide");
-                if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1){
-                    $(this).parent().addClass("hide");
-                }
+        $('#myTable td.keywords').each(function () {
+            $(this).parent().removeClass("hide");
+            if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1) {
+                $(this).parent().addClass("hide");
+            }
         });
     });
 

@@ -179,7 +179,7 @@
 
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a href="createKeyword.jsp"><button>Add new keyword</button></a>
+                            <button class="addKeywordDropdown">Add new keyword</button>
                         </div>
                     </div>
                 </nav>
@@ -189,47 +189,70 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="header">
-                                        <h4 class="title">Search Keyword</h4>
+                                    <div class="col-md-12 dropdown-create-keyword hide">
+                                        <div class="header">
+                                            <h4 class="title">Create New Keyword</h4>
+                                        </div>
+                                        <div class="content">
+                                            <form action="MainController" method="POST">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" placeholder="Enter Keyword" name="txtKeyword">
+
+                                                        </div>
+                                                        <button class="login100-form-btn" type="submit" value="CreateKeyword" name="btnAction">
+                                                            Add
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="content">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                    <div class="col-md-12">
+                                        <div class="header">
+                                            <h4 class="title">Search Keyword</h4>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="header">
-                                        <h4 class="title">Key word List</h4>
-                                    </div>
-                                    <div class="content table-responsive table-full-width">
-                                        <table id="myTable" class="table table-hover table-striped">
-                                            <thead>
-                                            <th>NO</th>
-                                            <th>Keyword</th>
-                                            <th>User Id</th>
-                                            <th></th>
-                                            </thead>
-                                            <tbody>
-                                                <% List<Keyword> list = (List) session.getAttribute("LISTKEYWORD");
-                                                    if (list != null) {
-                                                %>
-                                                <% for (int i = 0; i < list.size(); i++) {%>
-                                                <% Keyword keywordDTO = list.get(i);%>
+                                    <div class="col-md-12">
+                                        <div class="header">
+                                            <h4 class="title">Key word List</h4>
+                                        </div>
+                                        <div class="content table-responsive table-full-width">
+                                            <table id="myTable" class="table table-hover table-striped">
+                                                <thead>
+                                                <th>NO</th>
+                                                <th>Keyword</th>
+                                                <th>User Id</th>
+                                                <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    <% List<Keyword> list = (List) session.getAttribute("LISTKEYWORD");
+                                                        if (list != null) {
+                                                    %>
+                                                    <% for (int i = 0; i < list.size(); i++) {%>
+                                                    <% Keyword keywordDTO = list.get(i);%>
 
-                                                <tr>
-                                                    <td><%= i + 1%></td>
-                                                    <td class="keywords"><%= keywordDTO.getKeyword()%></td>
-                                                    <td><%= keywordDTO.getUserId()%></td>
-                                                    <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                </tr>
-                                                <% } %>
-                                                <% }%>
-                                            </tbody>
-                                        </table>
-
+                                                    <tr>
+                                                        <td><%= i + 1%></td>
+                                                        <td class="keywords"><%= keywordDTO.getKeyword()%></td>
+                                                        <td><%= keywordDTO.getUserId()%></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                    </tr>
+                                                    <% } %>
+                                                    <% }%>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -287,6 +310,23 @@
 
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
+    <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        if (<%=request.getAttribute("SEND")%>) {
+                                            $.notify({
+                                                icon: "pe-7s-bell",
+                                                message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
 
+                                            }, {
+                                                type: type[<%=request.getAttribute("RESULT")%>],
+                                                timer: 4000,
+                                                placement: {
+                                                    from: 'top',
+                                                    align: 'left'
+                                                }
+                                            });
+                                        }
+                                    });
+    </script>
 
 </html>

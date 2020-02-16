@@ -1,16 +1,19 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package MediaCrisis.Controller;
 
+import MediaCrisis.Model.Keyword;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
@@ -25,8 +29,10 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "CreateKeywordController", urlPatterns = {"/CreateKeywordController"})
 public class CreateKeywordController extends HttpServlet {
-private final String error = "error.html";
-private final String create = "createKeyword.jsp";
+
+    private final String error = "error.html";
+    private final String create = "Keyword_JSP.jsp";
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,41 +53,47 @@ private final String create = "createKeyword.jsp";
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
         url += userId;
-        
+
         String nextPage = "";
-        
+
         URL urlForGetRequest = new URL(url);
         String readLine = null;
         HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
         conection.setRequestMethod("POST");
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
-        
+
         if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
-                }
-                in.close();
-              
-                System.out.println("JSON String Result " + rp.toString());
-                nextPage = create;
-                request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-                request.setAttribute("RESULT", 2);
-                request.setAttribute("SEND", true);
-            } else {
-                System.out.println("Loi api roi");
-                nextPage = error;
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(conection.getInputStream()));
+            while ((readLine = in.readLine()) != null) {
+                rp.append(readLine);
             }
-        RequestDispatcher  rd = request.getRequestDispatcher(nextPage);
+            in.close();
+            System.out.println("JSON String Result " + rp.toString());
+            try {
+                JSONObject jobj = new JSONObject(rp.toString());
+                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(), 
+                                jobj.get("userId").toString());
+                List<Keyword> listKeyword = new ArrayList<>();
+                listKeyword = (List<Keyword>)session.getAttribute("LISTKEYWORD");
+                listKeyword.add(keyWord);
+                session.setAttribute("LISTKEYWORD", listKeyword);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            nextPage = create;
+            request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+            request.setAttribute("RESULT", 2);
+            request.setAttribute("SEND", true);
+        } else {
+            System.out.println("Loi api roi");
+            nextPage = error;
+        }
+        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
     }
 
-    
-    
-    
-    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

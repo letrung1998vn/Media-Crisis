@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="GetAllKeywordController">
+                            <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>

@@ -32,6 +32,9 @@ public class MainController extends HttpServlet {
     private final String loginController = "LoginController";
     private final String signupController = "SignUpController";
     private final String loginPage = "login_JSP.jsp";
+    private final String showKeyword = "GetAllKeywordController";
+    private final String deleteKeyword = "DeleteKeywordController";
+    private final String createKeyword = "CreateKeywordController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,6 +53,12 @@ public class MainController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.invalidate();
                 url = loginPage;
+            } else if (button.equals("ShowKeyword")) {
+                url = showKeyword;
+            } else if (button.equals("DeleteKeyword")) {
+                url = deleteKeyword;
+            } else if (button.equals("CreateKeyword")) {
+                url = createKeyword;
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

@@ -5,13 +5,18 @@
  */
 package MediaCrisis.Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -19,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DeleteKeywordController", urlPatterns = {"/DeleteKeywordController"})
 public class DeleteKeywordController extends HttpServlet {
+private final String keywordList = "GetAllKeywordController";
+private final String error = "error.html";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,20 +39,42 @@ public class DeleteKeywordController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DeleteKeywordController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DeleteKeywordController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String url = "http://localhost:8181/keyword/deleteKeyword/?";
+        String idString = request.getParameter("id");
+        int id = Integer.parseInt(idString);
+        url += "id=";
+        url += id;    
+        String nextPage = "";
+        
+        URL urlForGetRequest = new URL(url);
+        String readLine = null;
+        HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
+        connection.setRequestMethod("POST");
+        int responseCode = connection.getResponseCode();
+        StringBuffer rp = new StringBuffer();
+        
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+        } else {
+            System.out.println("Loi api");
+            nextPage = error;
         }
+        nextPage = keywordList;
+        HttpSession session = request.getSession();
+//        session.removeAttribute("");
+        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+        rd.forward(request, response);
+        
     }
 
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

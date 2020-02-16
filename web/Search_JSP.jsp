@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="GetAllKeywordController">
+                            <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>
@@ -108,7 +108,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Key Word List</a>
+                            <a class="navbar-brand" href="MainController?btnAction=ShowKeyword">Key Word List</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">

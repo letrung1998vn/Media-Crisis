@@ -96,7 +96,7 @@ public class GetAllKeywordController extends HttpServlet {
                                 list.get(i).get("userId").toString());
                         listKeyword.add(keyWord);
                     }
-                    request.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("LISTKEYWORD", listKeyword);
                     session.setAttribute("COUNT", listKeyword.size());
                     
                     System.out.println(listKeyword.toString());

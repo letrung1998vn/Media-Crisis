@@ -127,6 +127,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("USERID", userDTO.getUsername());
             session.setAttribute("LISTKEYWORD", listKeyword);
             session.setAttribute("COUNT", listKeyword.size());
+            
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

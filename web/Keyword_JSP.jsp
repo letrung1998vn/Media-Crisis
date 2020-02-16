@@ -61,7 +61,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="Keyword_JSP.jsp">
+                            <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>
@@ -179,6 +179,11 @@
                             </ul>
                         </div>
                     </div>
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a href="createKeyword.jsp"><button>Add new keyword</button></a>
+                        </div>
+                    </div>
                 </nav>
 
                 <div class="content">
@@ -198,7 +203,7 @@
                                             <th></th>
                                             </thead>
                                             <tbody>
-                                                <% List<Keyword> list = (List) request.getAttribute("LISTKEYWORD");
+                                                <% List<Keyword> list = (List) session.getAttribute("LISTKEYWORD");
                                                     if (list != null) {
                                                 %>
                                                 <% for (int i = 0; i < list.size(); i++) {%>
@@ -208,7 +213,7 @@
                                                     <td><%= i+1%></td>
                                                     <td><%= keywordDTO.getKeyword()%></td>
                                                     <td><%= keywordDTO.getUserId()%></td>
-                                                    <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                    <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
                                                 <% } %>
                                                 <% } %>

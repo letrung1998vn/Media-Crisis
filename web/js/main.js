@@ -16,7 +16,7 @@
     });
     
     $('.search-keyword').on('input', function () {
-        var keywordsinput = $('.search-keyword').val();
+        var keywordsinput = $('.search-keyword').val().toLowerCase();
             $('#myTable td.keywords').each(function() {  
                 $(this).parent().removeClass("hide");
                 if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1){

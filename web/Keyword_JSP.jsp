@@ -62,6 +62,7 @@
                         </li>
                         <li class="active">
                             <a href="MainController?btnAction=ShowKeyword">
+<!--                            <a href="Keyword_JSP.jsp">-->
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>
@@ -179,6 +180,7 @@
                             </ul>
                         </div>
                     </div>
+
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <a href="createKeyword.jsp"><button>Add new keyword</button></a>

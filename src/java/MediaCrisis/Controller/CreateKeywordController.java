@@ -40,7 +40,7 @@ private final String create = "createKeyword.jsp";
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String newKeyword = request.getParameter("txtKeyword");
-        String url = "http://localhost:8181/keyword/createKeyword/?";
+        String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword/?";
         url += "keyword=";
         url += newKeyword;
         url += "&userId=";
@@ -66,9 +66,10 @@ private final String create = "createKeyword.jsp";
                 in.close();
               
                 System.out.println("JSON String Result " + rp.toString());
-                
                 nextPage = create;
                 request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+                request.setAttribute("RESULT", 2);
+                request.setAttribute("SEND", true);
             } else {
                 System.out.println("Loi api roi");
                 nextPage = error;

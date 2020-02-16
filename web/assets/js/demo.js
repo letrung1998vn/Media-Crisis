@@ -15,11 +15,9 @@ demo = {
             }
         });
     },
-
     checkScrollForTransparentNavbar: debounce(function () {
         $navbar = $('.navbar[color-on-scroll]');
         scroll_distance = $navbar.attr('color-on-scroll') || 500;
-
         if ($(document).scrollTop() > scroll_distance) {
             if (transparent) {
                 transparent = false;
@@ -34,7 +32,6 @@ demo = {
             }
         }
     }, 17),
-
     initDocChartist: function () {
         var dataSales = {
             labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '9:00PM', '12:00PM', '3:00AM', '6:00AM', '8:00AM'],
@@ -44,7 +41,6 @@ demo = {
                 [23, 113, 67, 108, 190, 239, 307, 308, 439, 410, 410, 509]
             ]
         };
-
         var optionsSales = {
             lineSmooth: false,
             low: 0,
@@ -60,7 +56,6 @@ demo = {
             showLine: false,
             showPoint: false,
         };
-
         var responsiveSales = [
             ['screen and (max-width: 640px)', {
                     axisX: {
@@ -70,10 +65,7 @@ demo = {
                     }
                 }]
         ];
-
         Chartist.Line('#chartHours', dataSales, optionsSales, responsiveSales);
-
-
         var data = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             series: [
@@ -81,7 +73,6 @@ demo = {
                 [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
             ]
         };
-
         var options = {
             seriesBarDistance: 10,
             axisX: {
@@ -89,7 +80,6 @@ demo = {
             },
             height: "245px"
         };
-
         var responsiveOptions = [
             ['screen and (max-width: 640px)', {
                     seriesBarDistance: 5,
@@ -100,15 +90,12 @@ demo = {
                     }
                 }]
         ];
-
         Chartist.Bar('#chartActivity', data, options, responsiveOptions);
-
         var dataPreferences = {
             series: [
                 [25, 30, 20, 25]
             ]
         };
-
         var optionsPreferences = {
             donut: true,
             donutWidth: 40,
@@ -119,15 +106,12 @@ demo = {
                 showGrid: false
             }
         };
-
         Chartist.Pie('#chartPreferences', dataPreferences, optionsPreferences);
-
         Chartist.Pie('#chartPreferences', {
             labels: ['62%', '32%', '6%'],
             series: [62, 32, 6]
         });
     },
-
     initChartist: function (dataPreferences) {
 
         var dataSales = {
@@ -139,7 +123,6 @@ demo = {
                 [14, 56, 77, 89, 92, 132, 257, 348, 439, 510, 630, 709, 950]
             ]
         };
-
         var optionsSales = {
             lineSmooth: false,
             low: 0,
@@ -155,7 +138,6 @@ demo = {
             showLine: false,
             showPoint: false,
         };
-
         var responsiveSales = [
             ['screen and (max-width: 640px)', {
                     axisX: {
@@ -165,10 +147,7 @@ demo = {
                     }
                 }]
         ];
-
         Chartist.Line('#chartHours', dataSales, optionsSales, responsiveSales);
-
-
         var data = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             series: [
@@ -178,7 +157,6 @@ demo = {
                 [215, 273, 480, 670, 753, 353, 400, 464, 768, 480, 436, 595]
             ]
         };
-
         var options = {
             seriesBarDistance: 10,
             axisX: {
@@ -186,7 +164,6 @@ demo = {
             },
             height: "245px"
         };
-
         var responsiveOptions = [
             ['screen and (max-width: 640px)', {
                     seriesBarDistance: 10,
@@ -197,9 +174,7 @@ demo = {
                     }
                 }]
         ];
-
         Chartist.Bar('#chartActivity', data, options, responsiveOptions);
-
 //        var dataPreferences = {
 //            labels: ['20%', '40%', '20%','20%'],
 //            series: [20, 40, 20, 20]
@@ -223,7 +198,6 @@ demo = {
 //            series: [62, 32, 6]
 //        });
     },
-
     initGoogleMaps: function () {
         var myLatlng = new google.maps.LatLng(40.748817, -73.985428);
         var mapOptions = {
@@ -234,25 +208,21 @@ demo = {
 
         }
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
         var marker = new google.maps.Marker({
             position: myLatlng,
             title: "Hello World!"
         });
-
         // To add the marker to the map, call setMap();
         marker.setMap(map);
     },
-
     showNotification: function (from, align) {
         color = Math.floor((Math.random() * 4) + 1);
-
         $.notify({
             icon: "pe-7s-gift",
             message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
 
         }, {
-            type: type[color],
+            type: type[2],
             timer: 4000,
             placement: {
                 from: from,
@@ -260,6 +230,5 @@ demo = {
             }
         });
     }
-
 
 }

@@ -193,7 +193,7 @@
                                                 <div class="col-md-5">
                                                     <div class="form-group">
                                                         <input type="text" class="form-control" placeholder="Enter Keyword" name="txtKeyword">
-                                                        
+
                                                     </div>
                                                     <button class="login100-form-btn" type="submit" value="CreateKeyword" name="btnAction">
                                                         Add
@@ -202,7 +202,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
@@ -268,5 +268,22 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
 
+    <script type="text/javascript">
+                                $(document).ready(function () {
+                                    if (<%=request.getAttribute("SEND")%>) {
+                                        $.notify({
+                                            icon: "pe-7s-bell",
+                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
 
+                                        }, {
+                                            type: type[<%=request.getAttribute("RESULT")%>],
+                                            timer: 4000,
+                                            placement: {
+                                                from: 'top',
+                                                align: 'left'
+                                            }
+                                        });
+                                    }
+                                });
+    </script>
 </html>

@@ -39,7 +39,7 @@ private final String error = "error.html";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "http://localhost:8181/keyword/deleteKeyword/?";
+        String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
         String idString = request.getParameter("id");
         int id = Integer.parseInt(idString);
         url += "id=";

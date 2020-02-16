@@ -141,12 +141,6 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-                                <li>
-                                    <a href="Search_JSP.jsp">
-                                        <i class="fa fa-search"></i>
-                                        <p class="hidden-lg hidden-md">Search</p>
-                                    </a>
-                                </li>
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -200,13 +194,11 @@
                                     </div>
                                     <div class="content">
                                             <div class="row">
-                                                <div class="col-md-10">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
                                                         <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
                                                     </div>
                                                 </div>
-                                                <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1">Search</button>
-                                                
                                             </div>
                                     </div>
                                     <div class="header">

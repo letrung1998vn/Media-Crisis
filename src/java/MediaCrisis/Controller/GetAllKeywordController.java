@@ -47,12 +47,9 @@ public class GetAllKeywordController extends HttpServlet {
             throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/getAll/?";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/getAll";
             String nextPage = "";
             HttpSession session = request.getSession();
-            String userId = session.getAttribute("USERID").toString().trim();
-            url += "userId=";
-            url += userId;
             
             URL urlForGetRequest = new URL(url);
             String readLine = null;

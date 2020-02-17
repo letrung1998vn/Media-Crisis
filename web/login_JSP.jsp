@@ -47,15 +47,15 @@
                             <img src="images/logoMC.jpg" class="logoMC"/>
                         </span>
                         <%
-                                String result = (String) request.getAttribute("SIGNUP_MESSAGE");
-                                if (result != null) {
+                            String result = (String) request.getAttribute("SIGNUP_MESSAGE");
+                            if (result != null) {
                         %>
                         <div class="alert alert-success text-center" id="loginPageAlert">
                             <%
                                 out.print(result);%>
                         </div>
                         <%  }
-                                %>
+                        %>
                         <div class="wrap-input100 validate-input" data-validate = "Enter username">
                             <input class="input100" type="text" name="txtUsername">
                             <span class="focus-input100" data-placeholder="Username"></span>
@@ -112,5 +112,56 @@
         <!--===============================================================================================-->
         <script src="js/main.js"></script>
 
+        <script type="text/javascript">
+            $(document).ready(function () {
+                if (<%=request.getAttribute("SEND")%>) {
+                    $.notify({
+                        icon: "pe-7s-bell",
+                        message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+
+                    }, {
+                        type: type[<%=request.getAttribute("RESULT")%>],
+                        timer: 4000,
+                        placement: {
+                            from: 'top',
+                            align: 'left'
+                        }
+                    });
+                }
+            });
+        </script>
+        <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+        <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+        <!--  Charts Plugin -->
+        <script src="assets/js/chartist.min.js"></script>
+
+        <!--===============================================================================================-->
+        <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="vendor/animsition/js/animsition.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="vendor/bootstrap/js/popper.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="vendor/select2/select2.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="vendor/daterangepicker/moment.min.js"></script>
+        <script src="vendor/daterangepicker/daterangepicker.js"></script>
+        <!--===============================================================================================-->
+        <script src="vendor/countdowntime/countdowntime.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/main.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="assets/js/bootstrap-notify.js"></script>
+
+        <!--  Google Maps Plugin    -->
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+        <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+        <script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+
+        <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+        <script src="assets/js/demo.js"></script>
     </body>
 </html>

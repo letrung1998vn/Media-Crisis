@@ -47,7 +47,9 @@ public class LoginController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String error = "error.html";
+    private final String login = "login_JSP.jsp";
     private final String mainPage = "mainPage_JSP.jsp";
+    private final String adminPage = "adminPage_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
@@ -107,12 +109,11 @@ public class LoginController extends HttpServlet {
                         userDTO.setUsername(jobj.get("userId").toString());
                         userDTO.setEmail(jobj.get("email").toString());
                         if (list.get(i).getInt("keywordId") != 0) {
-                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), list.get(i).get("keyword").toString(), 
-                                list.get(i).get("userId").toString());
-                        listKeyword.add(keyWord);
+                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), list.get(i).get("keyword").toString(),
+                                    list.get(i).get("userId").toString());
+                            listKeyword.add(keyWord);
                         }
                     }
-                    nextPage = mainPage;
                 } catch (Exception e) {
                     System.out.println("ko parse duoc ve json object");
                     e.printStackTrace();
@@ -125,9 +126,24 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("USERLOGIN", userDTO);
             session.setAttribute("USERID", userDTO.getUsername());
-            session.setAttribute("LISTKEYWORD", listKeyword);
-            session.setAttribute("COUNT", listKeyword.size());
-            
+            System.out.println(userDTO);
+            if (userDTO.getRole() != null) {
+                if (userDTO.getRole().equals("admin")) {
+                    nextPage = adminPage;
+                } else if (userDTO.getRole().equals("user")) {
+                    session.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("COUNT", listKeyword.size());
+                    nextPage = mainPage;
+                } else {
+                    System.out.println("Role sai!");
+                    nextPage = error;
+                }
+            } else {
+                request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
+                request.setAttribute("RESULT", 4);
+                request.setAttribute("SEND", true);
+                nextPage = login;
+            }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

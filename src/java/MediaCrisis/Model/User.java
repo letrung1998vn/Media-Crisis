@@ -12,16 +12,18 @@ package MediaCrisis.Model;
 public class User {
 
     String username, password, role, name, email;
-
+    boolean isAvailable;
+    
     public User() {
     }
 
-    public User(String username, String password, String role, String name, String email) {
+    public User(String username, String password, String role, String name, String email, boolean isAvailable) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.name = name;
         this.email = email;
+        this.isAvailable = isAvailable;
     }
 
     public String getUsername() {
@@ -64,9 +66,17 @@ public class User {
         this.email = email;
     }
 
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "username=" + username + ", password=" + password + ", role=" + role + ", name=" + name + ", email=" + email + '}';
+        return "User{" + "username=" + username + ", password=" + password + ", role=" + role + ", name=" + name + ", email=" + email + ", isAvailable=" + isAvailable + '}';
     }
 
 }

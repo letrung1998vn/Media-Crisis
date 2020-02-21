@@ -108,6 +108,7 @@ public class LoginController extends HttpServlet {
                         userDTO.setName(jobj.get("name").toString());
                         userDTO.setUsername(jobj.get("userId").toString());
                         userDTO.setEmail(jobj.get("email").toString());
+                        userDTO.setIsAvailable(jobj.getBoolean("available"));
                         if (list.get(i).getInt("keywordId") != 0) {
                             Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), list.get(i).get("keyword").toString(),
                                     list.get(i).get("userId").toString());
@@ -127,7 +128,7 @@ public class LoginController extends HttpServlet {
             session.setAttribute("USERLOGIN", userDTO);
             session.setAttribute("USERID", userDTO.getUsername());
             System.out.println(userDTO);
-            if (userDTO.getRole() != null) {
+            if ((userDTO.getRole() != null) && (userDTO.isIsAvailable())) {
                 if (userDTO.getRole().equals("admin")) {
                     nextPage = adminPage;
                 } else if (userDTO.getRole().equals("user")) {
@@ -139,7 +140,11 @@ public class LoginController extends HttpServlet {
                     nextPage = error;
                 }
             } else {
-                request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
+                if ((userDTO.getRole() != null) && (!userDTO.isIsAvailable())) {
+                    request.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
+                } else {
+                    request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
+                }
                 request.setAttribute("RESULT", 4);
                 request.setAttribute("SEND", true);
                 nextPage = login;

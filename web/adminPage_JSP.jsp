@@ -59,15 +59,15 @@
                             </a>
                         </li>
                         <li>
-                            <a href="GetAllKeywordController">
+                            <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword Admin</p>
                             </a>
                         </li>
                         <li>
-                            <a href="typography.html">
+                            <a href="MainController?btnAction=ShowUser">
                                 <i class="pe-7s-news-paper"></i>
-                                <p>Typography</p>
+                                <p>User manager</p>
                             </a>
                         </li>
                         <li>

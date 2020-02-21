@@ -1,4 +1,4 @@
-<%@page import="MediaCrisis.Model.Keyword"%>
+<%@page import="MediaCrisis.Model.User"%>
 <%@page import="java.util.List"%>
 <!doctype html>
 <html lang="en">
@@ -31,7 +31,7 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-        
+
         <script>
         </script>
     </head>
@@ -71,9 +71,9 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowUser">
+                            <a href="typography.html">
                                 <i class="pe-7s-news-paper"></i>
-                                <p>User manager</p>
+                                <p>Typography</p>
                             </a>
                         </li>
                         <li>
@@ -177,12 +177,6 @@
                             </ul>
                         </div>
                     </div>
-
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <button class="addKeywordDropdown">Add new keyword</button>
-                        </div>
-                    </div>
                 </nav>
 
                 <div class="content">
@@ -190,36 +184,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="col-md-12 dropdown-create-keyword hide">
-                                        <div class="header">
-                                            <h4 class="title">Create New Keyword</h4>
-                                        </div>
-                                        <div class="content">
-                                            <form class="login100-form validate-form-add-keyword" action="MainController" method="POST">
-                                                <div class="row">
-                                                    <div class="col-md-5">
-                                                        
-                                                        <div class="wrap-input100 validate-input" data-validate = "">
-                                                            <input class="input100" type="text" name="txtKeyword">
-                                                            <span class="focus-input100"></span>
-                                                        </div>
-                                                        <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeyword" name="btnAction">
-                                                            Add
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <div class="header">
-                                            <h4 class="title">Search Keyword</h4>
+                                            <h4 class="title">Search user</h4>
                                         </div>
                                         <div class="content">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                                        <input type="text" class="form-control search-user" placeholder="Enter username">
                                                     </div>
                                                 </div>
                                             </div>
@@ -233,25 +206,29 @@
                                             <table id="myTable" class="table table-hover table-striped">
                                                 <thead>
                                                 <th>NO</th>
-                                                <th>Keyword</th>
-                                                <th>User Id</th>
-                                                <th></th>
+                                                <th>Userename</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
                                                 </thead>
                                                 <tbody>
-                                                    <% List<Keyword> list = (List) session.getAttribute("LISTKEYWORD");
-                                                        if (list != null) {
-                                                    %>
-                                                    <% for (int i = 0; i < list.size(); i++) {%>
-                                                    <% Keyword keywordDTO = list.get(i);%>
+                                                    <% List<User> users = (List<User>) request.getAttribute("LISTUSER");
+                                                        if (users != null) {
+                                                            for (int i = 0; i < users.size(); i++) {
 
+                                                    %>
                                                     <tr>
                                                         <td><%= i + 1%></td>
-                                                        <td class="keywords"><%= keywordDTO.getKeyword()%></td>
-                                                        <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td class="users"><%= users.get(i).getUsername()%></td>
+                                                        <td><%= users.get(i).getName()%></td>
+                                                        <td><%= users.get(i).getEmail()%></td>
+                                                        <td><%= users.get(i).getRole()%></td>
+                                                        <td><%= users.get(i).isIsAvailable()%></td>
                                                     </tr>
-                                                    <% } %>
-                                                    <% }%>
+                                                    <% }
+                                                        }%>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -328,6 +305,16 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
+                                $('.search-user').on('input', function () {
+                                    var keywordsinput = $('.search-user').val().toLowerCase();
+                                    $('#myTable td.users').each(function () {
+                                        $(this).parent().removeClass("hide");
+                                        if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1) {
+                                            $(this).parent().addClass("hide");
+                                        }
+                                    });
+                                });
+                                
                                 $(document).ready(function () {
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({

@@ -69,6 +69,17 @@
         return check;
     });
 
+    $('.validate-form-add-keyword-admin').on('submit', function () {
+        var check = true;
+        for (var i = 0; i < input.length; i++) {
+            if (validateAddKeywordAdmin(input[i]) == false) {
+                check = false;
+            }
+        }
+
+        return check;
+    });
+
     $('.validate-form-signup').on('submit', function () {
         var check = true;
 
@@ -140,6 +151,69 @@
         } else {
             var keywordsinput = $('.search-keyword').val().toLowerCase();
             var checkExist = true;
+            var numberOfKeyword;
+            $('#myTable td.keywordsNo').each(function () {
+                numberOfKeyword = $(this).html();
+            });
+            if (numberOfKeyword >= 10) {
+                $.notify({
+                    icon: "pe-7s-bell",
+                    message: 'You have reached the limit for the number of keywords! Please contact admin for more infomation'
+
+                }, {
+                    type: type[4],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
+                return false;
+            } else {
+                $('#myTable td.keywords').each(function () {
+                    if ($(this).html().toLowerCase() == $(input).val().trim()) {
+                        checkExist = false;
+                    }
+                });
+                if (!checkExist) {
+                    $.notify({
+                        icon: "pe-7s-bell",
+                        message: 'This keyword is existed!'
+
+                    }, {
+                        type: type[4],
+                        timer: 4000,
+                        placement: {
+                            from: 'top',
+                            align: 'left'
+                        }
+                    });
+                    return false;
+                }
+            }
+        }
+    }
+
+    function validateAddKeywordAdmin(input) {
+
+        if ($(input).val().trim() == '') {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: 'Keyword field is empty, can not add'
+
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            return false;
+        } else {
+            var keywordsinput = $('.search-keyword').val().toLowerCase();
+            var checkExist = true;
+
             $('#myTable td.keywords').each(function () {
                 if ($(this).html().toLowerCase() == $(input).val().trim()) {
                     checkExist = false;

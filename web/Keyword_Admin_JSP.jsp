@@ -194,7 +194,7 @@
                                             <h4 class="title">Create New Keyword</h4>
                                         </div>
                                         <div class="content">
-                                            <form class="login100-form validate-form-add-keyword" action="MainController" method="POST">
+                                            <form class="login100-form validate-form-add-keyword-admin" action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-5">
                                                         
@@ -202,7 +202,7 @@
                                                             <input class="input100" type="text" name="txtKeyword">
                                                             <span class="focus-input100"></span>
                                                         </div>
-                                                        <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeyword" name="btnAction">
+                                                        <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeywordAdmin" name="btnAction">
                                                             Add
                                                         </button>
                                                     </div>
@@ -247,7 +247,7 @@
                                                         <td><%= i + 1%></td>
                                                         <td class="keywords"><%= keywordDTO.getKeyword()%></td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                     </tr>
                                                     <% } %>
                                                     <% }%>

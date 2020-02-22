@@ -90,8 +90,9 @@ public class GetAllUserController extends HttpServlet {
                         listUser.add(userObj);
                     }
                     nextPage = userPage;
-                    request.setAttribute("LISTUSER", listUser);
-                    request.setAttribute("COUNT", listUser.size());
+                    HttpSession session = request.getSession();
+                    session.setAttribute("LISTUSER", listUser);
+                    session.setAttribute("COUNT", listUser.size());
                 } catch (JSONException e) {
                     System.out.println("Ko parse dc ve jsonobj");
                     nextPage = error;

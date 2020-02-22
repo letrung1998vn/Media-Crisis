@@ -213,7 +213,7 @@
                                                 <th>Status</th>
                                                 </thead>
                                                 <tbody>
-                                                    <% List<User> users = (List<User>) request.getAttribute("LISTUSER");
+                                                    <% List<User> users = (List<User>) session.getAttribute("LISTUSER");
                                                         if (users != null) {
                                                             for (int i = 0; i < users.size(); i++) {
 

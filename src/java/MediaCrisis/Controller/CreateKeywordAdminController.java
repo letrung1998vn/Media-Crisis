@@ -9,10 +9,17 @@ import MediaCrisis.Model.Keyword;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,16 +27,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 
 /**
  *
- * @author Admin
+ * @author Administrator
  */
-@WebServlet(name = "DeleteKeywordController", urlPatterns = {"/DeleteKeywordController"})
-public class DeleteKeywordController extends HttpServlet {
-
-    private final String keywordList = "Keyword_JSP.jsp";
-    private final String error = "error.html";
+@WebServlet(name = "CreateKeywordAdminController", urlPatterns = {"/CreateKeywordAdminController"})
+public class CreateKeywordAdminController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,50 +45,68 @@ public class DeleteKeywordController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private final String error = "error.html";
+    private final String create = "Keyword_Admin_JSP.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
-        String idString = request.getParameter("id");
-        int id = Integer.parseInt(idString);
-        String keywordNo = request.getParameter("no");
-        int keywordNumber = Integer.parseInt(keywordNo);
-        url += "id=";
-        url += id;
+        String newKeyword = request.getParameter("txtKeyword");
+        String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword";
+        HttpSession session = request.getSession();
+        String userId = session.getAttribute("USERID").toString();
+
         String nextPage = "";
 
         URL urlForGetRequest = new URL(url);
         String readLine = null;
-        HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-        connection.setRequestMethod("POST");
-        int responseCode = connection.getResponseCode();
+        HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+        conection.setRequestMethod("POST");
+        conection.setDoOutput(true);
+        Map<String, String> arguments = new HashMap<>();
+        arguments.put("keyword", newKeyword);
+        arguments.put("userId", userId);
+        StringJoiner sj = new StringJoiner("&");
+        for (Map.Entry<String, String> entry : arguments.entrySet()) {
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+        try (OutputStream os = conection.getOutputStream()) {
+            os.write(out);
+        }
+        int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
+                    new InputStreamReader(conection.getInputStream()));
             while ((readLine = in.readLine()) != null) {
                 rp.append(readLine);
             }
             in.close();
             System.out.println("JSON String Result " + rp.toString());
+            try {
+                JSONObject jobj = new JSONObject(rp.toString());
+                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(),
+                        jobj.get("userId").toString());
+                List<Keyword> listKeyword = new ArrayList<>();
+                listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
+                listKeyword.add(keyWord);
+                session.setAttribute("LISTKEYWORD", listKeyword);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            nextPage = create;
+            request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+            request.setAttribute("RESULT", 2);
+            request.setAttribute("SEND", true);
         } else {
-            System.out.println("Loi api");
+            System.out.println("Loi api roi");
             nextPage = error;
         }
-        request.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
-        request.setAttribute("RESULT", 2);
-        request.setAttribute("SEND", true);
-        nextPage = keywordList;
-        HttpSession session = request.getSession();
-        List<Keyword> listKeyword = new ArrayList<>();
-        listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
-        listKeyword.remove(keywordNumber);
-        session.setAttribute("LISTKEYWORD", listKeyword);
-//        session.removeAttribute("");
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

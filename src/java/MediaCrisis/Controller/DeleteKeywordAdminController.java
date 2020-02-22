@@ -5,10 +5,15 @@
  */
 package MediaCrisis.Controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +23,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Administrator
  */
-public class MainController extends HttpServlet {
+@WebServlet(name = "DeleteKeywordAdminController", urlPatterns = {"/DeleteKeywordAdminController"})
+public class DeleteKeywordAdminController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -29,49 +35,47 @@ public class MainController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String loginController = "LoginController";
-    private final String signupController = "SignUpController";
-    private final String loginPage = "login_JSP.jsp";
-    private final String showKeyword = "GetAllKeywordController";
-    private final String deleteKeyword = "DeleteKeywordController";
-    private final String createKeyword = "CreateKeywordController";
-    private final String deleteKeywordAdmin = "DeleteKeywordAdminController";
-    private final String createKeywordAdmin = "CreateKeywordAdminController";
-    private final String showUser = "GetAllUserController";
-
+    private final String keywordList = "GetAllKeywordController";
+    private final String error = "error.html";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            String button = request.getParameter("btnAction");
-            String url = loginPage;
-            if (button == null) {
-                System.out.println("Btn bị null");
-                //do nothing
-            } else if (button.equals("Login")) {
-                url = loginController;
-            } else if (button.equals("SignUp")) {
-                url = signupController;
-            } else if (button.equals("LogOut")) {
-                HttpSession session = request.getSession();
-                session.invalidate();
-                url = loginPage;
-            } else if (button.equals("ShowKeyword")) {
-                url = showKeyword;
-            } else if (button.equals("ShowUser")) {
-                url = showUser;
-            } else if (button.equals("DeleteKeyword")) {
-                url = deleteKeyword;
-            } else if (button.equals("CreateKeyword")) {
-                url = createKeyword;
-            } else if (button.equals("DeleteKeywordAdmin")) {
-                url = deleteKeyword;
-            } else if (button.equals("CreateKeywordAdmin")) {
-                url = createKeyword;
+         String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
+        String idString = request.getParameter("id");
+        int id = Integer.parseInt(idString);
+        url += "id=";
+        url += id;
+        String nextPage = "";
+
+        URL urlForGetRequest = new URL(url);
+        String readLine = null;
+        HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
+        connection.setRequestMethod("POST");
+        int responseCode = connection.getResponseCode();
+        StringBuffer rp = new StringBuffer();
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+            while ((readLine = in.readLine()) != null) {
+                rp.append(readLine);
             }
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            in.close();
+            System.out.println("JSON String Result " + rp.toString());
+        } else {
+            System.out.println("Loi api");
+            nextPage = error;
         }
+        request.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
+        request.setAttribute("RESULT", 2);
+        request.setAttribute("SEND", true);
+        nextPage = keywordList;
+        HttpSession session = request.getSession();
+//        session.removeAttribute("");
+        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+        rd.forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

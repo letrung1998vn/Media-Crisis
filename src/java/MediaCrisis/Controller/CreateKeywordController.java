@@ -9,11 +9,17 @@ import MediaCrisis.Model.Keyword;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,13 +52,10 @@ public class CreateKeywordController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String newKeyword = request.getParameter("txtKeyword");
-        String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword/?";
-        url += "keyword=";
-        url += newKeyword;
-        url += "&userId=";
+        String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword";
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
-        url += userId;
+
 
         String nextPage = "";
 
@@ -60,6 +63,19 @@ public class CreateKeywordController extends HttpServlet {
         String readLine = null;
         HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
         conection.setRequestMethod("POST");
+        conection.setDoOutput(true);
+        Map<String, String> arguments = new HashMap<>();
+        arguments.put("keyword", newKeyword);
+        arguments.put("userId", userId); 
+        StringJoiner sj = new StringJoiner("&");
+        for (Map.Entry<String, String> entry : arguments.entrySet()) {
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+        try (OutputStream os = conection.getOutputStream()) {
+            os.write(out);
+        }
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
 
@@ -73,10 +89,10 @@ public class CreateKeywordController extends HttpServlet {
             System.out.println("JSON String Result " + rp.toString());
             try {
                 JSONObject jobj = new JSONObject(rp.toString());
-                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(), 
-                                jobj.get("userId").toString());
+                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(),
+                        jobj.get("userId").toString());
                 List<Keyword> listKeyword = new ArrayList<>();
-                listKeyword = (List<Keyword>)session.getAttribute("LISTKEYWORD");
+                listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
                 listKeyword.add(keyWord);
                 session.setAttribute("LISTKEYWORD", listKeyword);
             } catch (Exception e) {

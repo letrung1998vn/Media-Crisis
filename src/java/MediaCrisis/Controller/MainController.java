@@ -35,6 +35,7 @@ public class MainController extends HttpServlet {
     private final String showKeyword = "GetAllKeywordController";
     private final String deleteKeyword = "DeleteKeywordController";
     private final String createKeyword = "CreateKeywordController";
+    private final String showUser = "GetAllUserController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,6 +56,8 @@ public class MainController extends HttpServlet {
                 url = loginPage;
             } else if (button.equals("ShowKeyword")) {
                 url = showKeyword;
+            } else if (button.equals("ShowUser")) {
+                url = showUser;
             } else if (button.equals("DeleteKeyword")) {
                 url = deleteKeyword;
             } else if (button.equals("CreateKeyword")) {

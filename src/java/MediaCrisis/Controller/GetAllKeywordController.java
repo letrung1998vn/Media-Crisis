@@ -32,7 +32,7 @@ import org.json.JSONObject;
  */
 @WebServlet(name = "GetAllKeywordController", urlPatterns = {"/GetAllKeywordController"})
 public class GetAllKeywordController extends HttpServlet {
-    private final String keywordList = "Keyword_JSP.jsp";
+    private final String keywordList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -63,8 +63,8 @@ public class GetAllKeywordController extends HttpServlet {
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 //read and get data from url
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {                    
+                    new InputStreamReader(connection.getInputStream()));
+                    while ((readLine = in.readLine()) != null) {                    
                     rp.append(readLine);
                 }
                 in.close();

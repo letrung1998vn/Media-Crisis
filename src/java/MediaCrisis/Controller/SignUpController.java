@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller;
 
+import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,9 +42,9 @@ public class SignUpController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
     private final String error = "error.html";
     private final String loginPage = "login_JSP.jsp";
+    private final String signupPage = "signup_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoSuchAlgorithmException {
@@ -89,13 +90,26 @@ public class SignUpController extends HttpServlet {
                 in.close();
                 System.out.println("JSON String Result " + rp.toString());
                 try {
+                    JSONObject jobj = new JSONObject(rp.toString());
+                    if (jobj.getString("userId").equals("")) {
+                        User inputedUser = new User(username, "", "", name, email, true);
+                        request.setAttribute("INPUT_USER", inputedUser);
+                        nextPage = signupPage;
+                    } else {
+                        nextPage = loginPage;
+                        request.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                        request.setAttribute("RESULT", 2);
+                        request.setAttribute("SEND", true);
+                    }
+                } catch (Exception e) {
+                }
+                try {
                     //Gửi mail verify email
                 } catch (Exception e) {
                     System.out.println("Gui mail fail");
                     nextPage = error;
                 }
-                nextPage = loginPage;
-                request.setAttribute("SIGNUP_MESSAGE", "Signed up successfully, please login!");
+
             } else {
                 System.out.println("Loi api roi");
                 nextPage = error;

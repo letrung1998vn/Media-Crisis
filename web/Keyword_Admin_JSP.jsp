@@ -31,7 +31,7 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-        
+
         <script>
         </script>
     </head>
@@ -197,7 +197,7 @@
                                             <form class="login100-form validate-form-add-keyword-admin" action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-5">
-                                                        
+
                                                         <div class="wrap-input100 validate-input" data-validate = "">
                                                             <input class="input100" type="text" name="txtKeyword">
                                                             <span class="focus-input100"></span>
@@ -251,6 +251,15 @@
                                                     </tr>
                                                     <% } %>
                                                     <% }%>
+                                                    <tr>
+                                                        <% if (((int)session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) { %>
+                                                        <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                        <% } %>
+                                                        <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
+                                                        <% if (((int)session.getAttribute("KEYWORDADMINTHISPAGE")) != (int)(session.getAttribute("KEYWORDADMINMAXPAGE"))) { %>
+                                                        <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                        <% } %>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>

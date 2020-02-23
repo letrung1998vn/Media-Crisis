@@ -14,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,13 +26,10 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Admin
+ * @author Administrator
  */
-@WebServlet(name = "GetAllKeywordController", urlPatterns = {"/GetAllKeywordController"})
-public class GetAllKeywordController extends HttpServlet {
-
-    private final String keywordList = "Keyword_Admin_JSP.jsp";
-    private final String error = "error.html";
+@WebServlet(name = "KeywordPagingController", urlPatterns = {"/KeywordPagingController"})
+public class KeywordPagingController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,11 +40,16 @@ public class GetAllKeywordController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+        private final String keywordList = "Keyword_Admin_JSP.jsp";
+    private final String error = "error.html";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, JSONException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/getAllByPage/?page=1";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/getAllByPage/?page=";
+            String pageNum = request.getParameter("pageNum");
+            url += pageNum;
             String nextPage = "";
             HttpSession session = request.getSession();
             List<JSONObject> list = new ArrayList<>();
@@ -144,11 +144,7 @@ public class GetAllKeywordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (JSONException ex) {
-            Logger.getLogger(GetAllKeywordController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -162,11 +158,7 @@ public class GetAllKeywordController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (JSONException ex) {
-            Logger.getLogger(GetAllKeywordController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

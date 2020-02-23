@@ -31,7 +31,7 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-        
+
         <script>
         </script>
     </head>
@@ -198,7 +198,7 @@
                                             <form class="login100-form validate-form-add-keyword" action="MainController" method="POST">
                                                 <div class="row">
                                                     <div class="col-md-5">
-                                                        
+
                                                         <div class="wrap-input100 validate-input" data-validate = "">
                                                             <input class="input100" type="text" name="txtKeyword">
                                                             <span class="focus-input100"></span>
@@ -248,7 +248,7 @@
                                                         <td class="keywordsNo"><%= i + 1%></td>
                                                         <td class="keywords"><%= keywordDTO.getKeyword()%></td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                     </tr>
                                                     <% } %>
                                                     <% }%>

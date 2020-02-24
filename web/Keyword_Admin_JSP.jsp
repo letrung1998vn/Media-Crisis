@@ -212,25 +212,31 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="header">
+                                        <div class="header col-md-12">
                                             <h4 class="title">Search Keyword</h4>
                                         </div>
-                                        <div class="content">
+                                        <div class="content col-md-12">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                                <form class="login100-form col-md-12" action="MainController" method="post">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" placeholder="Enter Keyword" name="txtSearch">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
-                                                    if (listUser != null) { %>
-                                                <select>
+                                                    <div class="col-md-2">
+                                                        <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="SearchKeyword" name="btnAction">Search</button>
+                                                    </div>
+                                                    
 
+                                                </form>
+
+                                                <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
+                                                    if (listUser != null) {%>
+                                                <select name="forma" onchange="location = this.value;">
+                                                    <option value="MainController?btnAction=KeywordPaging&pageNum=1">Username</option>
                                                     <% for (int i = 0; i < listUser.length; i++) {
                                                     %>
-
-                                                    <option><%= listUser[i] %></option>
-
+                                                    <option value="MainController?btnAction=KeywordSearchByUser&username=<%= listUser[i]%>"><%= listUser[i]%></option>
                                                     <% } %>
                                                 </select>
                                                 <% } %>
@@ -264,14 +270,16 @@
                                                     </tr>
                                                     <% } %>
                                                     <% }%>
-                                                    <tr>
+                                                    <tr>    
+                                                        <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") != 0)) {%>
                                                         <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) {%>
                                                 <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
                                                             <% }%>
                                                             <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
                                                             <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) != (int) (session.getAttribute("KEYWORDADMINMAXPAGE"))) {%>
                                                 <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                                            <% }%>
+                                                            <% }
+                                                                }%>
                                                 </tr>
                                                 </tbody>
                                             </table>

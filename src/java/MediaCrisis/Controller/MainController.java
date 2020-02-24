@@ -39,6 +39,9 @@ public class MainController extends HttpServlet {
     private final String createKeywordAdmin = "CreateKeywordAdminController";
     private final String showUser = "GetAllUserController";
     private final String keywordPaging = "KeywordPagingController";
+    private final String keywordUserSearch = "GetKeywordByUsername";
+    private final String keywordInputSearch = "SearchKeywordController";
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -71,6 +74,10 @@ public class MainController extends HttpServlet {
                 url = createKeyword;
             } else if (button.equals("KeywordPaging")) {
                 url = keywordPaging;
+            } else if (button.equals("KeywordSearchByUser")) {
+                url = keywordUserSearch;
+            } else if (button.equals("SearchKeyword")) {
+                url = keywordInputSearch;
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

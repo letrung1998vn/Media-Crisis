@@ -1,3 +1,4 @@
+
 <%@page import="MediaCrisis.Model.Keyword"%>
 <%@page import="java.util.List"%>
 <!doctype html>
@@ -221,6 +222,18 @@
                                                         <input type="text" class="form-control search-keyword" placeholder="Enter Keyword">
                                                     </div>
                                                 </div>
+                                                <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
+                                                    if (listUser != null) { %>
+                                                <select>
+
+                                                    <% for (int i = 0; i < listUser.length; i++) {
+                                                    %>
+
+                                                    <option><%= listUser[i] %></option>
+
+                                                    <% } %>
+                                                </select>
+                                                <% } %>
                                             </div>
                                         </div>
                                     </div>
@@ -252,14 +265,14 @@
                                                     <% } %>
                                                     <% }%>
                                                     <tr>
-                                                        <% if (((int)session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) { %>
-                                                        <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                                        <% } %>
-                                                        <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
-                                                        <% if (((int)session.getAttribute("KEYWORDADMINTHISPAGE")) != (int)(session.getAttribute("KEYWORDADMINMAXPAGE"))) { %>
-                                                        <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                                        <% } %>
-                                                    </tr>
+                                                        <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) {%>
+                                                <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                            <% }%>
+                                                            <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
+                                                            <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) != (int) (session.getAttribute("KEYWORDADMINMAXPAGE"))) {%>
+                                                <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                            <% }%>
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>

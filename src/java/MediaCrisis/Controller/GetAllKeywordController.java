@@ -56,7 +56,7 @@ public class GetAllKeywordController extends HttpServlet {
             List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
-            
+
             URL urlForGetRequest = new URL(url);
             String readLine = null;
             HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
@@ -98,6 +98,32 @@ public class GetAllKeywordController extends HttpServlet {
                 session.setAttribute("COUNT", listKeyword.size());
                 session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
                 session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
+                url = "http://media-crisis-api.herokuapp.com/keyword/getUsers";
+                urlForGetRequest = new URL(url);
+                readLine = null;
+                connection = (HttpURLConnection) urlForGetRequest.openConnection();
+                connection.setRequestMethod("GET");
+                responeCod = connection.getResponseCode();
+                rp = new StringBuffer();
+                System.out.println(responeCod);
+                String[] usersList = null;
+                if (responeCod == HttpURLConnection.HTTP_OK) {
+                    //read and get data from url
+                    in = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()));
+                    while ((readLine = in.readLine()) != null) {
+                        rp.append(readLine);
+                    }
+                    in.close();
+                    System.out.println(rp.toString());
+                    String users = rp.toString();
+                    users = users.substring(1, users.length() - 1);
+                    usersList = users.split(",");
+                    for (int i = 0; i < usersList.length; i++) {
+                        usersList[i] = usersList[i].substring(1, usersList[i].length() - 1);
+                    }
+                }
+                session.setAttribute("USERSKEYWORDADMIN", usersList);
                 nextPage = keywordList;
 
 //                listJson = listJson.replace("[", "");

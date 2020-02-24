@@ -40,9 +40,9 @@ public class KeywordPagingController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-        private final String keywordList = "Keyword_Admin_JSP.jsp";
+    private final String keywordList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -56,7 +56,7 @@ public class KeywordPagingController extends HttpServlet {
             List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
-            
+
             URL urlForGetRequest = new URL(url);
             String readLine = null;
             HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
@@ -98,6 +98,7 @@ public class KeywordPagingController extends HttpServlet {
                 session.setAttribute("COUNT", listKeyword.size());
                 session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
                 session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
+                
                 nextPage = keywordList;
 
 //                listJson = listJson.replace("[", "");

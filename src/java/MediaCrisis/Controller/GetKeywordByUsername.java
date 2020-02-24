@@ -58,6 +58,7 @@ public class GetKeywordByUsername extends HttpServlet {
             List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
+            System.out.println(url);
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;

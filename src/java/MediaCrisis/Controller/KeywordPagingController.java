@@ -47,10 +47,13 @@ public class KeywordPagingController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/getAllByPage/?page=";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/searchKeyword/?keyword=";
+            url += request.getParameter("searchingKeyword");
+            url += "&page=";
             String pageNum = request.getParameter("pageNum");
             url += pageNum;
             String nextPage = "";
+            System.out.println(url);
             HttpSession session = request.getSession();
             List<JSONObject> list = new ArrayList<>();
             List<Keyword> listKeyword = new ArrayList<>();

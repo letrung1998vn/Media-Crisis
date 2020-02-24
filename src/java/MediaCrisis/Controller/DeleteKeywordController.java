@@ -6,6 +6,7 @@
 package MediaCrisis.Controller;
 
 import MediaCrisis.Model.Keyword;
+import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import sun.security.pkcs11.wrapper.Functions;
 
 /**
  *
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpSession;
 public class DeleteKeywordController extends HttpServlet {
 
     private final String keywordList = "Keyword_JSP.jsp";
+    private final String keywordAdminList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
 
     /**
@@ -74,8 +77,13 @@ public class DeleteKeywordController extends HttpServlet {
         request.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
         request.setAttribute("RESULT", 2);
         request.setAttribute("SEND", true);
-        nextPage = keywordList;
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("USERLOGIN");
+        if (user.getRole().equals("admin")) {
+            nextPage = keywordAdminList;
+        } else {
+            nextPage = keywordList;
+        }
         List<Keyword> listKeyword = new ArrayList<>();
         listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
         listKeyword.remove(keywordNumber);

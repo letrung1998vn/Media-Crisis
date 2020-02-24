@@ -98,6 +98,7 @@ public class GetAllKeywordController extends HttpServlet {
                 session.setAttribute("COUNT", listKeyword.size());
                 session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
                 session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
+                session.setAttribute("SEARCHINGKEYWORD", "");
                 url = "http://media-crisis-api.herokuapp.com/keyword/getUsers";
                 urlForGetRequest = new URL(url);
                 readLine = null;

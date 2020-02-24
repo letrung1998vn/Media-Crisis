@@ -220,39 +220,66 @@
                                                 <form class="login100-form col-md-12" action="MainController" method="post">
                                                     <div class="col-md-10">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control" placeholder="Enter Keyword" name="txtSearch">
+                                                            <input type="text" class="form-control search-keyword-admin" placeholder="Enter Keyword" name="txtSearch" value="<%= session.getAttribute("SEARCHINGKEYWORD")%>">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="SearchKeyword" name="btnAction">Search</button>
                                                     </div>
-                                                    
+
 
                                                 </form>
+                                                <form class="login100-form col-md-12 validate-form-search-keyword-admin" action="MainController" method="post">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group">
+                                                            <input list="my-list" type="text" class="form-control validate-input input100 username" placeholder="Enter Username" name="username">
+                                                            <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
+                                                                if (listUser != null) {%>
+                                                            <datalist id="my-list">
+                                                                <% for (int i = 0; i < listUser.length; i++) {
+                                                                %>
+                                                                <option class="username-details" value="<%= listUser[i]%>"></option>
+                                                                <% } %>
+                                                            </datalist>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="KeywordSearchByUser" name="btnAction">Search</button>
+                                                    </div>
 
-                                                <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
-                                                    if (listUser != null) {%>
-                                                <select name="forma" onchange="location = this.value;">
-                                                    <option value="MainController?btnAction=KeywordPaging&pageNum=1">Username</option>
-                                                    <% for (int i = 0; i < listUser.length; i++) {
-                                                    %>
-                                                    <option value="MainController?btnAction=KeywordSearchByUser&username=<%= listUser[i]%>"><%= listUser[i]%></option>
-                                                    <% } %>
-                                                </select>
-                                                <% } %>
+
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <div class="header">
-                                            <h4 class="title">Key word List</h4>
+                                        <div class="header col-md-12">
+                                            <h4 class="title">Keyword List</h4>
+                                            <div class="col-md-12">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-2">
+                                                    <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") != 0)) {%>
+                                                    <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) {%>
+                                                    <a class="" href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                                <% }%>
+                                                    <span style="padding-left: 25px; padding-right: 25px">
+                                                        <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
+                                                    </span>
+                                                    <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) != (int) (session.getAttribute("KEYWORDADMINMAXPAGE"))) {%>
+                                                    <a class="" href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+
+                                                    <% }
+                                                        }%>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="content table-responsive table-full-width">
                                             <table id="myTable" class="table table-hover table-striped">
                                                 <thead>
                                                 <th>NO</th>
                                                 <th>Keyword</th>
-                                                <th>User Id</th>
+                                                <th>Username</th>
                                                 <th></th>
                                                 </thead>
                                                 <tbody>
@@ -266,21 +293,10 @@
                                                         <td><%= i + 1%></td>
                                                         <td class="keywords"><%= keywordDTO.getKeyword()%></td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                     </tr>
                                                     <% } %>
                                                     <% }%>
-                                                    <tr>    
-                                                        <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") != 0)) {%>
-                                                        <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE") > 1)) {%>
-                                                <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                                            <% }%>
-                                                            <%= session.getAttribute("KEYWORDADMINTHISPAGE")%>
-                                                            <% if (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) != (int) (session.getAttribute("KEYWORDADMINMAXPAGE"))) {%>
-                                                <a href="MainController?btnAction=KeywordPaging&pageNum=<%= ((int) session.getAttribute("KEYWORDADMINTHISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                                            <% }
-                                                                }%>
-                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -358,6 +374,7 @@
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
                                 $(document).ready(function () {
+
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
@@ -372,7 +389,11 @@
                                             }
                                         });
                                     }
+                                    if (<%= session.getAttribute("SEARCHINGKEYWORD")%> == null) {
+                                        $('.search-keyword-admin').val("");
+                                    }
                                 });
+
     </script>
 
 </html>

@@ -132,6 +132,61 @@
 
     }
 
+    $('.validate-form-search-keyword-admin').on('submit', function () {
+        var check = true;
+        input = $('.username');
+        var input1 = $('.username-details');
+
+        for (var i = 0; i < input.length; i++) {
+            if (validateInputUser(input[i]) == false) {
+                check = false;
+            }
+        }
+        if (check) {
+            check = false;
+            input1.each(function () {
+                if ($(this).val().toLowerCase() == input.val()) {
+                    check = true;
+                }
+            });
+            if (!check) {
+                $.notify({
+                icon: "pe-7s-bell",
+                message: 'Username you have inputed is not existed!'
+
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            }
+        }
+        return check;
+    });
+
+    function validateInputUser(input) {
+
+        if ($(input).val().trim() == '') {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: 'This field is empty, can not search'
+
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            return false;
+        }
+
+    }
+
     function validateAddKeyword(input) {
 
         if ($(input).val().trim() == '') {

@@ -290,7 +290,7 @@
                                                     <% Keyword keywordDTO = list.get(i);%>
 
                                                     <tr>
-                                                        <td><%= i + 1%></td>
+                                                        <td><%= (((int) session.getAttribute("KEYWORDADMINTHISPAGE"))-1) * 10 + (i + 1) %></td>
                                                         <td class="keywords"><%= keywordDTO.getKeyword()%></td>
                                                         <td><%= keywordDTO.getUserId()%></td>
                                                         <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>

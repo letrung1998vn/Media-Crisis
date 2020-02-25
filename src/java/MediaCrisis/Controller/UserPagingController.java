@@ -5,7 +5,7 @@
  */
 package MediaCrisis.Controller;
 
-import MediaCrisis.Model.Keyword;
+import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,8 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,8 +28,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "GetKeywordByUsername", urlPatterns = {"/GetKeywordByUsername"})
-public class GetKeywordByUsername extends HttpServlet {
+@WebServlet(name = "UserPagingController", urlPatterns = {"/UserPagingController"})
+public class UserPagingController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,23 +40,21 @@ public class GetKeywordByUsername extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String keywordList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
+    private final String userPage = "User_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, JSONException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/getAllByUserId/?userId=";
+            String url = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username";
+            url += request.getParameter("searchingKeyword");
+            url += "&page=";
+            String pageNum = request.getParameter("pageNum");
+            url += pageNum;
             String nextPage = "";
-            HttpSession session = request.getSession();
-            String userId = request.getParameter("username");
-            url += userId;
-            List<JSONObject> list = new ArrayList<>();
-            List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
-            System.out.println(url);
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;
@@ -66,8 +62,6 @@ public class GetKeywordByUsername extends HttpServlet {
             connection.setRequestMethod("GET");
             int responeCod = connection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-
-            Keyword keyDTO = new Keyword();
 
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 //read and get data from url
@@ -80,33 +74,52 @@ public class GetKeywordByUsername extends HttpServlet {
 
                 String listJson = rp.toString();
                 try {
+                    JSONObject jobj = new JSONObject(listJson);
+                    System.out.println("Jobj: " + jobj);
+                    thisPage = jobj.getInt("number") + 1;
+                    maxPage = jobj.getInt("totalPages");
+                    listJson = jobj.get("content").toString();
                     listJson = listJson.substring(1, listJson.length() - 1);
                     listJson = listJson.replace("},{", "};{");
-                    String[] keywords = listJson.split(";");
-                    for (int i = 0; i < keywords.length; i++) {
-                        JSONObject obj = new JSONObject(keywords[i]);
-                        Keyword keyWord = new Keyword(obj.getInt("id"), obj.get("keyword").toString(),
-                                obj.get("userId").toString());
-                        listKeyword.add(keyWord);
+                    String[] users = listJson.split(";");
+                    List<User> listUser = new ArrayList<User>();
+                    for (int i = 0; i < users.length; i++) {
+                        JSONObject obj = new JSONObject(users[i]);
+                        User userObj = new User();
+                        userObj.setUsername(obj.getString("userId"));
+                        userObj.setName(obj.getString("name"));
+                        userObj.setEmail(obj.getString("email"));
+                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
+                        userObj.setPassword(obj1.getString("password"));
+                        userObj.setRole(obj1.getString("role"));
+                        userObj.setIsAvailable(obj1.getBoolean("available"));
+                        System.out.println(userObj.toString());
+                        //có noti thì thêm vào đây
+                        listUser.add(userObj);
                     }
-                    session.setAttribute("LISTKEYWORD", listKeyword);
-                    session.setAttribute("COUNT", listKeyword.size());
-                    session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
-                    session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
-                    nextPage = keywordList;
+
+                    nextPage = userPage;
+                    try {
+                        
+                    } catch (Exception e) {
+                    }
+                    HttpSession session = request.getSession();
+                    session.setAttribute("LISTUSER", listUser);
+                    session.setAttribute("COUNT", listUser.size());
+                    session.setAttribute("USERADMINTHISPAGE", thisPage);
+                    session.setAttribute("USERADMINMAXPAGE", maxPage);
+                    session.setAttribute("SEARCHINGKEYWORD", "");
                 } catch (JSONException e) {
-                    System.out.println("Ko parse dc ve json obj");
+                    System.out.println("Ko parse dc ve jsonobj");
                     nextPage = error;
                 }
-
-                RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-                rd.forward(request, response);
             }
-
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -118,11 +131,7 @@ public class GetKeywordByUsername extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (JSONException ex) {
-            Logger.getLogger(GetKeywordByUsername.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -136,11 +145,7 @@ public class GetKeywordByUsername extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (JSONException ex) {
-            Logger.getLogger(GetKeywordByUsername.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

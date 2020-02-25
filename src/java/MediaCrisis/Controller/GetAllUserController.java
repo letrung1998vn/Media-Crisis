@@ -50,8 +50,10 @@ public class GetAllUserController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/user/check";
+            String url = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username&page=1";
             String nextPage = "";
+            int maxPage = 0;
+            int thisPage = 0;
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;
@@ -70,11 +72,16 @@ public class GetAllUserController extends HttpServlet {
                 in.close();
 
                 String listJson = rp.toString();
-                listJson = listJson.substring(1, listJson.length() - 1);
-                List<User> listUser = new ArrayList<>();
-                listJson = listJson.replace("},{", "};{");
-                String[] users = listJson.split(";");
                 try {
+                    JSONObject jobj = new JSONObject(listJson);
+                    System.out.println("Jobj: " + jobj);
+                    thisPage = jobj.getInt("number") + 1;
+                    maxPage = jobj.getInt("totalPages");
+                    listJson = jobj.get("content").toString();
+                    listJson = listJson.substring(1, listJson.length() - 1);
+                    listJson = listJson.replace("},{", "};{");
+                    String[] users = listJson.split(";");
+                    List<User> listUser = new ArrayList<User>();
                     for (int i = 0; i < users.length; i++) {
                         JSONObject obj = new JSONObject(users[i]);
                         User userObj = new User();
@@ -89,10 +96,14 @@ public class GetAllUserController extends HttpServlet {
                         //có noti thì thêm vào đây
                         listUser.add(userObj);
                     }
+
                     nextPage = userPage;
                     HttpSession session = request.getSession();
                     session.setAttribute("LISTUSER", listUser);
                     session.setAttribute("COUNT", listUser.size());
+                    session.setAttribute("USERADMINTHISPAGE", thisPage);
+                    session.setAttribute("USERADMINMAXPAGE", maxPage);
+                    session.setAttribute("SEARCHINGKEYWORD", "");
                 } catch (JSONException e) {
                     System.out.println("Ko parse dc ve jsonobj");
                     nextPage = error;

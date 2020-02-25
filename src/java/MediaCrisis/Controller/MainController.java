@@ -39,16 +39,19 @@ public class MainController extends HttpServlet {
     private final String createKeywordAdmin = "CreateKeywordAdminController";
     private final String showUser = "GetAllUserController";
     private final String keywordPaging = "KeywordPagingController";
-    private final String keywordUserSearch = "GetKeywordByUsername";
+    private final String userPaging = "UserPagingController";
+    private final String keywordUserSearch = "GetKeywordByUsernameController";
     private final String keywordInputSearch = "SearchKeywordController";
-    
+    private final String userSearch = "SearchUserController";
+    private final String changeUserStatus = "ChangeUserStatusController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String button = request.getParameter("btnAction");
-            String url = loginPage;
+            System.out.println(button);
+            String url = "error.html";
             if (button == null) {
                 System.out.println("Btn bị null");
                 //do nothing
@@ -78,6 +81,12 @@ public class MainController extends HttpServlet {
                 url = keywordUserSearch;
             } else if (button.equals("SearchKeyword")) {
                 url = keywordInputSearch;
+            } else if (button.equals("UserPaging")) {
+                url = userPaging;
+            } else if (button.equals("SearchUser")) {
+                url = userSearch;
+            } else if (button.equals("ChangeUserStatus")) {
+                url = changeUserStatus;
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

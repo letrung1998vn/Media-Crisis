@@ -53,7 +53,7 @@
 
                     <ul class="nav">
                         <li>
-                            <a href="mainPage_JSP.jsp">
+                            <a href="adminPage_JSP.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -67,7 +67,7 @@
                         <li class="active">
                             <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
-                                <p>Keyword</p>
+                                <p>Keyword Admin</p>
                             </a>
                         </li>
                         <li>

@@ -52,7 +52,7 @@
 
                     <ul class="nav">
                         <li>
-                            <a href="mainPage_JSP.jsp">
+                            <a href="adminPage_JSP.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -63,13 +63,13 @@
                                 <p>User Profile</p>
                             </a>
                         </li>
-                        <li class="active">
+                        <li>
                             <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
-                                <p>Keyword</p>
+                                <p>Keyword Admin</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="MainController?btnAction=ShowUser">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>User manager</p>
@@ -189,17 +189,39 @@
                                         </div>
                                         <div class="content">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control search-user" placeholder="Enter username">
+                                                <form class="login100-form col-md-12" action="MainController" method="post">
+                                                    <div class="col-md-10">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control search-user-admin" placeholder="Enter Keyword" name="txtSearch" value="">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div class="col-md-2">
+                                                        <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="SearchUser" name="btnAction">Search</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="header">
                                             <h4 class="title">Key word List</h4>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-2">
+                                                <% if (((int) session.getAttribute("USERADMINTHISPAGE") != 0)) {%>
+                                                <% if (((int) session.getAttribute("USERADMINTHISPAGE") > 1)) {%>
+                                                <a class="" href="MainController?btnAction=UserPaging&pageNum=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) - 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                            <% }%>
+                                                <span style="padding-left: 25px; padding-right: 25px">
+                                                    <%= session.getAttribute("USERADMINTHISPAGE")%>
+                                                </span>
+                                                <% if (((int) session.getAttribute("USERADMINTHISPAGE")) != (int) (session.getAttribute("USERADMINMAXPAGE"))) {%>
+                                                <a class="" href="MainController?btnAction=UserPaging&pageNum=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) + 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+
+                                                <% }
+                                                    }%>
+                                            </div>
                                         </div>
                                         <div class="content table-responsive table-full-width">
                                             <table id="myTable" class="table table-hover table-striped">
@@ -218,12 +240,29 @@
 
                                                     %>
                                                     <tr>
-                                                        <td><%= i + 1%></td>
+                                                        <td><%= (((int) session.getAttribute("USERADMINTHISPAGE")) - 1) * 10 + (i + 1)%></td>
                                                         <td class="users"><%= users.get(i).getUsername()%></td>
                                                         <td><%= users.get(i).getName()%></td>
                                                         <td><%= users.get(i).getEmail()%></td>
                                                         <td><%= users.get(i).getRole()%></td>
-                                                        <td><%= users.get(i).isIsAvailable()%></td>
+                                                        <td><a href="MainController?btnAction=ChangeUserStatus&username=<%= users.get(i).getUsername()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to ' + <%
+                                                            if (users.get(i).isIsAvailable()) { %>
+                                                                'disable'
+                                                               <%
+                                                               } else { %>
+                                                                'enable'
+                                                               <%
+                                                                   }
+                                                               %> + ' this item?'
+                                                                        );"><%
+                                                                            if (users.get(i).isIsAvailable()) { %>
+                                                                <button class="btn btn-success">Enable</button>
+                                                                <%
+                                                            } else { %>
+                                                                <button class="btn btn-danger">Disable</button>
+                                                                <%
+                                                                    }
+                                                                %></a></td>
                                                     </tr>
                                                     <% }
                                                         }%>
@@ -304,16 +343,7 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
-                                $('.search-user').on('input', function () {
-                                    var keywordsinput = $('.search-user').val().toLowerCase();
-                                    $('#myTable td.users').each(function () {
-                                        $(this).parent().removeClass("hide");
-                                        if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1) {
-                                            $(this).parent().addClass("hide");
-                                        }
-                                    });
-                                });
-                                
+
                                 $(document).ready(function () {
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({
@@ -328,6 +358,9 @@
                                                 align: 'left'
                                             }
                                         });
+                                    }
+                                    if (<%= session.getAttribute("SEARCHINGKEYWORD")%> == null) {
+                                        $('.search-user-admin').val("");
                                     }
                                 });
     </script>

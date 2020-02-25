@@ -6,6 +6,7 @@
 package MediaCrisis.Controller;
 
 import MediaCrisis.Model.Keyword;
+import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,8 +29,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "KeywordPagingController", urlPatterns = {"/KeywordPagingController"})
-public class KeywordPagingController extends HttpServlet {
+@WebServlet(name = "SearchUserController", urlPatterns = {"/SearchUserController"})
+public class SearchUserController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,24 +41,20 @@ public class KeywordPagingController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String keywordList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
+    private final String userPage = "User_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/searchKeyword/?keyword=";
-            url += request.getParameter("searchingKeyword");
-            url += "&page=";
-            String pageNum = request.getParameter("pageNum");
-            url += pageNum;
+            String url = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username=";
+            url += request.getParameter("txtSearch");
+            url += "&page=1";
             String nextPage = "";
-            HttpSession session = request.getSession();
-            List<JSONObject> list = new ArrayList<>();
-            List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
+            HttpSession session = request.getSession();
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;
@@ -65,8 +62,6 @@ public class KeywordPagingController extends HttpServlet {
             connection.setRequestMethod("GET");
             int responeCod = connection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-
-            Keyword keyDTO = new Keyword();
 
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 //read and get data from url
@@ -86,52 +81,38 @@ public class KeywordPagingController extends HttpServlet {
                     listJson = jobj.get("content").toString();
                     listJson = listJson.substring(1, listJson.length() - 1);
                     listJson = listJson.replace("},{", "};{");
-                    String[] keywords = listJson.split(";");
-                    for (int i = 0; i < keywords.length; i++) {
-                        JSONObject obj = new JSONObject(keywords[i]);
-                        Keyword keyWord = new Keyword(obj.getInt("id"), obj.get("keyword").toString(),
-                                obj.get("userId").toString());
-                        listKeyword.add(keyWord);
+                    String[] users = listJson.split(";");
+                    List<User> listUser = new ArrayList<User>();
+                    for (int i = 0; i < users.length; i++) {
+                        JSONObject obj = new JSONObject(users[i]);
+                        User userObj = new User();
+                        userObj.setUsername(obj.getString("userId"));
+                        userObj.setName(obj.getString("name"));
+                        userObj.setEmail(obj.getString("email"));
+                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
+                        userObj.setPassword(obj1.getString("password"));
+                        userObj.setRole(obj1.getString("role"));
+                        userObj.setIsAvailable(obj1.getBoolean("available"));
+                        System.out.println(userObj.toString());
+                        //có noti thì thêm vào đây
+                        listUser.add(userObj);
+                        session.setAttribute("LISTUSER", listUser);
+                        session.setAttribute("COUNT", listUser.size());
                     }
-                } catch (JSONException e) {
-                    System.out.println("Ko parse duoc json obj");
-                }
-                session.setAttribute("LISTKEYWORD", listKeyword);
-                session.setAttribute("COUNT", listKeyword.size());
-                session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
-                session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
-                
-                nextPage = keywordList;
 
-//                listJson = listJson.replace("[", "");
-//                listJson = listJson.replace("]", "");
-//                List<JSONObject> list = new ArrayList<>();
-//                while (listJson.contains("{") && listJson.contains("}")) {
-//                    String json = listJson.substring(listJson.indexOf("{"), listJson.indexOf("}") + 1);
-//                    JSONObject jobj = new JSONObject(json);
-//                    list.add(jobj);
-//                    listJson = listJson.replace(json, "");
-//                }
-//                System.out.println("JSON String Result " + list.toString());
-//                try {                    
-//                    List<Keyword> listKeyword = new ArrayList<>();
-//                    for (int i = 0; i < list.size(); i++) {
-//                        Keyword keyWord = new Keyword(list.get(i).getInt("id"), list.get(i).get("keyword").toString(), 
-//                                list.get(i).get("userId").toString());
-//                        listKeyword.add(keyWord);
-//                    }
-//                    session.setAttribute("LISTKEYWORD", listKeyword);
-//                    session.setAttribute("COUNT", listKeyword.size());
-//                    
-//                    System.out.println(listKeyword.toString());
-//                    nextPage = keywordList;
-//                } catch (Exception e) {
-//                    System.out.println("ko parse duoc ve json object");
-//                    nextPage = error;
-//                }
-                RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-                rd.forward(request, response);
+                } catch (JSONException e) {
+                    System.out.println("Ko parse dc ve jsonobj");
+                    session.setAttribute("LISTUSER", null);
+                    session.setAttribute("COUNT", null);
+                }
             }
+            nextPage = userPage;
+
+            session.setAttribute("USERADMINTHISPAGE", thisPage);
+            session.setAttribute("USERADMINMAXPAGE", maxPage);
+            session.setAttribute("SEARCHINGKEYWORD", "");
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

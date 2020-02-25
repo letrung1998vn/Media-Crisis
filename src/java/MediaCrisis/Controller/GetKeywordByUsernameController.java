@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,8 +30,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "KeywordPagingController", urlPatterns = {"/KeywordPagingController"})
-public class KeywordPagingController extends HttpServlet {
+@WebServlet(name = "GetKeywordByUsernameController", urlPatterns = {"/GetKeywordByUsernameController"})
+public class GetKeywordByUsernameController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,20 +46,19 @@ public class KeywordPagingController extends HttpServlet {
     private final String error = "error.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "http://media-crisis-api.herokuapp.com/keyword/searchKeyword/?keyword=";
-            url += request.getParameter("searchingKeyword");
-            url += "&page=";
-            String pageNum = request.getParameter("pageNum");
-            url += pageNum;
+            String url = "http://media-crisis-api.herokuapp.com/keyword/getAllByUserId/?userId=";
             String nextPage = "";
             HttpSession session = request.getSession();
+            String userId = request.getParameter("username");
+            url += userId;
             List<JSONObject> list = new ArrayList<>();
             List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
-            int thisPage = 0;
+            int thisPage = 1;
+            System.out.println(url);
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;
@@ -79,11 +80,6 @@ public class KeywordPagingController extends HttpServlet {
 
                 String listJson = rp.toString();
                 try {
-                    JSONObject jobj = new JSONObject(listJson);
-                    System.out.println("Jobj: " + jobj);
-                    thisPage = jobj.getInt("number") + 1;
-                    maxPage = jobj.getInt("totalPages");
-                    listJson = jobj.get("content").toString();
                     listJson = listJson.substring(1, listJson.length() - 1);
                     listJson = listJson.replace("},{", "};{");
                     String[] keywords = listJson.split(";");
@@ -93,45 +89,20 @@ public class KeywordPagingController extends HttpServlet {
                                 obj.get("userId").toString());
                         listKeyword.add(keyWord);
                     }
+                    session.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("COUNT", listKeyword.size());
+                    session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
+                    session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
+                    nextPage = keywordList;
                 } catch (JSONException e) {
-                    System.out.println("Ko parse duoc json obj");
+                    System.out.println("Ko parse dc ve json obj");
+                    nextPage = error;
                 }
-                session.setAttribute("LISTKEYWORD", listKeyword);
-                session.setAttribute("COUNT", listKeyword.size());
-                session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
-                session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
-                
-                nextPage = keywordList;
 
-//                listJson = listJson.replace("[", "");
-//                listJson = listJson.replace("]", "");
-//                List<JSONObject> list = new ArrayList<>();
-//                while (listJson.contains("{") && listJson.contains("}")) {
-//                    String json = listJson.substring(listJson.indexOf("{"), listJson.indexOf("}") + 1);
-//                    JSONObject jobj = new JSONObject(json);
-//                    list.add(jobj);
-//                    listJson = listJson.replace(json, "");
-//                }
-//                System.out.println("JSON String Result " + list.toString());
-//                try {                    
-//                    List<Keyword> listKeyword = new ArrayList<>();
-//                    for (int i = 0; i < list.size(); i++) {
-//                        Keyword keyWord = new Keyword(list.get(i).getInt("id"), list.get(i).get("keyword").toString(), 
-//                                list.get(i).get("userId").toString());
-//                        listKeyword.add(keyWord);
-//                    }
-//                    session.setAttribute("LISTKEYWORD", listKeyword);
-//                    session.setAttribute("COUNT", listKeyword.size());
-//                    
-//                    System.out.println(listKeyword.toString());
-//                    nextPage = keywordList;
-//                } catch (Exception e) {
-//                    System.out.println("ko parse duoc ve json object");
-//                    nextPage = error;
-//                }
                 RequestDispatcher rd = request.getRequestDispatcher(nextPage);
                 rd.forward(request, response);
             }
+
         }
     }
 
@@ -147,7 +118,11 @@ public class KeywordPagingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(GetKeywordByUsernameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -161,7 +136,11 @@ public class KeywordPagingController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(GetKeywordByUsernameController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

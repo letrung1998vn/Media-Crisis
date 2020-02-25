@@ -69,9 +69,9 @@ public class MainController extends HttpServlet {
             } else if (button.equals("CreateKeyword")) {
                 url = createKeyword;
             } else if (button.equals("DeleteKeywordAdmin")) {
-                url = deleteKeyword;
+                url = deleteKeywordAdmin;
             } else if (button.equals("CreateKeywordAdmin")) {
-                url = createKeyword;
+                url = createKeywordAdmin;
             } else if (button.equals("KeywordPaging")) {
                 url = keywordPaging;
             } else if (button.equals("KeywordSearchByUser")) {

@@ -58,10 +58,10 @@
                                 <p>User Profile</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="MainController?btnAction=ShowKeyword">
                                 <i class="pe-7s-note2"></i>
-                                <p>Keyword Admin</p>
+                                <p>Keyword</p>
                             </a>
                         </li>
                         <li>

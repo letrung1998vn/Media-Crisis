@@ -52,11 +52,11 @@ public class SearchKeywordController extends HttpServlet {
             url += search;
             url += "&page=1";
             String nextPage = "";
+            HttpSession session = request.getSession();
             List<JSONObject> list = new ArrayList<>();
             List<Keyword> listKeyword = new ArrayList<>();
             int maxPage = 0;
             int thisPage = 0;
-            HttpSession session = request.getSession();
             session.setAttribute("SEARCHINGKEYWORD", search);
 
             URL urlForGetRequest = new URL(url);

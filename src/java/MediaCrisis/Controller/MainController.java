@@ -41,7 +41,7 @@ public class MainController extends HttpServlet {
     private final String keywordPaging = "KeywordPagingController";
     private final String userPaging = "UserPagingController";
     private final String keywordUserSearch = "GetKeywordByUsernameController";
-    private final String keywordInputSearch = "SearchKeywordController";
+    private final String keywordInputSearch = "SearchKeywordsController";
     private final String userSearch = "SearchUserController";
     private final String changeUserStatus = "ChangeUserStatusController";
 
@@ -50,7 +50,6 @@ public class MainController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String button = request.getParameter("btnAction");
-            System.out.println(button);
             String url = "error.html";
             if (button == null) {
                 System.out.println("Btn bị null");

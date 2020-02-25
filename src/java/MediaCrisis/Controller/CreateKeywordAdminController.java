@@ -46,7 +46,7 @@ public class CreateKeywordAdminController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String error = "error.html";
-    private final String create = "Keyword_Admin_JSP.jsp";
+    private final String create = "MainController?btnAction=SearchKeyword&page=1&userId=&searchValue=";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowKeyword">
+                            <a href="MainController?btnAction=SearchKeyword&page=1&userId=&searchValue=">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword Admin</p>
                             </a>

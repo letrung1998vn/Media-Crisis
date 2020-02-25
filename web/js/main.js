@@ -37,8 +37,6 @@
             $(this).parent().removeClass("hide");
             if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1) {
                 $(this).parent().addClass("hide");
-            } else {
-                alert("input: " + keywordsinput + "; Value from table: " +  $(this).html().toLowerCase() + "Same");
             }
         });
     });

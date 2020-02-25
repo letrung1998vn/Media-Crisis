@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller.NewController;
+package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
@@ -51,6 +51,7 @@ public class SearchKeywordsController extends HttpServlet {
             String[] usersList = null;
             HttpSession session = request.getSession();
 
+            //get parameter
             String search = request.getParameter("searchValue");
             String userId = request.getParameter("userId");
             String page = request.getParameter("page");
@@ -75,7 +76,7 @@ public class SearchKeywordsController extends HttpServlet {
             //Parse JSONOBJ Keyword to Keyword class
             try {
                 JSONObject jobj = new JSONObject(jsonString);
-                System.out.println("Jobj: " + jobj);
+//                System.out.println("Jobj: " + jobj);
                 thisPage = jobj.getInt("number") + 1;
                 maxPage = jobj.getInt("totalPages");
                 jsonString = jobj.get("content").toString();

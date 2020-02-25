@@ -35,7 +35,7 @@ public class MainController extends HttpServlet {
     private final String showKeyword = "GetAllKeywordController";
     private final String deleteKeyword = "DeleteKeywordController";
     private final String createKeyword = "CreateKeywordController";
-    private final String deleteKeywordAdmin = "DeleteKeywordAdminController";
+    private final String deleteKeywordAdmin = "DeleteKeywordsController";
     private final String createKeywordAdmin = "CreateKeywordAdminController";
     private final String showUser = "GetAllUserController";
     private final String keywordPaging = "KeywordPagingController";

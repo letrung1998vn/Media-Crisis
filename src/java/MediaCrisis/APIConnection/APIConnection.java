@@ -46,6 +46,8 @@ public class APIConnection {
                 output = rp.toString();
             }
         } catch (Exception e) {
+            System.out.println("Error at API Connection");
+            e.printStackTrace();
         }
         return output;
     }

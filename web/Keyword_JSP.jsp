@@ -31,6 +31,7 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
         <script>
         </script>
@@ -328,6 +329,19 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
+                                $('.search-keyword').on('input', function () {
+                                    var keywordsinput = $('.search-keyword').val().toLowerCase();
+                                    var keyword;
+                                    var keywordDecode;
+                                    $('#myTable td.keywords').each(function () {
+                                        keyword = $(this).html().toLowerCase();
+                                        keywordDecode = $('<textarea />').html(keyword).text();
+                                        $(this).parent().removeClass("hide");
+                                        if (keywordDecode.indexOf(keywordsinput) == -1) {
+                                            $(this).parent().addClass("hide");
+                                        }
+                                    });
+                                });
                                 $(document).ready(function () {
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({

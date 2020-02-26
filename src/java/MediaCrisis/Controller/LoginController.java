@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.apache.commons.lang3.StringEscapeUtils;
 /**
  *
  * @author Administrator
@@ -110,7 +110,7 @@ public class LoginController extends HttpServlet {
                         userDTO.setEmail(jobj.get("email").toString());
                         userDTO.setIsAvailable(jobj.getBoolean("available"));
                         if (list.get(i).getInt("keywordId") != 0) {
-                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), list.get(i).get("keyword").toString(),
+                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), StringEscapeUtils.escapeHtml4(list.get(i).get("keyword").toString()),
                                     list.get(i).get("userId").toString());
                             listKeyword.add(keyWord);
                         }

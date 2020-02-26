@@ -61,6 +61,7 @@ public class SearchKeywordsController extends HttpServlet {
             String nextPage = "";
             String[] usersList = null;
             HttpSession session = request.getSession();
+            String jsonString = "";
 
             //get parameter
             String search = request.getParameter("searchValue");
@@ -81,9 +82,9 @@ public class SearchKeywordsController extends HttpServlet {
 
             //Call API Connection get all keyword
             APIConnection ac = new APIConnection(urlGetAllKeyword, "GET");
-            String jsonString = ac.connect();
+            jsonString = ac.connect();
 //            try {
-//            URL urlForGetRequest = new URL(url);
+//            URL urlForGetRequest = new URL("http://media-crisis-api.herokuapp.com/keyword/search);
 //            String readLine = null;
 //            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 //            conection.setRequestMethod("GET");

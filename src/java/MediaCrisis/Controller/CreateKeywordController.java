@@ -78,7 +78,6 @@ public class CreateKeywordController extends HttpServlet {
         }
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
-
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conection.getInputStream()));
@@ -87,26 +86,25 @@ public class CreateKeywordController extends HttpServlet {
             }
             in.close();
             System.out.println("JSON String Result " + rp.toString());
+            try {
+                JSONObject jobj = new JSONObject(rp.toString());
+                Keyword keyWord = new Keyword(jobj.getInt("id"), StringEscapeUtils.escapeHtml4(jobj.get("keyword").toString()),
+                        jobj.get("userId").toString());
+                List<Keyword> listKeyword = new ArrayList<>();
+                listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
+                listKeyword.add(keyWord);
+                session.setAttribute("LISTKEYWORD", listKeyword);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            nextPage = create;
+            request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+            request.setAttribute("RESULT", 2);
+            request.setAttribute("SEND", true);
         } else {
             System.out.println("Loi api roi");
             nextPage = error;
         }
-        try {
-            JSONObject jobj = new JSONObject(rp.toString());
-            Keyword keyWord = new Keyword(jobj.getInt("id"), StringEscapeUtils.escapeHtml4(jobj.get("keyword").toString()),
-                    jobj.get("userId").toString());
-            List<Keyword> listKeyword = new ArrayList<>();
-            listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
-            listKeyword.add(keyWord);
-            session.setAttribute("LISTKEYWORD", listKeyword);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        nextPage = create;
-        request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-        request.setAttribute("RESULT", 2);
-        request.setAttribute("SEND", true);
-
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
     }

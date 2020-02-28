@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
 /**
@@ -56,7 +57,6 @@ public class CreateKeywordController extends HttpServlet {
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
 
-
         String nextPage = "";
 
         URL urlForGetRequest = new URL(url);
@@ -66,7 +66,7 @@ public class CreateKeywordController extends HttpServlet {
         conection.setDoOutput(true);
         Map<String, String> arguments = new HashMap<>();
         arguments.put("keyword", newKeyword);
-        arguments.put("userId", userId); 
+        arguments.put("userId", userId);
         StringJoiner sj = new StringJoiner("&");
         for (Map.Entry<String, String> entry : arguments.entrySet()) {
             sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
@@ -78,7 +78,6 @@ public class CreateKeywordController extends HttpServlet {
         }
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
-
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conection.getInputStream()));
@@ -89,7 +88,7 @@ public class CreateKeywordController extends HttpServlet {
             System.out.println("JSON String Result " + rp.toString());
             try {
                 JSONObject jobj = new JSONObject(rp.toString());
-                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(),
+                Keyword keyWord = new Keyword(jobj.getInt("id"), StringEscapeUtils.escapeHtml4(jobj.get("keyword").toString()),
                         jobj.get("userId").toString());
                 List<Keyword> listKeyword = new ArrayList<>();
                 listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");

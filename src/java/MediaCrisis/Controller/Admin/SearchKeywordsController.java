@@ -7,10 +7,20 @@ package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +61,7 @@ public class SearchKeywordsController extends HttpServlet {
             String nextPage = "";
             String[] usersList = null;
             HttpSession session = request.getSession();
+            String jsonString = "";
 
             //get parameter
             String search = request.getParameter("searchValue");
@@ -57,20 +69,52 @@ public class SearchKeywordsController extends HttpServlet {
             String page = request.getParameter("page");
 
             //url get all keyword config
-            String urlGetAllKeyword = "http://media-crisis-api.herokuapp.com/keyword/search/?page=";
-            urlGetAllKeyword += page;
-            urlGetAllKeyword += "&username=";
-            urlGetAllKeyword += userId;
-            urlGetAllKeyword += "&keyword=";
-            urlGetAllKeyword += search;
-            //System.out.println(url);
+            String urlGetAllKeyword = "http://media-crisis-api.herokuapp.com/keyword/search";
+            System.out.println(urlGetAllKeyword);
 
             //url get all username in keyword table
             String urlGetUsername = "http://media-crisis-api.herokuapp.com/keyword/getUsers";
 
             //Call API Connection get all keyword
-            APIConnection ac = new APIConnection(urlGetAllKeyword, "GET");
-            String jsonString = ac.connect();
+            try {
+            URL urlForGetRequest = new URL(urlGetAllKeyword);
+            String readLine = null;
+            
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            conection.setDoOutput(true);
+            Map<String, String> arguments = new HashMap<>();
+            arguments.put("page", page);
+            arguments.put("username", userId);
+            arguments.put("keyword", search);
+            StringJoiner sj = new StringJoiner("&");
+            for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+            byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
+            try (OutputStream os = conection.getOutputStream()) {
+                os.write(out1);
+            }
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+            System.out.println(responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+                jsonString = rp.toString();
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
             //System.out.println(jsonString);
 
             //Parse JSONOBJ Keyword to Keyword class
@@ -81,11 +125,11 @@ public class SearchKeywordsController extends HttpServlet {
                 maxPage = jobj.getInt("totalPages");
                 jsonString = jobj.get("content").toString();
                 jsonString = jsonString.substring(1, jsonString.length() - 1);
-                jsonString = jsonString.replace("},{", "};{");
-                String[] keywords = jsonString.split(";");
+                jsonString = jsonString.replace("},{", "}&nbsp;{");
+                String[] keywords = jsonString.split("&nbsp;");
                 for (int i = 0; i < keywords.length; i++) {
                     JSONObject obj = new JSONObject(keywords[i]);
-                    Keyword keyWord = new Keyword(obj.getInt("id"), obj.get("keyword").toString(),
+                    Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
                             obj.get("userId").toString());
                     listKeyword.add(keyWord);
                 }
@@ -95,7 +139,7 @@ public class SearchKeywordsController extends HttpServlet {
             }
 
             //Call API Connection get user in keyword table
-            ac = new APIConnection(urlGetUsername, "GET");
+            APIConnection ac = new APIConnection(urlGetUsername, "GET");
             jsonString = ac.connect();
 
             //Parse to array of username

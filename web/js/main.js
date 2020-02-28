@@ -31,16 +31,6 @@
         }
     })
 
-    $('.search-keyword').on('input', function () {
-        var keywordsinput = $('.search-keyword').val().toLowerCase();
-        $('#myTable td.keywords').each(function () {
-            $(this).parent().removeClass("hide");
-            if ($(this).html().toLowerCase().indexOf(keywordsinput) == -1) {
-                $(this).parent().addClass("hide");
-            }
-        });
-    });
-
     /*==================================================================
      [ Validate ]*/
     var input = $('.validate-input .input100');

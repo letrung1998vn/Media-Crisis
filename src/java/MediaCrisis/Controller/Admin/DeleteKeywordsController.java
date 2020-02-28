@@ -44,7 +44,7 @@ public class DeleteKeywordsController extends HttpServlet {
             //url get all keyword config
             String urlDeleteKeyword = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
             urlDeleteKeyword += "id=";
-            urlDeleteKeyword += "deleteKeywordId";
+            urlDeleteKeyword += deleteKeywordId;
             //System.out.println(urlDeleteKeyword);
 
             //Call API Connection get all keyword

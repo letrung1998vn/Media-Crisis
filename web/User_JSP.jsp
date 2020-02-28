@@ -204,12 +204,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="header">
-                                            <a class="txt2" href="createUser_Admin.jsp">Create new user</a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="header">
-                                            <h4 class="title">User List</h4>
+                                            <h4 class="title">Keyword List</h4>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="col-md-4"></div>

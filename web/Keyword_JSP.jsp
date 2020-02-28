@@ -114,7 +114,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Key Word List</a>
+                            <a class="navbar-brand" href="#">Keyword List</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
@@ -227,7 +227,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="header">
-                                            <h4 class="title">Key word List</h4>
+                                            <h4 class="title">Keyword List</h4>
                                         </div>
                                         <div class="content table-responsive table-full-width">
                                             <table id="myTable" class="table table-hover table-striped">

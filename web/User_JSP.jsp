@@ -113,7 +113,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Key Word List</a>
+                            <a class="navbar-brand" href="#">Keyword List</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
@@ -204,7 +204,12 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="header">
-                                            <h4 class="title">Key word List</h4>
+                                            <a class="txt2" href="createUser_Admin.jsp">Create new user</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="header">
+                                            <h4 class="title">User List</h4>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="col-md-4"></div>

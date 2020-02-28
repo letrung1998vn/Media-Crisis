@@ -77,7 +77,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <div class="text-center p-t-115">
                             <span class="txt1">
                                 Don't have an account?

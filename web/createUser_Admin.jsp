@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Sign up JSP</title>
+        <title>Create User JSP</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--===============================================================================================-->	
@@ -42,7 +42,7 @@
                 <div class="wrap-login100">
                     <form class="login100-form validate-form-signup" action="MainController" method="post">
                         <span class="login100-form-title p-b-26">
-                            Sign up
+                            Create user
                         </span>
 
                         <% User user = (User) request.getAttribute("INPUT_USER"); %>
@@ -76,21 +76,12 @@
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">
                                 <div class="login100-form-bgbtn"></div>
-                                <button class="login100-form-btn" type="submit" value="SignUp" name="btnAction">
-                                    Sign up
+                                <button class="login100-form-btn" type="submit" value="CreateUser" name="btnAction">
+                                    Create
                                 </button>
                             </div>
                         </div>
                             
-                        <div class="text-center">
-                            <span class="txt1">
-                                Already have an account?
-                            </span>
-
-                            <a class="txt2" href="login_JSP.jsp">
-                                Login
-                            </a>
-                        </div>
                     </form>
                 </div>
             </div>

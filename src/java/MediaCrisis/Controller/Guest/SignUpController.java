@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Guest;
 
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -12,7 +12,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,8 +30,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "ChangeUserStatusController", urlPatterns = {"/ChangeUserStatusController"})
-public class ChangeUserStatusController extends HttpServlet {
+@WebServlet(name = "SignUpController", urlPatterns = {"/SignUpController"})
+public class SignUpController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,29 +42,48 @@ public class ChangeUserStatusController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String userPage = "User_JSP.jsp";
     private final String error = "error.html";
+    private final String loginPage = "login_JSP.jsp";
+    private final String signupPage = "signup_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            response.setContentType("text/html;charset=UTF-8");
-            String url = "https://media-crisis-api.herokuapp.com/user/changeStatus/?username=";
-            url += request.getParameter("username");
-            String nextPage = "";
+            /* TODO output your page here. You may use following sample code. */
+            String username = request.getParameter("txtUsername");
+            String password = request.getParameter("txtPassword");
+            String name = request.getParameter("txtName");
+            String email = request.getParameter("txtEmail");
+            String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
+            String nextPage = loginPage;
 
+            url += "username=";
+            url += username;
+            url += "&password=";
+
+            //Hash password
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : passwordInByte) {
+                sb.append(String.format("%02x", b));
+            }
+            url += sb.toString();
+            url += "&name=";
+            url += name;
+            url += "&email=";
+            url += email;
             URL urlForGetRequest = new URL(url);
             String readLine = null;
-            HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-            connection.setRequestMethod("POST");
-            int responseCode = connection.getResponseCode();
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            int responseCode = conection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-            boolean result = true;
-            
+
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
+                        new InputStreamReader(conection.getInputStream()));
                 while ((readLine = in.readLine()) != null) {
                     rp.append(readLine);
                 }
@@ -68,23 +91,30 @@ public class ChangeUserStatusController extends HttpServlet {
                 System.out.println("JSON String Result " + rp.toString());
                 try {
                     JSONObject jobj = new JSONObject(rp.toString());
-                    JSONObject jobj1 = new JSONObject(jobj.get("user").toString());
-                    result = jobj1.getBoolean("available");
+                    if (jobj.getString("userId").equals("")) {
+                        User inputedUser = new User(username, "", "", name, email, true);
+                        request.setAttribute("INPUT_USER", inputedUser);
+                        nextPage = signupPage;
+                    } else {
+                        nextPage = loginPage;
+                        request.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                        request.setAttribute("RESULT", 2);
+                        request.setAttribute("SEND", true);
+                    }
                 } catch (Exception e) {
                 }
+                try {
+                    //Gửi mail verify email
+                } catch (Exception e) {
+                    System.out.println("Gui mail fail");
+                    nextPage = error;
+                }
+
             } else {
-                System.out.println("Loi api");
+                System.out.println("Loi api roi");
                 nextPage = error;
             }
             HttpSession session = request.getSession();
-            request.setAttribute("CREATE_MESSAGE", "User status changed!");
-            request.setAttribute("RESULT", 2);
-            request.setAttribute("SEND", true);
-            List<User> list = (List<User>) session.getAttribute("LISTUSER");
-            int changeStatusUserLocation = Integer.parseInt(request.getParameter("no"));
-            list.get(changeStatusUserLocation).setIsAvailable(result);
-            session.setAttribute("LISTUSER", list);
-            nextPage = userPage;
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }
@@ -102,7 +132,11 @@ public class ChangeUserStatusController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -116,7 +150,11 @@ public class ChangeUserStatusController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

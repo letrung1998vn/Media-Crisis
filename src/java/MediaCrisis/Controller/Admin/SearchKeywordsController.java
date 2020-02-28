@@ -98,7 +98,6 @@ public class SearchKeywordsController extends HttpServlet {
             }
             int responseCode = conection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-            System.out.println(responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(conection.getInputStream()));

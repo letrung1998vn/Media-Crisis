@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,15 +20,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
  * @author Administrator
  */
-@WebServlet(name = "UserPagingController", urlPatterns = {"/UserPagingController"})
-public class UserPagingController extends HttpServlet {
+@WebServlet(name = "ChangeUserStatusController", urlPatterns = {"/ChangeUserStatusController"})
+public class ChangeUserStatusController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,86 +38,59 @@ public class UserPagingController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String error = "error.html";
     private final String userPage = "User_JSP.jsp";
+    private final String error = "error.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username";
-            url += request.getParameter("searchingKeyword");
-            url += "&page=";
-            String pageNum = request.getParameter("pageNum");
-            url += pageNum;
+            response.setContentType("text/html;charset=UTF-8");
+            String url = "https://media-crisis-api.herokuapp.com/user/changeStatus/?username=";
+            url += request.getParameter("username");
             String nextPage = "";
-            int maxPage = 0;
-            int thisPage = 0;
 
             URL urlForGetRequest = new URL(url);
             String readLine = null;
             HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-            connection.setRequestMethod("GET");
-            int responeCod = connection.getResponseCode();
+            connection.setRequestMethod("POST");
+            int responseCode = connection.getResponseCode();
             StringBuffer rp = new StringBuffer();
-
-            if (responeCod == HttpURLConnection.HTTP_OK) {
-                //read and get data from url
+            boolean result = true;
+            
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
                         new InputStreamReader(connection.getInputStream()));
                 while ((readLine = in.readLine()) != null) {
                     rp.append(readLine);
                 }
                 in.close();
-
-                String listJson = rp.toString();
+                System.out.println("JSON String Result " + rp.toString());
                 try {
-                    JSONObject jobj = new JSONObject(listJson);
-                    System.out.println("Jobj: " + jobj);
-                    thisPage = jobj.getInt("number") + 1;
-                    maxPage = jobj.getInt("totalPages");
-                    listJson = jobj.get("content").toString();
-                    listJson = listJson.substring(1, listJson.length() - 1);
-                    listJson = listJson.replace("},{", "};{");
-                    String[] users = listJson.split(";");
-                    List<User> listUser = new ArrayList<User>();
-                    for (int i = 0; i < users.length; i++) {
-                        JSONObject obj = new JSONObject(users[i]);
-                        User userObj = new User();
-                        userObj.setUsername(obj.getString("userId"));
-                        userObj.setName(obj.getString("name"));
-                        userObj.setEmail(obj.getString("email"));
-                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                        userObj.setPassword(obj1.getString("password"));
-                        userObj.setRole(obj1.getString("role"));
-                        userObj.setIsAvailable(obj1.getBoolean("available"));
-                        System.out.println(userObj.toString());
-                        //có noti thì thêm vào đây
-                        listUser.add(userObj);
-                    }
-
-                    nextPage = userPage;
-                    try {
-                        
-                    } catch (Exception e) {
-                    }
-                    HttpSession session = request.getSession();
-                    session.setAttribute("LISTUSER", listUser);
-                    session.setAttribute("COUNT", listUser.size());
-                    session.setAttribute("USERADMINTHISPAGE", thisPage);
-                    session.setAttribute("USERADMINMAXPAGE", maxPage);
-                    session.setAttribute("SEARCHINGKEYWORD", "");
-                } catch (JSONException e) {
-                    System.out.println("Ko parse dc ve jsonobj");
-                    nextPage = error;
+                    JSONObject jobj = new JSONObject(rp.toString());
+                    JSONObject jobj1 = new JSONObject(jobj.get("user").toString());
+                    result = jobj1.getBoolean("available");
+                } catch (Exception e) {
                 }
+            } else {
+                System.out.println("Loi api");
+                nextPage = error;
             }
+            HttpSession session = request.getSession();
+            session.setAttribute("CREATE_MESSAGE", "User status changed!");
+            session.setAttribute("RESULT", 2);
+            session.setAttribute("SEND", true);
+            List<User> list = (List<User>) session.getAttribute("LISTUSER");
+            int changeStatusUserLocation = Integer.parseInt(request.getParameter("no"));
+            list.get(changeStatusUserLocation).setIsAvailable(result);
+            session.setAttribute("LISTUSER", list);
+            nextPage = userPage;
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

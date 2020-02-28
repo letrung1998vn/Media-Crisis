@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Admin;
 
+import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -48,69 +49,58 @@ public class SearchUserController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username=";
-            url += request.getParameter("txtSearch");
-            url += "&page=1";
+            String pageNum = request.getParameter("page");
             String nextPage = "";
             int maxPage = 0;
             int thisPage = 0;
-            HttpSession session = request.getSession();
+            String listJson = "";
 
-            URL urlForGetRequest = new URL(url);
-            String readLine = null;
-            HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-            connection.setRequestMethod("GET");
-            int responeCod = connection.getResponseCode();
-            StringBuffer rp = new StringBuffer();
+            String urlSearchUser = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username=";
+            String searchValue = request.getParameter("searchUser");
+            urlSearchUser += searchValue;
+            urlSearchUser += "&page=";
+            urlSearchUser += pageNum;
+            System.out.println(urlSearchUser);
+            
+            APIConnection ac = new APIConnection(urlSearchUser, "GET");
+            listJson = ac.connect();
 
-            if (responeCod == HttpURLConnection.HTTP_OK) {
-                //read and get data from url
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
+            try {
+                JSONObject jobj = new JSONObject(listJson);
+                System.out.println("Jobj: " + jobj);
+                thisPage = jobj.getInt("number") + 1;
+                maxPage = jobj.getInt("totalPages");
+                listJson = jobj.get("content").toString();
+                listJson = listJson.substring(1, listJson.length() - 1);
+                listJson = listJson.replace("},{", "};{");
+                String[] users = listJson.split(";");
+                List<User> listUser = new ArrayList<User>();
+                for (int i = 0; i < users.length; i++) {
+                    JSONObject obj = new JSONObject(users[i]);
+                    User userObj = new User();
+                    userObj.setUsername(obj.getString("userId"));
+                    userObj.setName(obj.getString("name"));
+                    userObj.setEmail(obj.getString("email"));
+                    JSONObject obj1 = new JSONObject(obj.get("user").toString());
+                    userObj.setPassword(obj1.getString("password"));
+                    userObj.setRole(obj1.getString("role"));
+                    userObj.setIsAvailable(obj1.getBoolean("available"));
+                    System.out.println(userObj.toString());
+                    //có noti thì thêm vào đây
+                    listUser.add(userObj);
                 }
-                in.close();
 
-                String listJson = rp.toString();
-                try {
-                    JSONObject jobj = new JSONObject(listJson);
-                    System.out.println("Jobj: " + jobj);
-                    thisPage = jobj.getInt("number") + 1;
-                    maxPage = jobj.getInt("totalPages");
-                    listJson = jobj.get("content").toString();
-                    listJson = listJson.substring(1, listJson.length() - 1);
-                    listJson = listJson.replace("},{", "};{");
-                    String[] users = listJson.split(";");
-                    List<User> listUser = new ArrayList<User>();
-                    for (int i = 0; i < users.length; i++) {
-                        JSONObject obj = new JSONObject(users[i]);
-                        User userObj = new User();
-                        userObj.setUsername(obj.getString("userId"));
-                        userObj.setName(obj.getString("name"));
-                        userObj.setEmail(obj.getString("email"));
-                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                        userObj.setPassword(obj1.getString("password"));
-                        userObj.setRole(obj1.getString("role"));
-                        userObj.setIsAvailable(obj1.getBoolean("available"));
-                        System.out.println(userObj.toString());
-                        //có noti thì thêm vào đây
-                        listUser.add(userObj);
-                        session.setAttribute("LISTUSER", listUser);
-                        session.setAttribute("COUNT", listUser.size());
-                    }
-
-                } catch (JSONException e) {
-                    System.out.println("Ko parse dc ve jsonobj");
-                    session.setAttribute("LISTUSER", null);
-                    session.setAttribute("COUNT", null);
-                }
+                nextPage = userPage;
+                HttpSession session = request.getSession();
+                session.setAttribute("LISTUSER", listUser);
+                session.setAttribute("COUNT", listUser.size());
+                session.setAttribute("USERADMINTHISPAGE", thisPage);
+                session.setAttribute("USERADMINMAXPAGE", maxPage);
+                session.setAttribute("SEARCHINGUSER", searchValue);
+            } catch (JSONException e) {
+                System.out.println("Ko parse dc ve jsonobj");
+                nextPage = error;
             }
-            nextPage = userPage;
-
-            session.setAttribute("USERADMINTHISPAGE", thisPage);
-            session.setAttribute("USERADMINMAXPAGE", maxPage);
-            session.setAttribute("SEARCHINGKEYWORD", "");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

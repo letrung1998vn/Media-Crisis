@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -28,10 +28,13 @@ import org.json.JSONObject;
 
 /**
  *
- * @author Administrator
+ * @author Admin
  */
-@WebServlet(name = "SignUpController", urlPatterns = {"/SignUpController"})
-public class SignUpController extends HttpServlet {
+@WebServlet(name = "CreateUserAdminController", urlPatterns = {"/CreateUserAdminController"})
+public class CreateUserAdminController extends HttpServlet {
+    private final String error = "error.html";
+    private final String createUserPage = "createUser_Admin.jsp";
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,22 +45,18 @@ public class SignUpController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String error = "error.html";
-    private final String loginPage = "login_JSP.jsp";
-    private final String signupPage = "signup_JSP.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
             String name = request.getParameter("txtName");
             String email = request.getParameter("txtEmail");
             String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
-            String nextPage = loginPage;
-
+            String nextPage = "";
+            HttpSession session = request.getSession();
+            
             url += "username=";
             url += username;
             url += "&password=";
@@ -94,12 +93,12 @@ public class SignUpController extends HttpServlet {
                     if (jobj.getString("userId").equals("")) {
                         User inputedUser = new User(username, "", "", name, email, true);
                         request.setAttribute("INPUT_USER", inputedUser);
-                        nextPage = signupPage;
+                        nextPage = createUserPage;
                     } else {
-                        nextPage = loginPage;
-                        request.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
-                        request.setAttribute("RESULT", 2);
-                        request.setAttribute("SEND", true);
+                        nextPage = "MainController?btnAction=SearchUser&page=" + session.getAttribute("USERADMINMAXPAGE") +"&userId=&searchValue=";
+                        session.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                        session.setAttribute("RESULT", 2);
+                        session.setAttribute("SEND", true);
                     }
                 } catch (Exception e) {
                 }
@@ -114,10 +113,10 @@ public class SignUpController extends HttpServlet {
                 System.out.println("Loi api roi");
                 nextPage = error;
             }
-            HttpSession session = request.getSession();
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -135,7 +134,7 @@ public class SignUpController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateUserAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -153,7 +152,7 @@ public class SignUpController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CreateUserAdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

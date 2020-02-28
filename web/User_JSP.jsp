@@ -70,7 +70,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="MainController?btnAction=ShowUser">
+                            <a href="MainController?btnAction=SearchUser&page=1&searchUser=">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>User manager</p>
                             </a>
@@ -113,7 +113,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="MainController?btnAction=SearchKeyword&page=1&userId=&searchValue=">Keyword List</a>
+                            <a class="navbar-brand" href="MainController?btnAction=SearchUser&page=1&searchUser=">User List</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
@@ -190,13 +190,17 @@
                                         <div class="content">
                                             <div class="row">
                                                 <form class="login100-form col-md-12" action="MainController" method="post">
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control search-user-admin" placeholder="Enter Keyword" name="txtSearch" value="">
+                                                            <span>Username: </span>
+                                                            <input type="text" class="form-control search-user-admin" placeholder="Enter Username" name="searchUser" value="<%= session.getAttribute("SEARCHINGUSER")%>">
+                                                            <input type="hidden" class="form-control search-keyword-admin" name="page" value="1">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="SearchUser" name="btnAction">Search</button>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-3 pull-right" style="padding-left: 15px">
+                                                            <button id="btn-search" class="btn btn-info btn-fill col-md-1 form-control"  type="submit" value="SearchUser" name="btnAction">Search</button>
+                                                        </div>
                                                     </div>
                                                 </form>
                                             </div>
@@ -204,20 +208,20 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="header">
-                                            <h4 class="title">Keyword List</h4>
+                                            <h4 class="title">Users List</h4>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="col-md-4"></div>
                                             <div class="col-md-2">
                                                 <% if (((int) session.getAttribute("USERADMINTHISPAGE") != 0)) {%>
                                                 <% if (((int) session.getAttribute("USERADMINTHISPAGE") > 1)) {%>
-                                                <a class="" href="MainController?btnAction=UserPaging&pageNum=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) - 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                <a class="" href="MainController?btnAction=SearchUser&page=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) - 1%>&searchUser=<%= session.getAttribute("SEARCHINGUSER")%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
                                                             <% }%>
                                                 <span style="padding-left: 25px; padding-right: 25px">
-                                                    <%= session.getAttribute("USERADMINTHISPAGE")%>
+                                                    Page <%= session.getAttribute("USERADMINTHISPAGE")%>/<%= session.getAttribute("USERADMINMAXPAGE")%>
                                                 </span>
                                                 <% if (((int) session.getAttribute("USERADMINTHISPAGE")) != (int) (session.getAttribute("USERADMINMAXPAGE"))) {%>
-                                                <a class="" href="MainController?btnAction=UserPaging&pageNum=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) + 1%>&searchingKeyword=<%= session.getAttribute("SEARCHINGKEYWORD")%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+                                                <a class="" href="MainController?btnAction=SearchUser&page=<%= ((int) session.getAttribute("USERADMINTHISPAGE")) + 1%>&searchUser=<%= session.getAttribute("SEARCHINGUSER")%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
 
                                                 <% }
                                                     }%>
@@ -258,7 +262,7 @@
                                                                             if (users.get(i).isIsAvailable()) { %>
                                                                 <button class="btn btn-success">Enable</button>
                                                                 <%
-                                                            } else { %>
+                                                                } else { %>
                                                                 <button class="btn btn-danger">Disable</button>
                                                                 <%
                                                                     }
@@ -345,13 +349,13 @@
     <script type="text/javascript">
 
                                 $(document).ready(function () {
-                                    if (<%=request.getAttribute("SEND")%>) {
+                                    if (<%=session.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                                            message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
                                         }, {
-                                            type: type[<%=request.getAttribute("RESULT")%>],
+                                            type: type[<%=session.getAttribute("RESULT")%>],
                                             timer: 4000,
                                             placement: {
                                                 from: 'top',
@@ -359,9 +363,9 @@
                                             }
                                         });
                                     }
-                                    if (<%= session.getAttribute("SEARCHINGKEYWORD")%> == null) {
-                                        $('.search-user-admin').val("");
-                                    }
+        <% session.removeAttribute("SEND"); %>
+        <% session.removeAttribute("CREATE_MESSAGE"); %>
+        <% session.removeAttribute("RESULT");%>
                                 });
     </script>
 

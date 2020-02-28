@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Guest;
 
 import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;

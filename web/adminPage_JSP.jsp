@@ -65,7 +65,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowUser">
+                            <a href="MainController?btnAction=SearchUser&page=1&searchUser=">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>User manager</p>
                             </a>

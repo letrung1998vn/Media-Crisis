@@ -50,14 +50,14 @@ public class DeleteKeywordsController extends HttpServlet {
             //Call API Connection get all keyword
             APIConnection ac = new APIConnection(urlDeleteKeyword, "POST");
             String jsonString = ac.connect();
-            if (jsonString.isEmpty()) {
-                request.setAttribute("CREATE_MESSAGE", "Delete keyword fail, please try again.");
-                request.setAttribute("RESULT", 4);
-                request.setAttribute("SEND", true);
+            if (jsonString == null) {
+                session.setAttribute("CREATE_MESSAGE", "Delete keyword fail, please try again.");
+                session.setAttribute("RESULT", 4);
+                session.setAttribute("SEND", true);
             } else {
-                request.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
-                request.setAttribute("RESULT", 2);
-                request.setAttribute("SEND", true);
+                session.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
+                session.setAttribute("RESULT", 2);
+                session.setAttribute("SEND", true);
             }
             nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE").toString() 
                     +"&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD").toString() + "&searchValue=" 

@@ -65,13 +65,13 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="MainController?btnAction=ShowKeyword">
+                            <a href="MainController?btnAction=SearchKeyword&page=1&userId=&searchValue=">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword Admin</p>
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowUser">
+                            <a href="MainController?btnAction=SearchUser&page=1&searchUser=">
                                 <i class="pe-7s-news-paper"></i>
                                 <p>User manager</p>
                             </a>
@@ -218,14 +218,16 @@
                                         <div class="content col-md-12">
                                             <div class="row">
                                                 <form class="login100-form col-md-12 validate-form-search-keyword-admin" action="MainController" method="post">
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-12">
                                                         <div class="form-group">
+                                                            <span>Keyword:</span><br>
                                                             <input type="text" class="form-control search-keyword-admin" placeholder="Enter Keyword" name="searchValue" value="<%= session.getAttribute("SEARCHINGKEYWORD")%>">
                                                             <input type="hidden" class="form-control search-keyword-admin" name="page" value="1">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-10">
+                                                    <div class="col-md-12" style="padding-left: 15px">
                                                         <div class="form-group">
+                                                            <span>Username:</span><br>
                                                             <input list="my-list" type="text" class="form-control validate-input input100 userId" placeholder="Enter Username" name="userId" value="<%= session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD")%>">
                                                             <% String[] listUser = (String[]) session.getAttribute("USERSKEYWORDADMIN");
                                                                 if (listUser != null) {%>
@@ -238,8 +240,10 @@
                                                             <% } %>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        <button id="btn-search" class="btn btn-info pull-left btn-fill col-md-1 form-control"  type="submit" value="SearchKeyword" name="btnAction">Search</button>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-3 pull-right" style="padding-left: 15px">
+                                                            <button id="btn-search" class="btn btn-info btn-fill col-md-1 form-control"  type="submit" value="SearchKeyword" name="btnAction">Search</button>
+                                                        </div>
                                                     </div>
                                                 </form>
                                             </div>
@@ -369,22 +373,22 @@
     <script type="text/javascript">
                                 $(document).ready(function () {
 
-                                    if (<%=request.getAttribute("SEND")%>) {
+                                    if (<%=session.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                                            message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
                                         }, {
-                                            type: type[<%=request.getAttribute("RESULT")%>],
+                                            type: type[<%=session.getAttribute("RESULT")%>],
                                             timer: 4000,
                                             placement: {
                                                 from: 'top',
                                                 align: 'left'
                                             }
                                         });
-                                    }
-                                    if (<%= session.getAttribute("SEARCHINGKEYWORD")%> == null) {
-                                        $('.search-keyword-admin').val("");
+                                        <% session.removeAttribute("SEND"); %>
+                                        <% session.removeAttribute("CREATE_MESSAGE"); %>
+                                        <% session.removeAttribute("RESULT"); %>
                                     }
                                 });
 

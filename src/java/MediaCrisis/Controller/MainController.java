@@ -32,16 +32,11 @@ public class MainController extends HttpServlet {
     private final String loginController = "LoginController";
     private final String signupController = "SignUpController";
     private final String loginPage = "login_JSP.jsp";
-    private final String showKeyword = "GetAllKeywordController";
     private final String deleteKeyword = "DeleteKeywordController";
     private final String createKeyword = "CreateKeywordController";
     private final String deleteKeywordAdmin = "DeleteKeywordsController";
     private final String createKeywordAdmin = "CreateKeywordAdminController";
-    private final String showUser = "GetAllUserController";
-    private final String keywordPaging = "KeywordPagingController";
-    private final String userPaging = "UserPagingController";
-    private final String keywordUserSearch = "GetKeywordByUsernameController";
-    private final String keywordInputSearch = "SearchKeywordsController";
+    private final String keywordSearch = "SearchKeywordsController";
     private final String userSearch = "SearchUserController";
     private final String changeUserStatus = "ChangeUserStatusController";
     private final String createUserAdmin = "CreateUserAdminController";
@@ -52,6 +47,7 @@ public class MainController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String button = request.getParameter("btnAction");
             String url = "error.html";
+            System.out.println(button);
             if (button == null) {
                 System.out.println("Btn bị null");
                 //do nothing
@@ -63,10 +59,6 @@ public class MainController extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.invalidate();
                 url = loginPage;
-            } else if (button.equals("ShowKeyword")) {
-                url = showKeyword;
-            } else if (button.equals("ShowUser")) {
-                url = showUser;
             } else if (button.equals("DeleteKeyword")) {
                 url = deleteKeyword;
             } else if (button.equals("CreateKeyword")) {
@@ -75,14 +67,8 @@ public class MainController extends HttpServlet {
                 url = deleteKeywordAdmin;
             } else if (button.equals("CreateKeywordAdmin")) {
                 url = createKeywordAdmin;
-            } else if (button.equals("KeywordPaging")) {
-                url = keywordPaging;
-            } else if (button.equals("KeywordSearchByUser")) {
-                url = keywordUserSearch;
             } else if (button.equals("SearchKeyword")) {
-                url = keywordInputSearch;
-            } else if (button.equals("UserPaging")) {
-                url = userPaging;
+                url = keywordSearch;
             } else if (button.equals("SearchUser")) {
                 url = userSearch;
             } else if (button.equals("ChangeUserStatus")) {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller;
+package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.Model.Keyword;
 import java.io.BufferedReader;
@@ -27,18 +27,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONObject;
 
 /**
  *
- * @author Admin
+ * @author Administrator
  */
-@WebServlet(name = "CreateKeywordController", urlPatterns = {"/CreateKeywordController"})
-public class CreateKeywordController extends HttpServlet {
-
-    private final String error = "error.html";
-    private final String create = "Keyword_JSP.jsp";
+@WebServlet(name = "CreateKeywordAdminController", urlPatterns = {"/CreateKeywordAdminController"})
+public class CreateKeywordAdminController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,6 +45,9 @@ public class CreateKeywordController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private final String error = "error.html";
+    private final String create = "MainController?btnAction=SearchKeyword&page=1&userId=&searchValue=";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -78,6 +77,7 @@ public class CreateKeywordController extends HttpServlet {
         }
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
+
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conection.getInputStream()));
@@ -88,7 +88,7 @@ public class CreateKeywordController extends HttpServlet {
             System.out.println("JSON String Result " + rp.toString());
             try {
                 JSONObject jobj = new JSONObject(rp.toString());
-                Keyword keyWord = new Keyword(jobj.getInt("id"), StringEscapeUtils.escapeHtml4(jobj.get("keyword").toString()),
+                Keyword keyWord = new Keyword(jobj.getInt("id"), jobj.get("keyword").toString(),
                         jobj.get("userId").toString());
                 List<Keyword> listKeyword = new ArrayList<>();
                 listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
@@ -97,10 +97,10 @@ public class CreateKeywordController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            nextPage = create;
-            request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-            request.setAttribute("RESULT", 2);
-            request.setAttribute("SEND", true);
+            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
+            session.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+            session.setAttribute("RESULT", 2);
+            session.setAttribute("SEND", true);
         } else {
             System.out.println("Loi api roi");
             nextPage = error;

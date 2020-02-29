@@ -175,6 +175,7 @@
                                 <li class="separator hidden-lg hidden-md"></li>
                             </ul>
                         </div>
+                        <a href="createUser_Admin.jsp"><button><i class="pe-7s-plus" style="width: 20px; height: 20px"></i>Add new user</button></a>
                     </div>
                 </nav>
 

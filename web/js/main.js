@@ -182,7 +182,6 @@
             });
             return false;
         } else {
-            var keywordsinput = $('.search-keyword').val().toLowerCase();
             var checkExist = true;
             var numberOfKeyword;
             $('#myTable td.keywordsNo').each(function () {
@@ -204,7 +203,7 @@
                 return false;
             } else {
                 $('#myTable td.keywords').each(function () {
-                    if ($(this).html().toLowerCase() == $(input).val().trim()) {
+                    if ($(this).children().val().toLowerCase() == $(input).val().trim()) {
                         checkExist = false;
                     }
                 });
@@ -248,7 +247,7 @@
             var checkExist = true;
 
             $('#myTable td.keywords').each(function () {
-                if ($(this).html().toLowerCase() == $(input).val().trim()) {
+                if ($(this).children().val().toLowerCase() == $(input).val().trim()) {
                     checkExist = false;
                 }
             });

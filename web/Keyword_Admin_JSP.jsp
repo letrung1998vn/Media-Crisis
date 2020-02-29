@@ -288,6 +288,7 @@
 
                                                     <tr>
                                                         <td><%= (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1) * 10 + (i + 1)%></td>
+                                                        <td><%= keywordDTO.getKeyword() %></td>
                                                         <td>
                                                             <button class="btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></button>
                                                             <button class="btn-submit">Update</button>

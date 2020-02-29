@@ -3,11 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/CreateKeywordAdminController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/web/adminPage_JSP.jsp</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/SearchUserController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/SearchKeywordsController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/MainController.java</file>
+            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/web/User_JSP.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/web/Keyword_Admin_JSP.jsp</file>
+            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/CreateUserAdminController.java</file>
+            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/ChangeUserStatusController.java</file>
+            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/web/js/main.js</file>
         </group>
     </open-files>
 </project-private>

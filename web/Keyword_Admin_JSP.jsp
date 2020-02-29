@@ -275,6 +275,7 @@
                                                 <thead>
                                                 <th>NO</th>
                                                 <th>Keyword</th>
+                                                <th>Edit</th>
                                                 <th>Username</th>
                                                 <th></th>
                                                 </thead>
@@ -287,8 +288,9 @@
 
                                                     <tr>
                                                         <td><%= (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1) * 10 + (i + 1)%></td>
-                                                        <td class="keywords">
-                                                            <%= keywordDTO.getKeyword()%>
+                                                        <td>
+                                                            <button class="btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></button>
+                                                            <button class="btn-submit">Update</button>
                                                         </td>
                                                         <td><%= keywordDTO.getUserId()%></td>
                                                         <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
@@ -391,6 +393,14 @@
                                         <% session.removeAttribute("RESULT"); %>
                                     }
                                 });
+                                
+                                function enableInput(i) {
+                                    var classNameOfInput = "keyword-value-" + i;
+//                                    $('.keyword-value').each(function () {
+//                                        $(this).disabled = true;
+//                                    });
+                                    document.getElementById(classNameOfInput).disabled = false;
+                                }
 
     </script>
 

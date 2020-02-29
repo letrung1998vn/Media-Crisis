@@ -235,8 +235,9 @@
                                                 <thead>
                                                 <th>NO</th>
                                                 <th>Keyword</th>
+                                                <th>Edit</th>
                                                 <th>User Id</th>
-                                                <th></th>
+                                                <th>Delete</th>
                                                 </thead>
                                                 <tbody>
                                                     <% List<Keyword> list = (List) session.getAttribute("LISTKEYWORD");
@@ -247,9 +248,16 @@
 
                                                     <tr>
                                                         <td class="keywordsNo"><%= i + 1%></td>
-                                                        <td class="keywords"><%= keywordDTO.getKeyword()%></td>
+                                                        <td class="keywords">
+                                                            <input id="keyword-value-<%= i%>" type="text" class="form-control keyword-value" value="<%= keywordDTO.getKeyword()%>" disabled>    
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></button>
+                                                            <button class="btn-submit">Update</button>
+                                                        </td>
                                                         <td><%= keywordDTO.getUserId()%></td>
                                                         <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td></td>  
                                                     </tr>
                                                     <% } %>
                                                     <% }%>
@@ -334,7 +342,7 @@
                                     var keyword;
                                     var keywordDecode;
                                     $('#myTable td.keywords').each(function () {
-                                        keyword = $(this).html().toLowerCase();
+                                        keyword = $(this).children().val().toLowerCase();
                                         keywordDecode = $('<textarea />').html(keyword).text();
                                         $(this).parent().removeClass("hide");
                                         if (keywordDecode.indexOf(keywordsinput) == -1) {
@@ -342,6 +350,15 @@
                                         }
                                     });
                                 });
+
+                                function enableInput(i) {
+                                    var classNameOfInput = "keyword-value-" + i;
+//                                    $('.keyword-value').each(function () {
+//                                        $(this).disabled = true;
+//                                    });
+                                    document.getElementById(classNameOfInput).disabled = false;
+                                }
+
                                 $(document).ready(function () {
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({

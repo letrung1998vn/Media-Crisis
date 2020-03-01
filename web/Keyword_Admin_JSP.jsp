@@ -294,7 +294,7 @@
                                                             <button class="btn-submit">Update</button>
                                                         </td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&version=<%= keywordDTO.getLog_version() %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                     </tr>
                                                     <% } %>
                                                     <% }%>

@@ -65,7 +65,7 @@
                             </a>
                         </li>
                         <li class="active">
-                            <a href="Keyword_JSP.jsp">
+                            <a href="MainController?btnAction=SearchKeywordUser&userId=<%= session.getAttribute("USERID") %>">
                                 <!--                            <a href="Keyword_JSP.jsp">-->
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
@@ -256,7 +256,7 @@
                                                             <button class="btn-submit">Update</button>
                                                         </td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i%>&version=<%= keywordDTO.getLog_version() %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&version=<%= keywordDTO.getLog_version() %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                         <td></td>  
                                                     </tr>
                                                     <% } %>

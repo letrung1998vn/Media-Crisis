@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -38,6 +40,7 @@ public class DeleteKeywordsController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             //get parameter
             String deleteKeywordId = request.getParameter("id");
+            String keywordVersion = request.getParameter("version");
             String nextPage = "";
             HttpSession session = request.getSession();
 
@@ -45,23 +48,26 @@ public class DeleteKeywordsController extends HttpServlet {
             String urlDeleteKeyword = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
             urlDeleteKeyword += "id=";
             urlDeleteKeyword += deleteKeywordId;
+            urlDeleteKeyword += "&logVersion=";
+            urlDeleteKeyword += keywordVersion;
+            urlDeleteKeyword += "&author=";
+            urlDeleteKeyword += session.getAttribute("USERID");
             //System.out.println(urlDeleteKeyword);
 
             //Call API Connection get all keyword
             APIConnection ac = new APIConnection(urlDeleteKeyword, "POST");
             String jsonString = ac.connect();
-            if (jsonString == null) {
-                session.setAttribute("CREATE_MESSAGE", "Delete keyword fail, please try again.");
-                session.setAttribute("RESULT", 4);
-                session.setAttribute("SEND", true);
-            } else {
-                session.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
-                session.setAttribute("RESULT", 2);
-                session.setAttribute("SEND", true);
+            try {
+                JSONObject jsonResult = new JSONObject(jsonString);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                session.setAttribute("RESULT", jsonResult.get("statusCode"));
+            } catch (JSONException e) {
+                System.out.println("Ko parse duoc json object");
             }
-            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE").toString() 
-                    +"&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD").toString() + "&searchValue=" 
-                    + session.getAttribute("SEARCHINGKEYWORD").toString();
+            session.setAttribute("SEND", true);
+            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                    + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                    + session.getAttribute("SEARCHINGKEYWORD");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
 

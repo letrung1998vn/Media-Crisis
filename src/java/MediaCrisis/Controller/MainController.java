@@ -37,6 +37,7 @@ public class MainController extends HttpServlet {
     private final String deleteKeywordAdmin = "DeleteKeywordsController";
     private final String createKeywordAdmin = "CreateKeywordAdminController";
     private final String keywordSearch = "SearchKeywordsController";
+    private final String keywordUserGetAll = "GetUserKeywordController";
     private final String userSearch = "SearchUserController";
     private final String changeUserStatus = "ChangeUserStatusController";
     private final String createUserAdmin = "CreateUserAdminController";
@@ -69,6 +70,8 @@ public class MainController extends HttpServlet {
                 url = createKeywordAdmin;
             } else if (button.equals("SearchKeyword")) {
                 url = keywordSearch;
+            } else if (button.equals("SearchKeywordUser")) {
+                url = keywordUserGetAll;
             } else if (button.equals("SearchUser")) {
                 url = userSearch;
             } else if (button.equals("ChangeUserStatus")) {

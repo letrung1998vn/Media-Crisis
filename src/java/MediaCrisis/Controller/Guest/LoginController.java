@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller.Guest;
 
+import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -30,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  *
  * @author Administrator
@@ -73,84 +75,53 @@ public class LoginController extends HttpServlet {
             url += sb.toString();
             System.out.println(url);
 
-            URL urlForGetRequest = new URL(url);
-            String readLine = null;
-            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-            conection.setRequestMethod("GET");
-            int responseCode = conection.getResponseCode();
-            StringBuffer rp = new StringBuffer();
-            User userDTO = new User();
-            List<Keyword> listKeyword = new ArrayList<>();
+            APIConnection ac = new APIConnection(url, "GET");
+            String result = ac.connect();
+            System.out.println(result);
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
-                }
-                in.close();
-                System.out.println("JSON String Result " + rp.toString());
-                try {
-                    String listJsonOutPutString = rp.toString();
-                    listJsonOutPutString = listJsonOutPutString.replace("[", "");
-                    listJsonOutPutString = listJsonOutPutString.replace("]", "");
-                    List<JSONObject> list = new ArrayList<JSONObject>();
-                    int count = 0;
-                    while (listJsonOutPutString.contains("{") && listJsonOutPutString.contains("}")) {
-                        String jsonObj = listJsonOutPutString.substring(listJsonOutPutString.indexOf("{"), listJsonOutPutString.indexOf("}") + 1);
-                        listJsonOutPutString = listJsonOutPutString.replace(jsonObj, "");
-                        list.add(new JSONObject(jsonObj));
-                    }
-                    for (int i = 0; i < list.size(); i++) {
-                        JSONObject jobj = new JSONObject(list.get(i).toString());
-                        userDTO.setPassword(jobj.get("password").toString());
-                        userDTO.setRole(jobj.get("role").toString());
-                        userDTO.setName(jobj.get("name").toString());
-                        userDTO.setUsername(jobj.get("userId").toString());
-                        userDTO.setEmail(jobj.get("email").toString());
-                        userDTO.setIsAvailable(jobj.getBoolean("available"));
-                        if (list.get(i).getInt("keywordId") != 0) {
-                            Keyword keyWord = new Keyword(list.get(i).getInt("keywordId"), StringEscapeUtils.escapeHtml4(list.get(i).get("keyword").toString()),
-                                    list.get(i).get("userId").toString());
-                            listKeyword.add(keyWord);
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println("ko parse duoc ve json object");
-                    e.printStackTrace();
-                    nextPage = error;
-                }
-            } else {
-                System.out.println("Loi api roi");
-                nextPage = error;
-            }
-            HttpSession session = request.getSession();
-            session.setAttribute("USERLOGIN", userDTO);
-            session.setAttribute("USERID", userDTO.getUsername());
-            System.out.println(userDTO);
-            if ((userDTO.getRole() != null) && (userDTO.isIsAvailable())) {
-                if (userDTO.getRole().equals("admin")) {
-                    nextPage = adminPage;
-                } else if (userDTO.getRole().equals("user")) {
-                    session.setAttribute("LISTKEYWORD", listKeyword);
-                    session.setAttribute("COUNT", listKeyword.size());
-                    nextPage = mainPage;
-                } else {
-                    System.out.println("Role sai!");
-                    nextPage = error;
-                }
-            } else {
-                if ((userDTO.getRole() != null) && (!userDTO.isIsAvailable())) {
-                    request.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
-                } else {
-                    request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
-                }
+            if (result.isEmpty()) {
+                request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
                 request.setAttribute("RESULT", 4);
                 request.setAttribute("SEND", true);
                 nextPage = login;
+            } else {
+                try {
+                    JSONObject obj = new JSONObject(result);
+                    User userDTO = new User();
+                    userDTO.setUsername(obj.getString("userId"));
+                    userDTO.setName(obj.getString("name"));
+                    userDTO.setEmail(obj.getString("email"));
+                    JSONObject obj1 = new JSONObject(obj.get("user").toString());
+                    userDTO.setPassword(obj1.getString("password"));
+                    userDTO.setRole(obj1.getString("role"));
+                    userDTO.setIsAvailable(obj1.getBoolean("available"));
+                    System.out.println(userDTO.toString());
+
+                    HttpSession session = request.getSession();
+                    System.out.println(userDTO);
+                    if (userDTO.isIsAvailable()) {
+                        if (userDTO.getRole().equals("admin")) {
+                            nextPage = adminPage;
+                        } else if (userDTO.getRole().equals("user")) {
+                            nextPage = mainPage;
+                        }
+                    } else {
+                        request.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
+                        request.setAttribute("RESULT", 4);
+                        request.setAttribute("SEND", true);
+                        nextPage = login;
+                    }
+
+                    session.setAttribute("USERLOGIN", userDTO);
+                    session.setAttribute("USERID", userDTO.getUsername());
+                } catch (JSONException e) {
+                    System.out.println("Login controller: K parse duoc ve JSONObj");
+                    //
+                }
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
+
         }
     }
 

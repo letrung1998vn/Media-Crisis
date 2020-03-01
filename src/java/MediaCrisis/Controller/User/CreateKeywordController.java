@@ -56,54 +56,56 @@ public class CreateKeywordController extends HttpServlet {
         String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword";
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
-
+        String result = "";
         String nextPage = "";
 
-        URL urlForGetRequest = new URL(url);
-        String readLine = null;
-        HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-        conection.setRequestMethod("POST");
-        conection.setDoOutput(true);
-        Map<String, String> arguments = new HashMap<>();
-        arguments.put("keyword", newKeyword);
-        arguments.put("userId", userId);
-        StringJoiner sj = new StringJoiner("&");
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
-            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-        try (OutputStream os = conection.getOutputStream()) {
-            os.write(out);
-        }
-        int responseCode = conection.getResponseCode();
-        StringBuffer rp = new StringBuffer();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(conection.getInputStream()));
-            while ((readLine = in.readLine()) != null) {
-                rp.append(readLine);
+        try {
+            URL urlForGetRequest = new URL(url);
+            String readLine = null;
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            conection.setDoOutput(true);
+            Map<String, String> arguments = new HashMap<>();
+            arguments.put("keyword", newKeyword);
+            arguments.put("userId", userId);
+            StringJoiner sj = new StringJoiner("&");
+            for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
             }
-            in.close();
-            System.out.println("JSON String Result " + rp.toString());
-            try {
-                JSONObject jobj = new JSONObject(rp.toString());
-                Keyword keyWord = new Keyword(jobj.getInt("id"), StringEscapeUtils.escapeHtml4(jobj.get("keyword").toString()),
-                        jobj.get("userId").toString());
-                List<Keyword> listKeyword = new ArrayList<>();
-                listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
-                listKeyword.add(keyWord);
-                session.setAttribute("LISTKEYWORD", listKeyword);
-            } catch (Exception e) {
-                e.printStackTrace();
+            byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+            try (OutputStream os = conection.getOutputStream()) {
+                os.write(out);
             }
-            nextPage = create;
-            request.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-            request.setAttribute("RESULT", 2);
-            request.setAttribute("SEND", true);
-        } else {
-            System.out.println("Loi api roi");
-            nextPage = error;
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                result = rp.toString();
+                if (result.isEmpty()) {
+                    nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
+                    session.setAttribute("CREATE_MESSAGE", "Create fail, please try again later.");
+                    session.setAttribute("RESULT", 4);
+                    session.setAttribute("SEND", true);
+                } else {
+                    nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
+                    session.setAttribute("CREATE_MESSAGE", "Added new keyword.");
+                    session.setAttribute("RESULT", 2);
+                    session.setAttribute("SEND", true);
+                }
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+        } catch (Exception e) {
+            System.out.println("Error at Create new keyword controller: ");
+            e.printStackTrace();
         }
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);

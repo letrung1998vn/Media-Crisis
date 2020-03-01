@@ -13,15 +13,34 @@ public class Keyword {
     private int id;
     private String keyword;
     private String userId;
+    private boolean available;
+    private int log_version;
 
     public Keyword() {
     }
 
-    
-    public Keyword(int id, String keyword, String userId) {
+    public Keyword(int id, String keyword, String userId, boolean available, int log_version) {
         this.id = id;
         this.keyword = keyword;
         this.userId = userId;
+        this.available = available;
+        this.log_version = log_version;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public int getLog_version() {
+        return log_version;
+    }
+
+    public void setLog_version(int log_version) {
+        this.log_version = log_version;
     }
 
     public int getId() {
@@ -50,11 +69,6 @@ public class Keyword {
 
     @Override
     public String toString() {
-        return "Keyword{" + "id=" + id + ", keyword=" + keyword + ", userId=" + userId + '}';
+        return "Keyword{" + "id=" + id + ", keyword=" + keyword + ", userId=" + userId + ", available=" + available + ", log_version=" + log_version + '}';
     }
-    
-      
-    
-    
-    
 }

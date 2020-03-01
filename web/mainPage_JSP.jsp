@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="Keyword_JSP.jsp">
+                            <a href="MainController?btnAction=SearchKeywordUser&userId=<%= session.getAttribute("USERID") %>">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>

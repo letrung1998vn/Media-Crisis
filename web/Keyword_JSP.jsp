@@ -256,7 +256,7 @@
                                                             <button class="btn-submit">Update</button>
                                                         </td>
                                                         <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                        <td><a href="MainController?btnAction=DeleteKeyword&id=<%= keywordDTO.getId()%>&no=<%= i%>&version=<%= keywordDTO.getLog_version() %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                         <td></td>  
                                                     </tr>
                                                     <% } %>
@@ -360,19 +360,22 @@
                                 }
 
                                 $(document).ready(function () {
-                                    if (<%=request.getAttribute("SEND")%>) {
+                                    if (<%=session.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                                            message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
                                         }, {
-                                            type: type[<%=request.getAttribute("RESULT")%>],
+                                            type: type[<%=session.getAttribute("RESULT")%>],
                                             timer: 4000,
                                             placement: {
                                                 from: 'top',
                                                 align: 'left'
                                             }
                                         });
+                                        <% session.removeAttribute("SEND"); %>
+                                        <% session.removeAttribute("CREATE_MESSAGE"); %>
+                                        <% session.removeAttribute("RESULT"); %>
                                     }
                                 });
     </script>

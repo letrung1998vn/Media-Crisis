@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller.User;
 
+import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
@@ -50,45 +51,28 @@ public class DeleteKeywordController extends HttpServlet {
         String idString = request.getParameter("id");
         int id = Integer.parseInt(idString);
         String keywordNo = request.getParameter("no");
+        String keywordVersion = request.getParameter("version");
         int keywordNumber = Integer.parseInt(keywordNo);
         url += "id=";
         url += id;
+        url += "&logVersion=";
+        url += keywordVersion;
         String nextPage = "";
-
-        URL urlForGetRequest = new URL(url);
-        String readLine = null;
-        HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-        connection.setRequestMethod("POST");
-        int responseCode = connection.getResponseCode();
-        StringBuffer rp = new StringBuffer();
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-            while ((readLine = in.readLine()) != null) {
-                rp.append(readLine);
-            }
-            in.close();
-            System.out.println("JSON String Result " + rp.toString());
-        } else {
-            System.out.println("Loi api");
-            nextPage = error;
-        }
-        request.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
-        request.setAttribute("RESULT", 2);
-        request.setAttribute("SEND", true);
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("USERLOGIN");
-        if (user.getRole().equals("admin")) {
-            nextPage = keywordAdminList;
+
+        APIConnection ac = new APIConnection(url, "POST");
+        String result = ac.connect();
+        if (result.isEmpty()) {
+            session.setAttribute("CREATE_MESSAGE", "This keyword list is already old, please try again with the new one.");
+            session.setAttribute("RESULT", 4);
+            session.setAttribute("SEND", true);
         } else {
-            nextPage = keywordList;
+            session.setAttribute("CREATE_MESSAGE", "Deleted keyword.");
+            session.setAttribute("RESULT", 2);
+            session.setAttribute("SEND", true);
         }
-        List<Keyword> listKeyword = new ArrayList<>();
-        listKeyword = (List<Keyword>) session.getAttribute("LISTKEYWORD");
-        listKeyword.remove(keywordNumber);
-        session.setAttribute("LISTKEYWORD", listKeyword);
-//        session.removeAttribute("");
+
+        nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
 

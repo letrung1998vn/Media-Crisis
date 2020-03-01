@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller.Admin;
+package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
@@ -36,8 +36,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "SearchKeywordsController", urlPatterns = {"/SearchKeywordsController"})
-public class SearchKeywordsController extends HttpServlet {
+@WebServlet(name = "GetUserKeywordController", urlPatterns = {"/GetUserKeywordController"})
+public class GetUserKeywordController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,32 +48,24 @@ public class SearchKeywordsController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String keywordList = "Keyword_Admin_JSP.jsp";
+    private final String keywordList = "Keyword_JSP.jsp";
     private final String error = "error.html";
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            int maxPage = 0;
-            int thisPage = 0;
             List<Keyword> listKeyword = new ArrayList<>();
             String nextPage = "";
-            String[] usersList = null;
             HttpSession session = request.getSession();
             String jsonString = "";
 
             //get parameter
-            String search = request.getParameter("searchValue");
             String userId = request.getParameter("userId");
-            String page = request.getParameter("page");
 
             //url get all keyword config
             String urlGetAllKeyword = "http://media-crisis-api.herokuapp.com/keyword/search";
             System.out.println(urlGetAllKeyword);
-
-            //url get all username in keyword table
-            String urlGetUsername = "http://media-crisis-api.herokuapp.com/keyword/getUsers";
 
             //Call API Connection get all keyword
             try {
@@ -84,9 +76,9 @@ public class SearchKeywordsController extends HttpServlet {
             conection.setRequestMethod("POST");
             conection.setDoOutput(true);
             Map<String, String> arguments = new HashMap<>();
-            arguments.put("page", page);
+            arguments.put("page", "1");
             arguments.put("username", userId);
-            arguments.put("keyword", search);
+            arguments.put("keyword", "");
             StringJoiner sj = new StringJoiner("&");
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
                 sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
@@ -120,8 +112,6 @@ public class SearchKeywordsController extends HttpServlet {
             try {
                 JSONObject jobj = new JSONObject(jsonString);
 //                System.out.println("Jobj: " + jobj);
-                thisPage = jobj.getInt("number") + 1;
-                maxPage = jobj.getInt("totalPages");
                 jsonString = jobj.get("content").toString();
                 jsonString = jsonString.substring(1, jsonString.length() - 1);
                 jsonString = jsonString.replace("},{", "}&nbsp;{");
@@ -137,23 +127,8 @@ public class SearchKeywordsController extends HttpServlet {
                 System.out.println("Ko parse duoc json obj");
             }
 
-            //Call API Connection get user in keyword table
-            APIConnection ac = new APIConnection(urlGetUsername, "GET");
-            jsonString = ac.connect();
-
-            //Parse to array of username
-            jsonString = jsonString.substring(1, jsonString.length() - 1);
-            usersList = jsonString.split(",");
-            for (int i = 0; i < usersList.length; i++) {
-                usersList[i] = usersList[i].substring(1, usersList[i].length() - 1);
-            }
-            session.setAttribute("SEARCHINGKEYWORD", search);
-            session.setAttribute("SEARCHINGUSERNAMEOFKEYWORD", userId);
-            session.setAttribute("USERSKEYWORDADMIN", usersList);
             session.setAttribute("LISTKEYWORD", listKeyword);
             session.setAttribute("COUNT", listKeyword.size());
-            session.setAttribute("KEYWORDADMINTHISPAGE", thisPage);
-            session.setAttribute("KEYWORDADMINMAXPAGE", maxPage);
             nextPage = keywordList;
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);

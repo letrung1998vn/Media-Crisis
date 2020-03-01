@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -88,17 +89,6 @@ public class CreateKeywordController extends HttpServlet {
                 }
                 in.close();
                 result = rp.toString();
-                if (result.isEmpty()) {
-                    nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
-                    session.setAttribute("CREATE_MESSAGE", "Create fail, please try again later.");
-                    session.setAttribute("RESULT", 4);
-                    session.setAttribute("SEND", true);
-                } else {
-                    nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
-                    session.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-                    session.setAttribute("RESULT", 2);
-                    session.setAttribute("SEND", true);
-                }
             } else {
                 System.out.println("Loi api roi");
                 nextPage = error;
@@ -107,6 +97,15 @@ public class CreateKeywordController extends HttpServlet {
             System.out.println("Error at Create new keyword controller: ");
             e.printStackTrace();
         }
+        try {
+            JSONObject jsonResult = new JSONObject(result);
+            session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+            session.setAttribute("RESULT", jsonResult.get("statusCode"));
+            session.setAttribute("SEND", true);
+        } catch (JSONException e) {
+            System.out.println("Ko parse duoc json object");
+        }
+        nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
     }

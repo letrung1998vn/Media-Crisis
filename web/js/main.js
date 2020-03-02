@@ -141,17 +141,17 @@
             });
             if (!check) {
                 $.notify({
-                icon: "pe-7s-bell",
-                message: 'Username you have inputed is not existed!'
+                    icon: "pe-7s-bell",
+                    message: 'Username you have inputed is not existed!'
 
-            }, {
-                type: type[4],
-                timer: 4000,
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            });
+                }, {
+                    type: type[4],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
             }
         }
         return check;
@@ -222,6 +222,46 @@
                     });
                     return false;
                 }
+            }
+        }
+    }
+
+    function validateUpdateKeyword(input) {
+
+        if ($(input).val().trim() == '') {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: 'Keyword field is empty, can not add'
+
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            return false;
+        } else {
+            $('#myTable td.keywords').each(function () {
+                if ($(this).children().val().toLowerCase() == $(input).val().trim()) {
+                    checkExist = false;
+                }
+            });
+            if (!checkExist) {
+                $.notify({
+                    icon: "pe-7s-bell",
+                    message: 'This keyword is existed!'
+
+                }, {
+                    type: type[4],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
+                return false;
             }
         }
     }

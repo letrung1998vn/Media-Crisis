@@ -42,6 +42,7 @@ public class MainController extends HttpServlet {
     private final String changeUserStatus = "ChangeUserStatusController";
     private final String createUserAdmin = "CreateUserAdminController";
     private final String updateKeywordUser = "UpdateKeywordController";
+    private final String updateUserProfile = "UpdateUserProfileController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,6 +82,8 @@ public class MainController extends HttpServlet {
                 url = createUserAdmin;
             } else if (button.equals("UpdateKeyword")) {
                 url = updateKeywordUser;
+            } else if (button.equals("Update")) {
+                url = updateUserProfile;
             }
             
             RequestDispatcher rd = request.getRequestDispatcher(url);

@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="user.html">
+                            <a href="userProfile.jsp">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>
@@ -145,7 +145,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="user.html">
+                                    <a href="userProfile.jsp">
                                         <p>Account</p>
                                     </a>
                                 </li>

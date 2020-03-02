@@ -25,6 +25,12 @@ public class User {
         this.email = email;
         this.isAvailable = isAvailable;
     }
+    
+    public User(String username, String name, String email) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+    }
 
     public String getUsername() {
         return username;

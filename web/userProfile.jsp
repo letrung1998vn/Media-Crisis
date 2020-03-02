@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.User"%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -41,27 +42,27 @@
                 <div class="sidebar-wrapper">
                     <div class="logo">
                         <a href="http://www.creative-tim.com" class="simple-text">
-                            Media Crisis Detect Application
+                            Creative Tim
                         </a>
                     </div>
 
                     <ul class="nav">
                         <li>
-                            <a href="mainPage_JSP.jsp">
+                            <a href="dashboard.html">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li>
-                            <a href="userProfile.jsp">
+                        <li class="active">
+                            <a href="user.html">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>
                         </li>
-                        <li class="active">
-                            <a href="MainController?btnAction=ShowKeyword">
+                        <li>
+                            <a href="table.html">
                                 <i class="pe-7s-note2"></i>
-                                <p>Keyword</p>
+                                <p>Table List</p>
                             </a>
                         </li>
                         <li>
@@ -108,21 +109,15 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="MainController?btnAction=ShowKeyword">Keyword List</a>
+                            <a class="navbar-brand" href="#">User Profile</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
-                                <!--                                <li>
-                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                                        <i class="fa fa-dashboard"></i>
-                                                                        <p class="hidden-lg hidden-md">Dashboard</p>
-                                                                    </a>
-                                                                </li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-globe"></i>
                                         <b class="caret hidden-sm hidden-xs"></b>
-                                        <span class="notification hidden-sm hidden-xs">5</span>
+                                        <!--<span class="notification hidden-sm hidden-xs">5</span>-->
                                         <p class="hidden-lg hidden-md">
                                             5 Notifications
                                             <b class="caret"></b>
@@ -136,38 +131,19 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-                                <!--                                <li>
-                                                                    <a href="Search_JSP.jsp">
-                                                                        <i class="fa fa-search"></i>
-                                                                        <p class="hidden-lg hidden-md">Search</p>
-                                                                    </a>
-                                                                </li>-->
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="userProfile.jsp">
+                                    <a href="#">
+                                        <p>Change password</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
                                         <p>Account</p>
                                     </a>
                                 </li>
-                                <!--                                <li class="dropdown">
-                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                                        <p>
-                                                                            Dropdown
-                                                                            <b class="caret"></b>
-                                                                        </p>
-                                
-                                                                    </a>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li><a href="#">Action</a></li>
-                                                                        <li><a href="#">Another action</a></li>
-                                                                        <li><a href="#">Something</a></li>
-                                                                        <li><a href="#">Another action</a></li>
-                                                                        <li><a href="#">Something</a></li>
-                                                                        <li class="divider"></li>
-                                                                        <li><a href="#">Separated link</a></li>
-                                                                    </ul>
-                                                                </li>-->
                                 <li>
                                     <a href="#">
                                         <p>Log out</p>
@@ -179,30 +155,49 @@
                     </div>
                 </nav>
 
+
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-10">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Create New Keyword</h4>
+                                        <h4 class="title">Edit Profile</h4>
                                     </div>
                                     <div class="content">
-                                        <form action="MainController" method="POST">
+                                        <% User user = (User)session.getAttribute("USERLOGIN");%>
+                                        <form action="MainController" method="post">
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" placeholder="Enter Keyword" name="txtKeyword">
-
+                                                        <label>Username</label>
+                                                        <input type="text" name="txtUsername" disabled class="form-control" placeholder="Username" value="<%= user.getUsername()%>">
                                                     </div>
-                                                    <button class="login100-form-btn" type="submit" value="CreateKeyword" name="btnAction">
-                                                        Add
-                                                    </button>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Name</label>
+                                                        <input type="text" name="txtName" class="form-control" placeholder="Company" value="<%= user.getName()%>">
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Email Address</label>
+                                                        <input type="email" name="txtEmail" class="form-control" placeholder="Email Address" value="<%= user.getEmail()%>">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                    <button type="submit" class="btn btn-info btn-fill pull-right" value="Update" name="btnAction">Update Profile</button>
+                                            <div class="clearfix"></div>
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -210,12 +205,13 @@
                     </div>
                 </div>
 
+
                 <footer class="footer">
                     <div class="container-fluid">
                         <nav class="pull-left">
                             <ul>
                                 <li>
-                                    <a href="mainPage_JSP.jsp">
+                                    <a href="#">
                                         Home
                                     </a>
                                 </li>
@@ -224,24 +220,23 @@
                                         Company
                                     </a>
                                 </li>
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Portfolio
-                                                                    </a>
-                                                                </li>-->
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Blog
-                                                                    </a>
-                                                                </li>-->
+                                <li>
+                                    <a href="#">
+                                        Portfolio
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Blog
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Media Crisis</a>, for your better business 
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
                         </p>
                     </div>
                 </footer>
-
 
             </div>
         </div>
@@ -268,12 +263,24 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
 
-    <script type="text/javascript">
+</html>
+
+<script>
+//    function showPassword() {
+//        var x = document.getElementById("inputPassword");
+//        if (x.type === "password") {
+//            x.type = "text";
+//        } else {
+//            x.type = "password";
+//  }
+//    }
+</script>
+<script type="text/javascript">
                                 $(document).ready(function () {
                                     if (<%=request.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                                            message: '<%=request.getAttribute("UPDATE_MESSAGE")%>'
 
                                         }, {
                                             type: type[<%=request.getAttribute("RESULT")%>],
@@ -286,4 +293,4 @@
                                     }
                                 });
     </script>
-</html>
+    

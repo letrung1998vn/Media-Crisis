@@ -288,16 +288,25 @@
 
                                                     <tr>
                                                         <td><%= (((int) session.getAttribute("KEYWORDADMINTHISPAGE")) - 1) * 10 + (i + 1)%></td>
-                                                        <td><%= keywordDTO.getKeyword() %></td>
-                                                        <td>
-                                                            <button class="btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></button>
-                                                            <button class="btn-submit">Update</button>
-                                                        </td>
-                                                        <td><%= keywordDTO.getUserId()%></td>
-                                                        <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&version=<%= keywordDTO.getLog_version() %>" onclick="return confirm('Are you sure you want to delete this item?');"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
-                                                    </tr>
-                                                    <% } %>
-                                                    <% }%>
+                                                <form class="login100-form validate-form-update-keyword" action="MainController" method="POST">
+                                                    <td>
+                                                        <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled>    
+                                                        <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
+                                                        <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">
+                                                        <input type="hidden" name="txtNo" value="<%= i%>">
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></a>
+                                                        <button id="btn-update-keyword-<%= i%>" class="btn" type="submit" value="UpdateKeywordAdmin" name="btnAction" onclick="return confirm('Are you sure you want to update this item?');" disabled>
+                                                            Update
+                                                        </button>
+                                                    </td>
+                                                </form>
+                                                <td><%= keywordDTO.getUserId()%></td>
+                                                <td><a href="MainController?btnAction=DeleteKeywordAdmin&id=<%= keywordDTO.getId()%>&version=<%= keywordDTO.getLog_version()%>" onclick="return confirm('Are you sure you want to delete this item?');"><button class="btn btn-danger"><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
+                                                </tr>
+                                                <% } %>
+                                                <% }%>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -374,8 +383,19 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript">
-                                $(document).ready(function () {
+                                function enableInput(i) {
+                                    var idOfInput = "keyword-value-" + i;
+                                    var idOfButton = "btn-update-keyword-" + i;
 
+//                                    $('.keyword-value').each(function () {
+//                                        $(this).disabled = true;
+//                                    });
+                                    document.getElementById(idOfInput).disabled = false;
+                                    document.getElementById(idOfButton).disabled = false;
+                                    document.getElementById(idOfButton).className += " btn-success";
+                                }
+
+                                $(document).ready(function () {
                                     if (<%=session.getAttribute("SEND")%>) {
                                         $.notify({
                                             icon: "pe-7s-bell",
@@ -389,19 +409,22 @@
                                                 align: 'left'
                                             }
                                         });
-                                        <% session.removeAttribute("SEND"); %>
-                                        <% session.removeAttribute("CREATE_MESSAGE"); %>
-                                        <% session.removeAttribute("RESULT"); %>
+                                        var i = <%= session.getAttribute("UPDATINGPOS")%>;
+                                        var idOfInput = "keyword-value-" + i;
+                                        var idOfButton = "btn-update-keyword-" + i;
+                                        document.getElementById(idOfInput).disabled = false;
+                                        document.getElementById(idOfInput).focus();
+                                        document.getElementById(idOfButton).disabled = false;
+                                        document.getElementById(idOfInput).value = "<%= session.getAttribute("UPDATINGVALUE")%>";
+                                        document.getElementById(idOfButton).className += " btn-success";
+
+        <% session.removeAttribute("SEND"); %>
+        <% session.removeAttribute("CREATE_MESSAGE"); %>
+        <% session.removeAttribute("RESULT");%>
+        <% session.removeAttribute("UPDATINGPOS");%>
+        <% session.removeAttribute("UPDATINGVALUE");%>
                                     }
                                 });
-                                
-                                function enableInput(i) {
-                                    var classNameOfInput = "keyword-value-" + i;
-//                                    $('.keyword-value').each(function () {
-//                                        $(this).disabled = true;
-//                                    });
-                                    document.getElementById(classNameOfInput).disabled = false;
-                                }
 
     </script>
 

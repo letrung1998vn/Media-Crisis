@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MediaCrisis.Controller.User;
+package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
@@ -35,8 +35,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "UpdateKeywordController", urlPatterns = {"/UpdateKeywordController"})
-public class UpdateKeywordController extends HttpServlet {
+@WebServlet(name = "UpdateKeywordAdminController", urlPatterns = {"/UpdateKeywordAdminController"})
+public class UpdateKeywordAdminController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,13 +48,13 @@ public class UpdateKeywordController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String error = "error.html";
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword/?";
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
@@ -64,7 +64,7 @@ public class UpdateKeywordController extends HttpServlet {
             boolean validate = true;
             String nextPage = "";
             int statusCode = 0;
-
+            
             if (newKeyword.isEmpty()) {
                 session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not update");
                 session.setAttribute("RESULT", 4);
@@ -81,8 +81,7 @@ public class UpdateKeywordController extends HttpServlet {
 //                url += "&author=";
 //                url += session.getAttribute("USERID");
 
-                System.out.println(url);
-
+               
                 String result = "";
                 try {
                     URL urlForGetRequest = new URL(url);
@@ -132,14 +131,16 @@ public class UpdateKeywordController extends HttpServlet {
                     System.out.println("Ko parse duoc json object");
                 }
             }
-
-            if ((!validate) || (statusCode != 2)) {
+            
+            if ((!validate) || (statusCode != 2)){
                 session.setAttribute("UPDATINGVALUE", newKeyword);
                 session.setAttribute("UPDATINGPOS", pos);
             }
-
+            
             session.setAttribute("SEND", true);
-            nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
+            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                    + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                    + session.getAttribute("SEARCHINGKEYWORD");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

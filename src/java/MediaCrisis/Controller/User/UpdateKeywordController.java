@@ -55,6 +55,7 @@ public class UpdateKeywordController extends HttpServlet {
             if (newKeyword.isEmpty()) {
                 session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
                 session.setAttribute("RESULT", 4);
+                session.setAttribute("SEND", true);
                 validate = false;
                 nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
             } else {

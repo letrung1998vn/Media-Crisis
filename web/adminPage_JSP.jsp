@@ -169,7 +169,7 @@
                                     </ul>
                                 </li>-->
                                 <li>
-                                    <a href="#">
+                                    <a href="MainController?btnAction=LogOut">
                                         <p>Log out</p>
                                     </a>
                                 </li>

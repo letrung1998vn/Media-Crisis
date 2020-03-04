@@ -113,20 +113,24 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                if (<%=request.getAttribute("SEND")%>) {
+                if (<%=session.getAttribute("SEND")%>) {
                     $.notify({
                         icon: "pe-7s-bell",
-                        message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                        message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
                     }, {
-                        type: type[<%=request.getAttribute("RESULT")%>],
+                        type: type[<%=session.getAttribute("RESULT")%>],
                         timer: 4000,
                         placement: {
                             from: 'top',
                             align: 'left'
                         }
                     });
+            <% session.removeAttribute("SEND"); %>
+            <% session.removeAttribute("CREATE_MESSAGE"); %>
+            <% session.removeAttribute("RESULT");%>
                 }
+                <% session.invalidate(); %>
             });
         </script>
         <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>

@@ -106,9 +106,9 @@ public class LoginController extends HttpServlet {
                             nextPage = mainPage;
                         }
                     } else {
-                        request.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
-                        request.setAttribute("RESULT", 4);
-                        request.setAttribute("SEND", true);
+                        session.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
+                        session.setAttribute("RESULT", 4);
+                        session.setAttribute("SEND", true);
                         nextPage = login;
                     }
 

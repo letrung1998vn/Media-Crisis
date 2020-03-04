@@ -57,7 +57,8 @@ public class SignUpController extends HttpServlet {
             String email = request.getParameter("txtEmail");
             String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
             String nextPage = loginPage;
-
+            HttpSession session = request.getSession();
+            
             url += "username=";
             url += username;
             url += "&password=";
@@ -97,9 +98,9 @@ public class SignUpController extends HttpServlet {
                         nextPage = signupPage;
                     } else {
                         nextPage = loginPage;
-                        request.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
-                        request.setAttribute("RESULT", 2);
-                        request.setAttribute("SEND", true);
+                        session.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                        session.setAttribute("RESULT", 2);
+                        session.setAttribute("SEND", true);
                     }
                 } catch (Exception e) {
                 }

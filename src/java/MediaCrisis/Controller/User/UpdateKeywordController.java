@@ -58,14 +58,14 @@ public class UpdateKeywordController extends HttpServlet {
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
-            String newKeyword = request.getParameter("txtNewKeyword");
+            String newKeyword = request.getParameter("txtNewKeyword").trim();
             String posString = request.getParameter("txtNo");
             int pos = Integer.parseInt(posString);
             boolean validate = true;
             String nextPage = "";
             String result = "";
             System.out.println("New keyword: " + newKeyword);
-            if (newKeyword.trim().isEmpty()) {
+            if (newKeyword.isEmpty()) {
                 System.out.println("Sai");
                 session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
                 session.setAttribute("RESULT", 4);

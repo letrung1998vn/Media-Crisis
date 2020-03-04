@@ -58,7 +58,7 @@ public class UpdateKeywordController extends HttpServlet {
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
-            String newKeyword = request.getParameter("txtNewKeyword");
+            String newKeyword = request.getParameter("txtNewKeyword").trim();
             String posString = request.getParameter("txtNo");
             int pos = Integer.parseInt(posString);
             boolean validate = true;

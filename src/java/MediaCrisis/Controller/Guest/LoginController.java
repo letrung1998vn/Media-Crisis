@@ -64,7 +64,7 @@ public class LoginController extends HttpServlet {
             url += "username=";
             url += username;
             url += "&password=";
-
+            HttpSession session = request.getSession();
             //Hash password
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -80,9 +80,9 @@ public class LoginController extends HttpServlet {
             System.out.println(result);
 
             if (result.isEmpty()) {
-                request.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
-                request.setAttribute("RESULT", 4);
-                request.setAttribute("SEND", true);
+                session.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
+                session.setAttribute("RESULT", 4);
+                session.setAttribute("SEND", true);
                 nextPage = login;
             } else {
                 try {
@@ -97,7 +97,6 @@ public class LoginController extends HttpServlet {
                     userDTO.setIsAvailable(obj1.getBoolean("available"));
                     System.out.println(userDTO.toString());
 
-                    HttpSession session = request.getSession();
                     System.out.println(userDTO);
                     if (userDTO.isIsAvailable()) {
                         if (userDTO.getRole().equals("admin")) {

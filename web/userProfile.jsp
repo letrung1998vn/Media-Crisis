@@ -41,28 +41,28 @@
 
                 <div class="sidebar-wrapper">
                     <div class="logo">
-                        <a href="http://www.creative-tim.com" class="simple-text">
-                            Creative Tim
+                        <a href="#" class="simple-text">
+                            Media Crisis Detect Application
                         </a>
                     </div>
 
                     <ul class="nav">
                         <li>
-                            <a href="dashboard.html">
+                            <a href="mainPage_JSP.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="active">
-                            <a href="user.html">
+                            <a href="userProfile.jsp">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>
                         </li>
                         <li>
-                            <a href="table.html">
+                            <a href="Keyword_JSP.jsp">
                                 <i class="pe-7s-note2"></i>
-                                <p>Table List</p>
+                                <p>Keyword</p>
                             </a>
                         </li>
                         <li>
@@ -135,7 +135,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="#">
+                                    <a href="changePassword.jsp">
                                         <p>Change password</p>
                                     </a>
                                 </li>
@@ -180,7 +180,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Name</label>
-                                                        <input type="text" name="txtName" class="form-control" placeholder="Company" value="<%= user.getName()%>">
+                                                        <input type="text" name="txtName" class="form-control" placeholder="Name" value="<%= user.getName()%>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,7 +194,7 @@
                                                 </div>
                                             </div>
 
-                                                    <button type="submit" class="btn btn-info btn-fill pull-right" value="Update" name="btnAction">Update Profile</button>
+                                                    <button type="submit" class="btn btn-info btn-fill pull-left" value="Update" name="btnAction">Update Profile</button>
                                             <div class="clearfix"></div>
                                         </form>
                                     </div>
@@ -233,7 +233,7 @@
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="#">Creative Tim</a>, made with love for a better web
                         </p>
                     </div>
                 </footer>

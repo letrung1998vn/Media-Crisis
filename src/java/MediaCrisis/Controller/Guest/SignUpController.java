@@ -114,7 +114,6 @@ public class SignUpController extends HttpServlet {
                 System.out.println("Loi api roi");
                 nextPage = error;
             }
-            HttpSession session = request.getSession();
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.User"%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -52,14 +53,14 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="userProfile.jsp">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>
                         </li>
-                        <li class="active">
-                            <a href="MainController?btnAction=ShowKeyword">
+                        <li>
+                            <a href="Keyword_JSP.jsp">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>
@@ -108,21 +109,15 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="MainController?btnAction=ShowKeyword">Keyword List</a>
+                            <a class="navbar-brand" href="#">User Profile</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
-                                <!--                                <li>
-                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                                        <i class="fa fa-dashboard"></i>
-                                                                        <p class="hidden-lg hidden-md">Dashboard</p>
-                                                                    </a>
-                                                                </li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-globe"></i>
                                         <b class="caret hidden-sm hidden-xs"></b>
-                                        <span class="notification hidden-sm hidden-xs">5</span>
+                                        <!--<span class="notification hidden-sm hidden-xs">5</span>-->
                                         <p class="hidden-lg hidden-md">
                                             5 Notifications
                                             <b class="caret"></b>
@@ -136,38 +131,19 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-                                <!--                                <li>
-                                                                    <a href="Search_JSP.jsp">
-                                                                        <i class="fa fa-search"></i>
-                                                                        <p class="hidden-lg hidden-md">Search</p>
-                                                                    </a>
-                                                                </li>-->
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="userProfile.jsp">
+                                    <a href="#">
+                                        <p>Change password</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="">
                                         <p>Account</p>
                                     </a>
                                 </li>
-                                <!--                                <li class="dropdown">
-                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                                        <p>
-                                                                            Dropdown
-                                                                            <b class="caret"></b>
-                                                                        </p>
-                                
-                                                                    </a>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li><a href="#">Action</a></li>
-                                                                        <li><a href="#">Another action</a></li>
-                                                                        <li><a href="#">Something</a></li>
-                                                                        <li><a href="#">Another action</a></li>
-                                                                        <li><a href="#">Something</a></li>
-                                                                        <li class="divider"></li>
-                                                                        <li><a href="#">Separated link</a></li>
-                                                                    </ul>
-                                                                </li>-->
                                 <li>
                                     <a href="#">
                                         <p>Log out</p>
@@ -179,30 +155,92 @@
                     </div>
                 </nav>
 
+
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Create New Keyword</h4>
+                                        <h4 class="title">Change Password</h4>
                                     </div>
                                     <div class="content">
-                                        <form action="MainController" method="POST">
+                                        <% String pwd = (String) session.getAttribute("PWD");%>
+                                        <form action="MainController" method="post" class="validate-form-change-password">
                                             <div class="row">
-                                                <div class="col-md-5">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" placeholder="Enter Keyword" name="txtKeyword">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4"><label>Old Password</label></div>
+                                                            <div class="col-md-8">
+                                                                <label  class="old-password-error"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-8">
+                                                                <input id="pwd1" type="password" name="txtOldPassword" class="form-control input100" placeholder="Old Password" value="">
+                                                                <input name="old-password-hidden" type="hidden" value="<%= pwd%>">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="checkbox" onclick="showPassword1()"> Show Password
+                                                            </div>
+
+                                                        </div>
 
                                                     </div>
-                                                    <button class="login100-form-btn" type="submit" value="CreateKeyword" name="btnAction">
-                                                        Add
-                                                    </button>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4"><label>New Password</label></div>
+                                                            <div class="col-md-8">
+                                                                <label  class="new-password-error"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-8">
+                                                                <input id="pwd2" type="password" name="txtPassword" class="form-control input100" placeholder="New Password" value="">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="checkbox" onclick="showPassword2()"> Show Password
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4"><label>Confirm Password</label></div>
+                                                            <div class="col-md-8">
+                                                                <label class="confirm-password-error"></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <div class="col-md-8">
+                                                                <input id="pwd" type="password" name="txtConfirmPassword" class="form-control input100" placeholder="Confirm Password" value="">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <input type="checkbox" onclick="showPassword()"> Show Password
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-info btn-fill pull-left" value="ChangePassword" name="btnAction">Update Password</button>
+                                            <div class="clearfix"></div>
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -210,12 +248,13 @@
                     </div>
                 </div>
 
+
                 <footer class="footer">
                     <div class="container-fluid">
                         <nav class="pull-left">
                             <ul>
                                 <li>
-                                    <a href="mainPage_JSP.jsp">
+                                    <a href="#">
                                         Home
                                     </a>
                                 </li>
@@ -224,24 +263,23 @@
                                         Company
                                     </a>
                                 </li>
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Portfolio
-                                                                    </a>
-                                                                </li>-->
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Blog
-                                                                    </a>
-                                                                </li>-->
+                                <li>
+                                    <a href="#">
+                                        Portfolio
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        Blog
+                                    </a>
+                                </li>
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Media Crisis</a>, for your better business 
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
                         </p>
                     </div>
                 </footer>
-
 
             </div>
         </div>
@@ -268,22 +306,53 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
 
-    <script type="text/javascript">
-                                $(document).ready(function () {
-                                    if (<%=request.getAttribute("SEND")%>) {
-                                        $.notify({
-                                            icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
-
-                                        }, {
-                                            type: type[<%=request.getAttribute("RESULT")%>],
-                                            timer: 4000,
-                                            placement: {
-                                                from: 'top',
-                                                align: 'left'
-                                            }
-                                        });
-                                    }
-                                });
-    </script>
 </html>
+
+<script src="js/main.js"></script>
+<script>
+                                function showPassword() {
+                                    var x = document.getElementById("pwd");
+                                    if (x.type === "password") {
+                                        x.type = "text";
+                                    } else {
+                                        x.type = "password";
+                                    }
+                                }
+                                function showPassword1() {
+                                    var x = document.getElementById("pwd1");
+                                    if (x.type === "password") {
+                                        x.type = "text";
+                                    } else {
+                                        x.type = "password";
+                                    }
+                                }
+                                function showPassword2() {
+                                    var x = document.getElementById("pwd2");
+                                    if (x.type === "password") {
+                                        x.type = "text";
+                                    } else {
+                                        x.type = "password";
+                                    }
+                                }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (<%=session.getAttribute("SEND")%>) {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: '<%=session.getAttribute("CHANGE_MESSAGE")%>'
+
+            }, {
+                type: type[<%=session.getAttribute("RESULT")%>],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+    <% session.removeAttribute("SEND"); %>
+    <% session.removeAttribute("CHANGE_MESSAGE"); %>
+    <% session.removeAttribute("RESULT");%>
+        }
+    });
+</script>

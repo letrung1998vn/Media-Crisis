@@ -114,6 +114,7 @@ public class LoginController extends HttpServlet {
 
                     session.setAttribute("USERLOGIN", userDTO);
                     session.setAttribute("USERID", userDTO.getUsername());
+                    session.setAttribute("PWD", password);
                 } catch (JSONException e) {
                     System.out.println("Login controller: K parse duoc ve JSONObj");
                     //

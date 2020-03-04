@@ -82,6 +82,30 @@
 
         return check;
     });
+    
+    $('.validate-form-change-password').on('submit', function () {
+        var check = true;
+        input = $('.input100');
+        for (var i = 0; i < input.length; i++) {
+            if (validateChangePassword(input[i]) != undefined) {
+                if (i == 0) {
+                    $('.old-password-error').html(validateChangePassword(input[0]))
+                    check = false;
+                }
+                if (i == 1) {
+                    $('.new-password-error').html(validateChangePassword(input[1]))
+                    check = false;
+                }
+                if (i == 2) {
+                    $('.confirm-password-error').html(validateChangePassword(input[2]))
+                    check = false;
+                }
+                
+            }
+        }
+
+        return check;
+    });
 
     $('.validate-form-login .input100').each(function () {
         $(this).focus(function () {
@@ -110,6 +134,31 @@
         } else {
             if ($(input).val().trim() == '') {
                 return false;
+            }
+        }
+    }
+    
+    function validateChangePassword(input) {
+        var result = '';
+        if ($(input).attr('name') == 'txtOldPassword') {
+            if ($(input).val().trim().match($("input[name=old-password-hidden]").val()) == null) {
+                result = 'Wrond password';
+                return result;
+            }
+        } else if ($(input).attr('name') == 'txtPassword') {
+            if ($(input).val().trim().match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/) == null) {
+                result = '8 characters min, at least 1 char, 1 number ';
+                return result;
+            }
+        } else if ($(input).attr('name') == 'txtConfirmPassword') {
+            if (!$(input).val().trim().match($("input[name=txtPassword]").val())) {
+                result =  'Wrong confirm password';
+                return result;
+            }
+        } else {
+            if ($(input).val().trim() == '') {
+                result =  'Cannot empty';
+                return result;
             }
         }
     }

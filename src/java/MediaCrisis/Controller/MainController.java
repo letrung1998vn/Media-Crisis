@@ -6,7 +6,6 @@
 package MediaCrisis.Controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,11 +42,12 @@ public class MainController extends HttpServlet {
     private final String createUserAdmin = "CreateUserAdminController";
     private final String updateKeywordUser = "UpdateKeywordController";
     private final String updateUserProfile = "UpdateUserProfileController";
+    private final String updatePassword = "UpdatePasswordController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        
             String button = request.getParameter("btnAction");
             String url = "error.html";
             System.out.println(button);
@@ -84,11 +84,13 @@ public class MainController extends HttpServlet {
                 url = updateKeywordUser;
             } else if (button.equals("Update")) {
                 url = updateUserProfile;
+            } else if (button.equals("ChangePassword")) {
+                url = updatePassword;
             }
             
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

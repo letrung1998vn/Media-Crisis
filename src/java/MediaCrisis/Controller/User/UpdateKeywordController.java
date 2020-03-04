@@ -86,23 +86,27 @@ public class UpdateKeywordController extends HttpServlet {
                 url += session.getAttribute("USERID");
 
                 System.out.println(url);
-                
+
                 APIConnection ac = new APIConnection(url, "POST");
                 String result = ac.connect();
                 try {
                     JSONObject jsonResult = new JSONObject(result);
                     session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-                    session.setAttribute("RESULT", jsonResult.get("statusCode"));
-                } catch (JSONException e) {
+                    int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                    session.setAttribute("RESULT", resultCode);
+                    session.setAttribute("SEND", true);
+                    if (resultCode == 3) {
+                        nextPage = "login_JSP.jsp";
+                    } else {
+                        nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
+                    }
+                } catch (Exception e) {
                     System.out.println("Ko parse duoc json object");
                 }
             } else {
                 session.setAttribute("UPDATINGVALUE", newKeyword);
                 session.setAttribute("UPDATINGPOS", pos);
             }
-            
-            session.setAttribute("SEND", true);
-            nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

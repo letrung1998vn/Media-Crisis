@@ -4,11 +4,15 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/User/UpdateUserProfileController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/User/UpdateKeywordController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/SearchUserController.java</file>
             <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/User/UpdatePasswordController.java</file>
-            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/web/changePassword.jsp</file>
-            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/web/js/main.js</file>
-            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Guest/SignUpController.java</file>
-            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/web/userProfile.jsp</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/DeleteKeywordsController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/CreateKeywordAdminController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/SearchKeywordsController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/ChangeUserStatusController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/UpdateKeywordAdminController.java</file>
+            <file>file:/H:/Capstone_Spring/Code/Demo/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/CreateUserAdminController.java</file>
         </group>
     </open-files>
 </project-private>

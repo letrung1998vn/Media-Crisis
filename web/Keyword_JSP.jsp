@@ -251,10 +251,10 @@
                                                 <form class="login100-form validate-form-update-keyword" action="MainController" method="POST">
                                                     <td class="keywords">
                                                         <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled>    
-                                                        <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
-                                                        <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">
-                                                        <input type="hidden" name="txtNo" value="<%= i%>">
                                                     </td>
+                                                    <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
+                                                    <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">
+                                                    <input type="hidden" name="txtNo" value="<%= i%>">
                                                     <td>
                                                         <a class="btn btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></a>
                                                         <button id="btn-update-keyword-<%= i%>" class="btn" type="submit" value="UpdateKeyword" name="btnAction" disabled>

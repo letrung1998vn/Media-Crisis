@@ -165,7 +165,7 @@
                                         <h4 class="title">Edit Profile</h4>
                                     </div>
                                     <div class="content">
-                                        <% User user = (User)session.getAttribute("USERLOGIN");%>
+                                        <% User user = (User) session.getAttribute("USERLOGIN");%>
                                         <form action="MainController" method="post">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -174,7 +174,7 @@
                                                         <input type="text" name="txtUsername" disabled class="form-control" placeholder="Username" value="<%= user.getUsername()%>">
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -194,7 +194,7 @@
                                                 </div>
                                             </div>
 
-                                                    <button type="submit" class="btn btn-info btn-fill pull-left" value="Update" name="btnAction">Update Profile</button>
+                                            <button type="submit" class="btn btn-info btn-fill pull-left" value="Update" name="btnAction">Update Profile</button>
                                             <div class="clearfix"></div>
                                         </form>
                                     </div>
@@ -276,21 +276,23 @@
 //    }
 </script>
 <script type="text/javascript">
-                                $(document).ready(function () {
-                                    if (<%=request.getAttribute("SEND")%>) {
-                                        $.notify({
-                                            icon: "pe-7s-bell",
-                                            message: '<%=request.getAttribute("UPDATE_MESSAGE")%>'
+    $(document).ready(function () {
+        if (<%=session.getAttribute("SEND")%>) {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
-                                        }, {
-                                            type: type[<%=request.getAttribute("RESULT")%>],
-                                            timer: 4000,
-                                            placement: {
-                                                from: 'top',
-                                                align: 'left'
-                                            }
-                                        });
-                                    }
-                                });
-    </script>
-    
+            }, {
+                type: type[<%=session.getAttribute("RESULT")%>],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+        }
+    <% session.removeAttribute("SEND"); %>
+    <% session.removeAttribute("CREATE_MESSAGE"); %>
+    <% session.removeAttribute("RESULT");%>
+    });
+</script>

@@ -79,7 +79,7 @@ public class UpdateUserProfileController extends HttpServlet {
         }
         int responseCode = conection.getResponseCode();
         StringBuffer rp = new StringBuffer();
-
+        String result = "";
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(conection.getInputStream()));
@@ -88,24 +88,26 @@ public class UpdateUserProfileController extends HttpServlet {
             }
             in.close();
             System.out.println("JSON String Result " + rp.toString());
+            result = rp.toString();
             try {
-                JSONObject jobj = new JSONObject(rp.toString());
-                User userDTO = new User();
-                userDTO.setUsername(jobj.getString("userId"));
-                userDTO.setName(jobj.getString("name"));
-                userDTO.setEmail(jobj.getString("email"));
-                JSONObject obj1 = new JSONObject(jobj.get("user").toString());
-                userDTO.setPassword(obj1.getString("password"));
-                userDTO.setRole(obj1.getString("role"));
-                userDTO.setIsAvailable(obj1.getBoolean("available"));
-                session.setAttribute("USERLOGIN", userDTO);
+                JSONObject jsonResult = new JSONObject(result);
+                int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                if (resultCode == 2) {
+                    User userDTO = (User) session.getAttribute("USERLOGIN");
+                    userDTO.setName(name);
+                    userDTO.setEmail(email);
+                }
+                if (resultCode == 3) {
+                    nextPage = "login_JSP.jsp";
+                } else {
+                    nextPage = update;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            nextPage = update;
-            request.setAttribute("UPDATE_MESSAGE", "Updated profile.");
-            request.setAttribute("RESULT", 2);
-            request.setAttribute("SEND", true);
+            session.setAttribute("CREATE_MESSAGE", "Updated profile.");
+            session.setAttribute("RESULT", 2);
+            session.setAttribute("SEND", true);
         } else {
             System.out.println("Loi api roi");
             nextPage = error;

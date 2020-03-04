@@ -7,10 +7,20 @@ package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,12 +47,14 @@ public class UpdateKeywordController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private final String error = "error.html";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword/?";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword";
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
@@ -51,56 +63,81 @@ public class UpdateKeywordController extends HttpServlet {
             int pos = Integer.parseInt(posString);
             boolean validate = true;
             String nextPage = "";
+            int statusCode = 0;
 
             if (newKeyword.isEmpty()) {
-                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
+                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not update");
                 session.setAttribute("RESULT", 4);
                 validate = false;
-            } else {
-                List<Keyword> list = new ArrayList<>();
-                try {
-                    list = (List<Keyword>) session.getAttribute("LISTKEYWORD");
-                    for (int i = 0; i < list.size(); i++) {
-                        if (i != pos) {
-                            if (list.get(i).getKeyword().equals(newKeyword)) {
-                                validate = false;
-                                session.setAttribute("CREATE_MESSAGE", "This keyword is existed!");
-                                session.setAttribute("RESULT", 4);
-                                break;
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
             if (validate) {
-                url += "keyword=";
-                url += newKeyword;
-                url += "&keywordId=";
-                url += id;
-                url += "&logVersion=";
-                url += keywordVersion;
-                url += "&author=";
-                url += session.getAttribute("USERID");
+//                url += "keyword=";
+//                url += newKeyword;
+//                url += "&keywordId=";
+//                url += id;
+//                url += "&logVersion=";
+//                url += keywordVersion;
+//                url += "&author=";
+//                url += session.getAttribute("USERID");
 
                 System.out.println(url);
-                
-                APIConnection ac = new APIConnection(url, "POST");
-                String result = ac.connect();
+
+                String result = "";
+                try {
+                    URL urlForGetRequest = new URL(url);
+                    String readLine = null;
+                    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+                    conection.setRequestMethod("POST");
+                    conection.setDoOutput(true);
+                    Map<String, String> arguments = new HashMap<>();
+                    arguments.put("keyword", newKeyword);
+                    arguments.put("keywordId", id+"");
+                    arguments.put("logVersion", keywordVersion);
+                    arguments.put("author", session.getAttribute("USERID").toString());
+                    StringJoiner sj = new StringJoiner("&");
+                    for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                        sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                                + URLEncoder.encode(entry.getValue(), "UTF-8"));
+                    }
+                    byte[] outS = sj.toString().getBytes(StandardCharsets.UTF_8);
+                    try (OutputStream os = conection.getOutputStream()) {
+                        os.write(outS);
+                    }
+                    int responseCode = conection.getResponseCode();
+                    StringBuffer rp = new StringBuffer();
+
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        BufferedReader in = new BufferedReader(
+                                new InputStreamReader(conection.getInputStream()));
+                        while ((readLine = in.readLine()) != null) {
+                            rp.append(readLine);
+                        }
+                        in.close();
+                        result = rp.toString();
+                    } else {
+                        System.out.println("Loi api roi");
+                        nextPage = error;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error at Create new keyword controller: ");
+                    e.printStackTrace();
+                }
                 try {
                     JSONObject jsonResult = new JSONObject(result);
                     session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-                    session.setAttribute("RESULT", jsonResult.get("statusCode"));
+                    statusCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                    session.setAttribute("RESULT", statusCode);
                 } catch (JSONException e) {
                     System.out.println("Ko parse duoc json object");
                 }
-            } else {
+            }
+
+            if ((!validate) || (statusCode != 2)) {
                 session.setAttribute("UPDATINGVALUE", newKeyword);
                 session.setAttribute("UPDATINGPOS", pos);
             }
-            
+
             session.setAttribute("SEND", true);
             nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);

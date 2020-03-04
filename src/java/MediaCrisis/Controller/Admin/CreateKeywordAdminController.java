@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -87,16 +88,13 @@ public class CreateKeywordAdminController extends HttpServlet {
                 }
                 in.close();
                 result = rp.toString();
-                if (result.isEmpty()) {
-                    nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
-                    session.setAttribute("CREATE_MESSAGE", "Create fail, please try again later.");
-                    session.setAttribute("RESULT", 4);
+                try {
+                    JSONObject jsonResult = new JSONObject(result);
+                    session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                    session.setAttribute("RESULT", jsonResult.get("statusCode"));
                     session.setAttribute("SEND", true);
-                } else {
-                    nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
-                    session.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-                    session.setAttribute("RESULT", 2);
-                    session.setAttribute("SEND", true);
+                } catch (JSONException e) {
+                    System.out.println("Ko parse duoc json object");
                 }
             } else {
                 System.out.println("Loi api roi");

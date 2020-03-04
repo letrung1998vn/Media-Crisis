@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -87,17 +90,6 @@ public class CreateKeywordAdminController extends HttpServlet {
                 }
                 in.close();
                 result = rp.toString();
-                if (result.isEmpty()) {
-                    nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
-                    session.setAttribute("CREATE_MESSAGE", "Create fail, please try again later.");
-                    session.setAttribute("RESULT", 4);
-                    session.setAttribute("SEND", true);
-                } else {
-                    nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
-                    session.setAttribute("CREATE_MESSAGE", "Added new keyword.");
-                    session.setAttribute("RESULT", 2);
-                    session.setAttribute("SEND", true);
-                }
             } else {
                 System.out.println("Loi api roi");
                 nextPage = error;
@@ -105,6 +97,15 @@ public class CreateKeywordAdminController extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Error at Create new keyword controller: ");
             e.printStackTrace();
+        }
+        try {
+            JSONObject jsonResult = new JSONObject(result);
+            session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+            session.setAttribute("RESULT", jsonResult.get("statusCode"));
+            session.setAttribute("SEND", true);
+            nextPage = create;
+        } catch (JSONException e) {
+            System.out.println("Ko parse duoc json object");
         }
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);

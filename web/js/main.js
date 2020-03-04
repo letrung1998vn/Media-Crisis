@@ -240,7 +240,7 @@
                 }
             });
             return false;
-        } 
+        }
     }
 
     function validateAddKeyword(input) {
@@ -320,27 +320,6 @@
                 }
             });
             return false;
-        } else {
-            $('#myTable td.keywords').each(function () {
-                if ($(this).children().val().toLowerCase() == $(input).val().trim().toLowerCase()) {
-                    checkExist = false;
-                }
-            });
-            if (!checkExist) {
-                $.notify({
-                    icon: "pe-7s-bell",
-                    message: 'This keyword is existed!'
-
-                }, {
-                    type: type[4],
-                    timer: 4000,
-                    placement: {
-                        from: 'top',
-                        align: 'left'
-                    }
-                });
-                return false;
-            }
         }
     }
 

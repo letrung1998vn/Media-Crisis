@@ -48,13 +48,13 @@ public class UpdateKeywordAdminController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String error = "error.html";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword/?";
+            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword";
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
@@ -63,11 +63,16 @@ public class UpdateKeywordAdminController extends HttpServlet {
             int pos = Integer.parseInt(posString);
             boolean validate = true;
             String nextPage = "";
-            int statusCode = 0;
+            String result = "";
+            int resultCode = 0;
             
             if (newKeyword.isEmpty()) {
-                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not update");
+                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
                 session.setAttribute("RESULT", 4);
+                session.setAttribute("SEND", true);
+                nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                        + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                        + session.getAttribute("SEARCHINGKEYWORD");
                 validate = false;
             }
 
@@ -80,9 +85,8 @@ public class UpdateKeywordAdminController extends HttpServlet {
 //                url += keywordVersion;
 //                url += "&author=";
 //                url += session.getAttribute("USERID");
-
-               
-                String result = "";
+//
+//                System.out.println(url);
                 try {
                     URL urlForGetRequest = new URL(url);
                     String readLine = null;
@@ -91,7 +95,7 @@ public class UpdateKeywordAdminController extends HttpServlet {
                     conection.setDoOutput(true);
                     Map<String, String> arguments = new HashMap<>();
                     arguments.put("keyword", newKeyword);
-                    arguments.put("keywordId", id+"");
+                    arguments.put("keywordId", idString);
                     arguments.put("logVersion", keywordVersion);
                     arguments.put("author", session.getAttribute("USERID").toString());
                     StringJoiner sj = new StringJoiner("&");
@@ -99,9 +103,9 @@ public class UpdateKeywordAdminController extends HttpServlet {
                         sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
                                 + URLEncoder.encode(entry.getValue(), "UTF-8"));
                     }
-                    byte[] outS = sj.toString().getBytes(StandardCharsets.UTF_8);
+                    byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
                     try (OutputStream os = conection.getOutputStream()) {
-                        os.write(outS);
+                        os.write(out1);
                     }
                     int responseCode = conection.getResponseCode();
                     StringBuffer rp = new StringBuffer();
@@ -122,25 +126,28 @@ public class UpdateKeywordAdminController extends HttpServlet {
                     System.out.println("Error at Create new keyword controller: ");
                     e.printStackTrace();
                 }
+                System.out.println(result);
                 try {
                     JSONObject jsonResult = new JSONObject(result);
                     session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-                    statusCode = Integer.parseInt(jsonResult.get("statusCode").toString());
-                    session.setAttribute("RESULT", statusCode);
-                } catch (JSONException e) {
+                    resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                    session.setAttribute("RESULT", resultCode);
+                    session.setAttribute("SEND", true);
+                    if (resultCode == 3) {
+                        nextPage = "login_JSP.jsp";
+                    } else {
+                        nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                                + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                                + session.getAttribute("SEARCHINGKEYWORD");
+                    }
+                } catch (Exception e) {
                     System.out.println("Ko parse duoc json object");
                 }
-            }
-            
-            if ((!validate) || (statusCode != 2)){
+            } 
+            if ((!validate) || (resultCode == 4)) {
                 session.setAttribute("UPDATINGVALUE", newKeyword);
                 session.setAttribute("UPDATINGPOS", pos);
             }
-            
-            session.setAttribute("SEND", true);
-            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
-                    + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
-                    + session.getAttribute("SEARCHINGKEYWORD");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

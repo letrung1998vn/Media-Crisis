@@ -41,6 +41,7 @@ public class MainController extends HttpServlet {
     private final String changeUserStatus = "ChangeUserStatusController";
     private final String createUserAdmin = "CreateUserAdminController";
     private final String updateKeywordUser = "UpdateKeywordController";
+    private final String updateKeywordAdmin = "UpdateKeywordAdminController";
     private final String updateUserProfile = "UpdateUserProfileController";
     private final String updatePassword = "UpdatePasswordController";
 
@@ -82,6 +83,8 @@ public class MainController extends HttpServlet {
                 url = createUserAdmin;
             } else if (button.equals("UpdateKeyword")) {
                 url = updateKeywordUser;
+            } else if (button.equals("UpdateKeywordAdmin")) {
+                url = updateKeywordAdmin;
             } else if (button.equals("Update")) {
                 url = updateUserProfile;
             } else if (button.equals("ChangePassword")) {

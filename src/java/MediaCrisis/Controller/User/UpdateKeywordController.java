@@ -58,16 +58,19 @@ public class UpdateKeywordController extends HttpServlet {
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
-            String newKeyword = request.getParameter("txtNewKeyword").trim();
+            String newKeyword = request.getParameter("txtNewKeyword");
             String posString = request.getParameter("txtNo");
             int pos = Integer.parseInt(posString);
             boolean validate = true;
             String nextPage = "";
             String result = "";
-
-            if (newKeyword.isEmpty()) {
+            System.out.println("New keyword: " + newKeyword);
+            if (newKeyword.trim().isEmpty()) {
+                System.out.println("Sai");
                 session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
                 session.setAttribute("RESULT", 4);
+                session.setAttribute("SEND", true);
+                nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
                 validate = false;
             } else {
                 List<Keyword> list = new ArrayList<>();
@@ -79,6 +82,8 @@ public class UpdateKeywordController extends HttpServlet {
                                 validate = false;
                                 session.setAttribute("CREATE_MESSAGE", "This keyword is existed!");
                                 session.setAttribute("RESULT", 4);
+                                session.setAttribute("SEND", true);
+                                nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
                                 break;
                             }
                         }
@@ -86,8 +91,6 @@ public class UpdateKeywordController extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                session.setAttribute("SEND", true);
-                nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
             }
 
             if (validate) {
@@ -161,50 +164,46 @@ public class UpdateKeywordController extends HttpServlet {
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
-            }
         }
-
-        // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-        /**
-         * Handles the HTTP <code>GET</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doGet
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        /**
-         * Handles the HTTP <code>POST</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doPost
-        (HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-            processRequest(request, response);
-        }
-
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-            () {
-        return "Short description";
-        }// </editor-fold>
-
     }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

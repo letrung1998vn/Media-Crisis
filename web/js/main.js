@@ -252,7 +252,7 @@
                 return false;
             } else {
                 $('#myTable td.keywords').each(function () {
-                    if ($(this).children().val().toLowerCase() == $(input).val().trim()) {
+                    if ($(this).children().val().toLowerCase() == $(input).val().trim().toLowerCase()) {
                         checkExist = false;
                     }
                 });

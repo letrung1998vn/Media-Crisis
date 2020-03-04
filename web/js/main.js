@@ -35,6 +35,18 @@
      [ Validate ]*/
     var input = $('.validate-input .input100');
 
+    $('.validate-form-update-profile').on('submit', function () {
+        input = $('.input100');
+        var check = true;
+        for (var i = 0; i < input.length; i++) {
+            if (validateUpdateProfile(input[i]) == false) {
+                check = false;
+            }
+        }
+
+        return check;
+    });
+
     $('.validate-form-login').on('submit', function () {
         var check = true;
 
@@ -82,7 +94,7 @@
 
         return check;
     });
-    
+
     $('.validate-form-change-password').on('submit', function () {
         var check = true;
         input = $('.input100');
@@ -100,7 +112,7 @@
                     $('.confirm-password-error').html(validateChangePassword(input[2]))
                     check = false;
                 }
-                
+
             }
         }
 
@@ -137,7 +149,7 @@
             }
         }
     }
-    
+
     function validateChangePassword(input) {
         var result = '';
         if ($(input).attr('name') == 'txtOldPassword') {
@@ -152,12 +164,12 @@
             }
         } else if ($(input).attr('name') == 'txtConfirmPassword') {
             if (!$(input).val().trim().match($("input[name=txtPassword]").val())) {
-                result =  'Wrong confirm password';
+                result = 'Wrong confirm password';
                 return result;
             }
         } else {
             if ($(input).val().trim() == '') {
-                result =  'Cannot empty';
+                result = 'Cannot empty';
                 return result;
             }
         }
@@ -212,6 +224,23 @@
             return false;
         }
 
+    }
+
+    function validateUpdateProfile(input) {
+        if ($(input).val().trim() == '') {
+            $.notify({
+                icon: "pe-7s-bell",
+                message: 'Keyword field is empty, can not add'
+            }, {
+                type: type[4],
+                timer: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'left'
+                }
+            });
+            return false;
+        } 
     }
 
     function validateAddKeyword(input) {

@@ -92,6 +92,8 @@ public class UpdateUserProfileController extends HttpServlet {
             try {
                 JSONObject jsonResult = new JSONObject(result);
                 int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage").toString());
+                session.setAttribute("RESULT", resultCode);
                 if (resultCode == 2) {
                     User userDTO = (User) session.getAttribute("USERLOGIN");
                     userDTO.setName(name);
@@ -105,8 +107,7 @@ public class UpdateUserProfileController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            session.setAttribute("CREATE_MESSAGE", "Updated profile.");
-            session.setAttribute("RESULT", 2);
+
             session.setAttribute("SEND", true);
         } else {
             System.out.println("Loi api roi");

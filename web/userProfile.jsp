@@ -166,7 +166,7 @@
                                     </div>
                                     <div class="content">
                                         <% User user = (User) session.getAttribute("USERLOGIN");%>
-                                        <form action="MainController" method="post">
+                                        <form action="MainController" method="post" class="validate-form-update-profile">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -180,7 +180,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Name</label>
-                                                        <input type="text" name="txtName" class="form-control" placeholder="Name" value="<%= user.getName()%>">
+                                                        <input type="text" name="txtName" class="form-control validate-input input100" placeholder="Name" value="<%= user.getName()%>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -189,7 +189,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Email Address</label>
-                                                        <input type="email" name="txtEmail" class="form-control" placeholder="Email Address" value="<%= user.getEmail()%>">
+                                                        <input type="email" name="txtEmail" class="form-control validate-input input100" placeholder="Email Address" value="<%= user.getEmail()%>">
                                                     </div>
                                                 </div>
                                             </div>
@@ -296,3 +296,4 @@
     <% session.removeAttribute("RESULT");%>
     });
 </script>
+<script src="js/main.js"></script>

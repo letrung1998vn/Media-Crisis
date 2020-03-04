@@ -340,7 +340,7 @@
         if (<%=session.getAttribute("SEND")%>) {
             $.notify({
                 icon: "pe-7s-bell",
-                message: '<%=session.getAttribute("CHANGE_MESSAGE")%>'
+                message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
             }, {
                 type: type[<%=session.getAttribute("RESULT")%>],
@@ -351,7 +351,7 @@
                 }
             });
     <% session.removeAttribute("SEND"); %>
-    <% session.removeAttribute("CHANGE_MESSAGE"); %>
+    <% session.removeAttribute("CREATE_MESSAGE"); %>
     <% session.removeAttribute("RESULT");%>
         }
     });

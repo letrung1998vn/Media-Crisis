@@ -47,7 +47,7 @@ public class UpdatePasswordController extends HttpServlet {
             throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String url = "http://localhost:8181/user/updatePassword/?";
+        String url = "https://media-crisis-api.herokuapp.com/user/updatePassword/?";
 
 //        String oldPassword = request.getParameter("txtOldPassword");
         String newPassword = request.getParameter("txtPassword");
@@ -84,7 +84,8 @@ public class UpdatePasswordController extends HttpServlet {
         connection.setDoOutput(true);
         int responseCode = connection.getResponseCode();
         StringBuffer rp = new StringBuffer();
-
+        String result = "";
+        
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
@@ -93,12 +94,19 @@ public class UpdatePasswordController extends HttpServlet {
             }
             in.close();
             System.out.println("JSON String Result " + rp.toString());
+            result = rp.toString();
             try {
-                JSONObject jobj = new JSONObject(rp.toString());
-                nextPage = updated;
-
-                session.setAttribute("CHANGE_MESSAGE", "Changed password successfully.");
-                session.setAttribute("RESULT", 2);
+                JSONObject jsonResult = new JSONObject(result);
+                int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                session.setAttribute("RESULT", resultCode);
+                
+                if (resultCode == 3) {
+                    nextPage = "login_JSP.jsp";
+                } else {
+                    nextPage = updated;
+                }
+                
                 session.setAttribute("SEND", true);
 
             } catch (Exception e) {

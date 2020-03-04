@@ -170,7 +170,7 @@
                                                                     </ul>
                                                                 </li>-->
                                 <li>
-                                    <a href="#">
+                                    <a href="MainController?btnAction=LogOut">
                                         <p>Log out</p>
                                     </a>
                                 </li>
@@ -257,7 +257,7 @@
                                                     </td>
                                                     <td>
                                                         <a class="btn btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></a>
-                                                        <button id="btn-update-keyword-<%= i%>" class="btn" type="submit" value="UpdateKeyword" name="btnAction" onclick="return confirm('Are you sure you want to update this item?');" disabled>
+                                                        <button id="btn-update-keyword-<%= i%>" class="btn" type="submit" value="UpdateKeyword" name="btnAction" disabled>
                                                             Update
                                                         </button>
                                                     </td>

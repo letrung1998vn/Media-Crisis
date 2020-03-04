@@ -41,7 +41,6 @@ public class MainController extends HttpServlet {
     private final String changeUserStatus = "ChangeUserStatusController";
     private final String createUserAdmin = "CreateUserAdminController";
     private final String updateKeywordUser = "UpdateKeywordController";
-    private final String updateKeywordAdmin = "UpdateKeywordAdminController";
     private final String updateUserProfile = "UpdateUserProfileController";
     private final String updatePassword = "UpdatePasswordController";
 
@@ -87,8 +86,6 @@ public class MainController extends HttpServlet {
                 url = updateUserProfile;
             } else if (button.equals("ChangePassword")) {
                 url = updatePassword;
-            } else if (button.equals("UpdateKeywordAdmin")) {
-                url = updateKeywordAdmin;
             }
             
             RequestDispatcher rd = request.getRequestDispatcher(url);

@@ -61,7 +61,7 @@ public class SearchUserController extends HttpServlet {
             urlSearchUser += "&page=";
             urlSearchUser += pageNum;
             System.out.println(urlSearchUser);
-
+            
             APIConnection ac = new APIConnection(urlSearchUser, "GET");
             listJson = ac.connect();
 
@@ -72,8 +72,8 @@ public class SearchUserController extends HttpServlet {
                 maxPage = jobj.getInt("totalPages");
                 listJson = jobj.get("content").toString();
                 listJson = listJson.substring(1, listJson.length() - 1);
-                listJson = listJson.replace("},{", "}&nbsp;{");
-                String[] users = listJson.split("&nbsp;");
+                listJson = listJson.replace("},{", "};{");
+                String[] users = listJson.split(";");
                 List<User> listUser = new ArrayList<User>();
                 for (int i = 0; i < users.length; i++) {
                     JSONObject obj = new JSONObject(users[i]);
@@ -98,10 +98,9 @@ public class SearchUserController extends HttpServlet {
                 session.setAttribute("USERADMINMAXPAGE", maxPage);
                 session.setAttribute("SEARCHINGUSER", searchValue);
             } catch (JSONException e) {
-                e.printStackTrace();
                 System.out.println("Ko parse dc ve jsonobj");
                 nextPage = error;
-            } 
+            }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

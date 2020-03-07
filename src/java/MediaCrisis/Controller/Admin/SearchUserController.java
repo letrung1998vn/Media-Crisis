@@ -55,14 +55,16 @@ public class SearchUserController extends HttpServlet {
             int thisPage = 0;
             String listJson = "";
 
-            String urlSearchUser = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username=";
+            String urlSearchUser = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo";
             String searchValue = request.getParameter("searchUser");
-            urlSearchUser += searchValue;
-            urlSearchUser += "&page=";
-            urlSearchUser += pageNum;
             System.out.println(urlSearchUser);
-            
-            APIConnection ac = new APIConnection(urlSearchUser, "GET");
+            List<String> listName = new ArrayList<>();
+            List<String> listValue = new ArrayList<>();
+            listName.add("username");
+            listValue.add(searchValue);
+            listName.add("page");
+            listValue.add(pageNum);
+            APIConnection ac = new APIConnection(urlSearchUser, listName, listValue);
             listJson = ac.connect();
 
             try {

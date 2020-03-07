@@ -8,6 +8,8 @@ package MediaCrisis.Controller.Admin;
 import MediaCrisis.APIConnection.APIConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,17 +47,18 @@ public class DeleteKeywordsController extends HttpServlet {
             HttpSession session = request.getSession();
 
             //url get all keyword config
-            String urlDeleteKeyword = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
-            urlDeleteKeyword += "id=";
-            urlDeleteKeyword += deleteKeywordId;
-            urlDeleteKeyword += "&logVersion=";
-            urlDeleteKeyword += keywordVersion;
-            urlDeleteKeyword += "&author=";
-            urlDeleteKeyword += session.getAttribute("USERID");
+            String urlDeleteKeyword = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword";
             //System.out.println(urlDeleteKeyword);
-
+            List<String> listName = new ArrayList<>();
+            List<String> listValue = new ArrayList<>();
+            listName.add("id");
+            listValue.add(deleteKeywordId);
+            listName.add("logVersion");
+            listValue.add(keywordVersion);
+            listName.add("author");
+            listValue.add(session.getAttribute("USERID").toString());
             //Call API Connection get all keyword
-            APIConnection ac = new APIConnection(urlDeleteKeyword, "POST");
+            APIConnection ac = new APIConnection(urlDeleteKeyword, listName, listValue);
             String jsonString = ac.connect();
             try {
                 JSONObject jsonResult = new JSONObject(jsonString);

@@ -57,7 +57,7 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/user/login";
+            String url = "https://media-crisis-api.herokuapp.com/user/login/?";
             String nextPage = "";
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
@@ -65,8 +65,6 @@ public class LoginController extends HttpServlet {
             url += username;
             url += "&password=";
             HttpSession session = request.getSession();
-            List<String> listName = new ArrayList<>();
-            List<String> listValue = new ArrayList<>();
             //Hash password
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -75,12 +73,9 @@ public class LoginController extends HttpServlet {
                 sb.append(String.format("%02x", b));
             }
             url += sb.toString();
-            listName.add("username");
-            listValue.add(username);
-            listName.add("password");
-            listValue.add(sb.toString());
+            System.out.println(url);
 
-            APIConnection ac = new APIConnection(url, listName, listValue);
+            APIConnection ac = new APIConnection(url, "GET");
             String result = ac.connect();
             System.out.println(result);
 

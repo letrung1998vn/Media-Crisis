@@ -50,21 +50,21 @@ public class DeleteKeywordController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword";
+        String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
         String idString = request.getParameter("id");
+        int id = Integer.parseInt(idString);
         String keywordVersion = request.getParameter("version");
-
+        url += "id=";
+        url += id;
+        url += "&logVersion=";
+        url += keywordVersion;
+        url += "&author=";
+        url += session.getAttribute("USERID");
+        
         String nextPage = "";
+        
 
-        List<String> listName = new ArrayList<>();
-        List<String> listValue = new ArrayList<>();
-        listName.add("id");
-        listValue.add(idString);
-        listName.add("logVersion");
-        listValue.add(keywordVersion);
-        listName.add("author");
-        listValue.add(session.getAttribute("USERID").toString());
-        APIConnection ac = new APIConnection(url, listName, listValue);
+        APIConnection ac = new APIConnection(url, "POST");
         String result = ac.connect();
         try {
             JSONObject jsonResult = new JSONObject(result);

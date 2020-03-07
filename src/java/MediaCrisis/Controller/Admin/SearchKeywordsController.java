@@ -62,8 +62,7 @@ public class SearchKeywordsController extends HttpServlet {
             String[] usersList = null;
             HttpSession session = request.getSession();
             String jsonString = "";
-            List<String> listName = new ArrayList<>();
-            List<String> listValue = new ArrayList<>();
+
             //get parameter
             String search = request.getParameter("searchValue");
             String userId = request.getParameter("userId");
@@ -78,24 +77,43 @@ public class SearchKeywordsController extends HttpServlet {
 
             //Call API Connection get all keyword
             try {
-                URL urlForGetRequest = new URL(urlGetAllKeyword);
-                String readLine = null;
-
-                HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-                conection.setRequestMethod("POST");
-                conection.setDoOutput(true);
-                Map<String, String> arguments = new HashMap<>();
-                listName.add("page");
-                listValue.add(page);
-                listName.add("username");
-                listValue.add(userId);
-                listName.add("keyword");
-                listValue.add(search);
-                APIConnection ac = new APIConnection(urlGetUsername, listName, listValue);
-                jsonString = ac.connect();
-            } catch (Exception e) {
-                e.printStackTrace();
+            URL urlForGetRequest = new URL(urlGetAllKeyword);
+            String readLine = null;
+            
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            conection.setDoOutput(true);
+            Map<String, String> arguments = new HashMap<>();
+            arguments.put("page", page);
+            arguments.put("username", userId);
+            arguments.put("keyword", search);
+            StringJoiner sj = new StringJoiner("&");
+            for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
             }
+            byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
+            try (OutputStream os = conection.getOutputStream()) {
+                os.write(out1);
+            }
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+                jsonString = rp.toString();
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
             //System.out.println(jsonString);
 
             //Parse JSONOBJ Keyword to Keyword class
@@ -121,7 +139,7 @@ public class SearchKeywordsController extends HttpServlet {
 
             //Call API Connection get user in keyword table
             APIConnection ac = new APIConnection(urlGetUsername, "GET");
-            jsonString = ac.connectWithoutParam();
+            jsonString = ac.connect();
 
             //Parse to array of username
             jsonString = jsonString.substring(1, jsonString.length() - 1);

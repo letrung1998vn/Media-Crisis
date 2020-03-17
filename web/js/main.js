@@ -42,7 +42,8 @@
             if (validateUpdateProfile(input[i]) == false) {
                 check = false;
             }
-            if (!check) {
+        }
+        if (!check) {
                 $.notify({
                     icon: "pe-7s-bell",
                     message: 'Field is empty, can not update'
@@ -55,8 +56,6 @@
                     }
                 });
             }
-        }
-
         return check;
     });
 

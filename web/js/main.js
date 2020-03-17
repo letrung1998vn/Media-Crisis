@@ -42,6 +42,19 @@
             if (validateUpdateProfile(input[i]) == false) {
                 check = false;
             }
+            if (!check) {
+                $.notify({
+                    icon: "pe-7s-bell",
+                    message: 'Field is empty, can not update'
+                }, {
+                    type: type[4],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
+            }
         }
 
         return check;
@@ -228,17 +241,6 @@
 
     function validateUpdateProfile(input) {
         if ($(input).val().trim() == '') {
-            $.notify({
-                icon: "pe-7s-bell",
-                message: 'Keyword field is empty, can not add'
-            }, {
-                type: type[4],
-                timer: 4000,
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            });
             return false;
         }
     }

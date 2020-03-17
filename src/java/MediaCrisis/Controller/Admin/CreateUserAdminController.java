@@ -96,17 +96,22 @@ public class CreateUserAdminController extends HttpServlet {
             }
             try {
                 JSONObject jobj = new JSONObject(result);
-                if (jobj.getString("userId").equals("")) {
+                session.setAttribute("CREATE_MESSAGE", jobj.get("statusMessage"));
+                int resultCode = Integer.parseInt(jobj.get("statusCode").toString());
+                session.setAttribute("RESULT", resultCode);
+                session.setAttribute("SEND", true);
+                if (resultCode != 2) {
                     User inputedUser = new User(username, "", "", name, email, true);
                     request.setAttribute("INPUT_USER", inputedUser);
                     nextPage = createUserPage;
                 } else {
                     nextPage = "MainController?btnAction=SearchUser&page=" + session.getAttribute("USERADMINMAXPAGE") + "&userId=&searchValue=";
-                    session.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                    session.setAttribute("CREATE_MESSAGE", "Create new user successfully!");
                     session.setAttribute("RESULT", 2);
                     session.setAttribute("SEND", true);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
             try {
                 //Gửi mail verify email

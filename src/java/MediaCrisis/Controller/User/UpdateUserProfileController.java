@@ -89,11 +89,16 @@ public class UpdateUserProfileController extends HttpServlet {
             in.close();
             System.out.println("JSON String Result " + rp.toString());
             result = rp.toString();
-            try {
+        } else {
+            System.out.println("Loi api roi");
+            nextPage = error;
+        }
+        try {
                 JSONObject jsonResult = new JSONObject(result);
                 int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                 session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage").toString());
                 session.setAttribute("RESULT", resultCode);
+                session.setAttribute("SEND", true);
                 if (resultCode == 2) {
                     User userDTO = (User) session.getAttribute("USERLOGIN");
                     userDTO.setName(name);
@@ -107,12 +112,6 @@ public class UpdateUserProfileController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            session.setAttribute("SEND", true);
-        } else {
-            System.out.println("Loi api roi");
-            nextPage = error;
-        }
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
     }

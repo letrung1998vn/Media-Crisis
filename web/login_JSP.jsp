@@ -130,7 +130,7 @@
             <% session.removeAttribute("CREATE_MESSAGE"); %>
             <% session.removeAttribute("RESULT");%>
                 }
-                <% session.invalidate(); %>
+            <% session.invalidate();%>
             });
         </script>
         <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>

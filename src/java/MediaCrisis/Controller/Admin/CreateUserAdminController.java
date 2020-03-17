@@ -32,9 +32,9 @@ import org.json.JSONObject;
  */
 @WebServlet(name = "CreateUserAdminController", urlPatterns = {"/CreateUserAdminController"})
 public class CreateUserAdminController extends HttpServlet {
+
     private final String error = "error.html";
     private final String createUserPage = "createUser_Admin.jsp";
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,8 +55,9 @@ public class CreateUserAdminController extends HttpServlet {
             String email = request.getParameter("txtEmail");
             String url = "http://localhost:8181/user/registration/?";
             String nextPage = "";
+            String result = "";
             HttpSession session = request.getSession();
-            
+
             url += "username=";
             url += username;
             url += "&password=";
@@ -88,35 +89,35 @@ public class CreateUserAdminController extends HttpServlet {
                 }
                 in.close();
                 System.out.println("JSON String Result " + rp.toString());
-                try {
-                    JSONObject jobj = new JSONObject(rp.toString());
-                    if (jobj.getString("userId").equals("")) {
-                        User inputedUser = new User(username, "", "", name, email, true);
-                        request.setAttribute("INPUT_USER", inputedUser);
-                        nextPage = createUserPage;
-                    } else {
-                        nextPage = "MainController?btnAction=SearchUser&page=" + session.getAttribute("USERADMINMAXPAGE") +"&userId=&searchValue=";
-                        session.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
-                        session.setAttribute("RESULT", 2);
-                        session.setAttribute("SEND", true);
-                    }
-                } catch (Exception e) {
-                }
-                try {
-                    //Gửi mail verify email
-                } catch (Exception e) {
-                    System.out.println("Gui mail fail");
-                    nextPage = error;
-                }
-
+                result = rp.toString();
             } else {
                 System.out.println("Loi api roi");
+                nextPage = error;
+            }
+            try {
+                JSONObject jobj = new JSONObject(result);
+                if (jobj.getString("userId").equals("")) {
+                    User inputedUser = new User(username, "", "", name, email, true);
+                    request.setAttribute("INPUT_USER", inputedUser);
+                    nextPage = createUserPage;
+                } else {
+                    nextPage = "MainController?btnAction=SearchUser&page=" + session.getAttribute("USERADMINMAXPAGE") + "&userId=&searchValue=";
+                    session.setAttribute("CREATE_MESSAGE", "Sign up successfully, please login.");
+                    session.setAttribute("RESULT", 2);
+                    session.setAttribute("SEND", true);
+                }
+            } catch (Exception e) {
+            }
+            try {
+                //Gửi mail verify email
+            } catch (Exception e) {
+                System.out.println("Gui mail fail");
                 nextPage = error;
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

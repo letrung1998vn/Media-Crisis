@@ -95,7 +95,12 @@ public class UpdatePasswordController extends HttpServlet {
             in.close();
             System.out.println("JSON String Result " + rp.toString());
             result = rp.toString();
-            try {
+            
+        } else {
+            System.out.println("Loi api roi");
+            nextPage = error;
+        }
+        try {
                 JSONObject jsonResult = new JSONObject(result);
                 int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                 session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
@@ -112,10 +117,6 @@ public class UpdatePasswordController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("Loi api roi");
-            nextPage = error;
-        }
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);
 

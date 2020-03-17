@@ -53,7 +53,7 @@ public class CreateUserAdminController extends HttpServlet {
             String password = request.getParameter("txtPassword");
             String name = request.getParameter("txtName");
             String email = request.getParameter("txtEmail");
-            String url = "https://media-crisis-api.herokuapp.com/user/registration/?";
+            String url = "http://localhost:8181/user/registration/?";
             String nextPage = "";
             HttpSession session = request.getSession();
             

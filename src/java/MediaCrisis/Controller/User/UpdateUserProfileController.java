@@ -55,7 +55,7 @@ public class UpdateUserProfileController extends HttpServlet {
         String name = request.getParameter("txtName");
         String email = request.getParameter("txtEmail");
 
-        String url = "https://media-crisis-api.herokuapp.com/user/updateProfile";
+        String url = "http://localhost:8181/user/updateProfile";
 
         String nextPage = "";
 

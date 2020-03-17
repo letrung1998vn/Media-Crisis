@@ -47,7 +47,7 @@ public class UpdatePasswordController extends HttpServlet {
             throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
 
-        String url = "https://media-crisis-api.herokuapp.com/user/updatePassword/?";
+        String url = "http://localhost:8181/user/updatePassword/?";
 
 //        String oldPassword = request.getParameter("txtOldPassword");
         String newPassword = request.getParameter("txtPassword");

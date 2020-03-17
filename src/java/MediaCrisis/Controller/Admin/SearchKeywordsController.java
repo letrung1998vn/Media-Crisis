@@ -69,11 +69,11 @@ public class SearchKeywordsController extends HttpServlet {
             String page = request.getParameter("page");
 
             //url get all keyword config
-            String urlGetAllKeyword = "http://media-crisis-api.herokuapp.com/keyword/search";
+            String urlGetAllKeyword = "http://localhost:8181/keyword/search";
             System.out.println(urlGetAllKeyword);
 
             //url get all username in keyword table
-            String urlGetUsername = "http://media-crisis-api.herokuapp.com/keyword/getUsers";
+            String urlGetUsername = "http://localhost:8181/keyword/getUsers";
 
             //Call API Connection get all keyword
             try {
@@ -128,8 +128,9 @@ public class SearchKeywordsController extends HttpServlet {
                 String[] keywords = jsonString.split("&nbsp;");
                 for (int i = 0; i < keywords.length; i++) {
                     JSONObject obj = new JSONObject(keywords[i]);
+                    JSONObject obj1 = new JSONObject(obj.get("user").toString());
                     Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
-                            obj.get("userId").toString(), obj.getBoolean("available"), obj.getInt("version"));
+                            obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"));
                     listKeyword.add(keyWord);
                 }
             } catch (JSONException e) {
@@ -139,7 +140,7 @@ public class SearchKeywordsController extends HttpServlet {
 
             //Call API Connection get user in keyword table
             APIConnection ac = new APIConnection(urlGetUsername, "GET");
-            jsonString = ac.connect();
+            jsonString = ac.connectWithoutParam();
 
             //Parse to array of username
             jsonString = jsonString.substring(1, jsonString.length() - 1);

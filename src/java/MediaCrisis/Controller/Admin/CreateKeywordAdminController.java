@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller.Admin;
 
+import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,55 +56,29 @@ public class CreateKeywordAdminController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String newKeyword = request.getParameter("txtKeyword");
-        String url = "http://media-crisis-api.herokuapp.com/keyword/createKeyword";
+        String url = "http://localhost:8181/keyword/createKeyword/?";
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
         String result = "";
         String nextPage = "";
+        List<String> params = new ArrayList<>();
+        List<String> value = new ArrayList<>();
 
-        try {
-            URL urlForGetRequest = new URL(url);
-            String readLine = null;
-            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-            conection.setRequestMethod("POST");
-            conection.setDoOutput(true);
-            Map<String, String> arguments = new HashMap<>();
-            arguments.put("keyword", newKeyword);
-            arguments.put("userId", userId);
-            StringJoiner sj = new StringJoiner("&");
-            for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-            try (OutputStream os = conection.getOutputStream()) {
-                os.write(out);
-            }
-            int responseCode = conection.getResponseCode();
-            StringBuffer rp = new StringBuffer();
+        params.add("keyword");
+        params.add("userId");
+        value.add(newKeyword);
+        value.add(userId);
 
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
-                }
-                in.close();
-                result = rp.toString();
-            } else {
-                System.out.println("Loi api roi");
-                nextPage = error;
-            }
-        } catch (Exception e) {
-            System.out.println("Error at Create new keyword controller: ");
-            e.printStackTrace();
-        }
+        //Call API connection and get return JSON string
+        APIConnection ac = new APIConnection(url, params, value);
+        result = ac.connect();
+        System.out.println(result);
         try {
             JSONObject jsonResult = new JSONObject(result);
             session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
             session.setAttribute("RESULT", jsonResult.get("statusCode"));
             session.setAttribute("SEND", true);
-            nextPage = create;
+            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
         } catch (JSONException e) {
             System.out.println("Ko parse duoc json object");
         }

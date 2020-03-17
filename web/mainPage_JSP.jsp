@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=SearchKeywordUser&userId=<%= session.getAttribute("USERID") %>">
+                            <a href="MainController?btnAction=SearchKeywordUser">
                                 <i class="pe-7s-note2"></i>
                                 <p>Keyword</p>
                             </a>

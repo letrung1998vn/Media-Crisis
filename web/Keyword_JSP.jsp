@@ -256,8 +256,8 @@
                                                     <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">
                                                     <input type="hidden" name="txtNo" value="<%= i%>">
                                                     <td>
-                                                        <a class="btn btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></a>
-                                                        <button id="btn-update-keyword-<%= i%>" class="btn" type="submit" value="UpdateKeyword" name="btnAction" disabled>
+                                                        <a id="btn-edit-keyword-<%= i%>" class="btn btn-edit" onclick="enableInput(<%= i%>)"><i class="pe-7s-pen btn-edit" style="width: 20px; height: 20px"></i></a>
+                                                        <button id="btn-update-keyword-<%= i%>" class="btn btn-success hidden" type="submit" value="UpdateKeyword" name="btnAction" onclick="return confirm('Are you sure you want to update this item?');">
                                                             Update
                                                         </button>
                                                     </td>
@@ -360,14 +360,16 @@
 
                                 function enableInput(i) {
                                     var idOfInput = "keyword-value-" + i;
+                                    var idOfEdit = "btn-edit-keyword-" + i;
                                     var idOfButton = "btn-update-keyword-" + i;
 
 //                                    $('.keyword-value').each(function () {
 //                                        $(this).disabled = true;
 //                                    });
+
                                     document.getElementById(idOfInput).disabled = false;
-                                    document.getElementById(idOfButton).disabled = false;
-                                    document.getElementById(idOfButton).className += " btn-success";
+                                    document.getElementById(idOfEdit).classList.add("hidden");
+                                    document.getElementById(idOfButton).classList.remove("hidden");
                                 }
 
                                 $(document).ready(function () {
@@ -386,12 +388,13 @@
                                         });
                                         var i = <%= session.getAttribute("UPDATINGPOS")%>;
                                         var idOfInput = "keyword-value-" + i;
+                                        var idOfEdit = "btn-edit-keyword-" + i;
                                         var idOfButton = "btn-update-keyword-" + i;
                                         document.getElementById(idOfInput).disabled = false;
                                         document.getElementById(idOfInput).focus();
-                                        document.getElementById(idOfButton).disabled = false;
+                                        document.getElementById(idOfEdit).classList.add("hidden");
+                                        document.getElementById(idOfButton).classList.remove("hidden");
                                         document.getElementById(idOfInput).value = "<%= session.getAttribute("UPDATINGVALUE")%>";
-                                        document.getElementById(idOfButton).className += " btn-success";
 
         <% session.removeAttribute("SEND"); %>
         <% session.removeAttribute("CREATE_MESSAGE"); %>

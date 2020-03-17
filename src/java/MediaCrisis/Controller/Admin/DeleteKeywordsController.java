@@ -8,6 +8,8 @@ package MediaCrisis.Controller.Admin;
 import MediaCrisis.APIConnection.APIConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,40 +36,45 @@ public class DeleteKeywordsController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private final String error = "error.html";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             //get parameter
-            String deleteKeywordId = request.getParameter("id");
-            String keywordVersion = request.getParameter("version");
-            String nextPage = "";
             HttpSession session = request.getSession();
+            String url = "http://localhost:8181/keyword/deleteKeyword/?";
+            String idString = request.getParameter("id");
+            String keywordVersion = request.getParameter("version");
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
 
-            //url get all keyword config
-            String urlDeleteKeyword = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
-            urlDeleteKeyword += "id=";
-            urlDeleteKeyword += deleteKeywordId;
-            urlDeleteKeyword += "&logVersion=";
-            urlDeleteKeyword += keywordVersion;
-            urlDeleteKeyword += "&author=";
-            urlDeleteKeyword += session.getAttribute("USERID");
-            //System.out.println(urlDeleteKeyword);
+            params.add("id");
+            params.add("logVersion");
+            params.add("author");
+            value.add(idString);
+            value.add(keywordVersion);
+            value.add(session.getAttribute("USERID").toString());
 
-            //Call API Connection get all keyword
-            APIConnection ac = new APIConnection(urlDeleteKeyword, "POST");
-            String jsonString = ac.connect();
+            String nextPage = "";
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            String result = ac.connect();
+            System.out.println(result);
             try {
-                JSONObject jsonResult = new JSONObject(jsonString);
+                JSONObject jsonResult = new JSONObject(result);
                 session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
                 session.setAttribute("RESULT", jsonResult.get("statusCode"));
+                session.setAttribute("SEND", true);
+                nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                        + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                        + session.getAttribute("SEARCHINGKEYWORD");
             } catch (JSONException e) {
                 System.out.println("Ko parse duoc json object");
+                nextPage = error;
             }
-            session.setAttribute("SEND", true);
-            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
-                    + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
-                    + session.getAttribute("SEARCHINGKEYWORD");
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
 

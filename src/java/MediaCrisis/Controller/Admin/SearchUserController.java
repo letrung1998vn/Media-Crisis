@@ -50,43 +50,43 @@ public class SearchUserController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String pageNum = request.getParameter("page");
+            String searchValue = request.getParameter("searchUser");
             String nextPage = "";
             int maxPage = 0;
             int thisPage = 0;
             String listJson = "";
-
-            String urlSearchUser = "https://media-crisis-api.herokuapp.com/user/findAllUserInfo/?username=";
-            String searchValue = request.getParameter("searchUser");
-            urlSearchUser += searchValue;
-            urlSearchUser += "&page=";
-            urlSearchUser += pageNum;
-            System.out.println(urlSearchUser);
+            String urlSearchUser = "http://localhost:8181/user/findAllUser/?";
             
-            APIConnection ac = new APIConnection(urlSearchUser, "GET");
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
+
+            params.add("username");
+            params.add("page");
+            value.add(searchValue);
+            value.add(pageNum);
+            
+            APIConnection ac = new APIConnection(urlSearchUser, params, value);
             listJson = ac.connect();
+            System.out.println(listJson);
 
             try {
                 JSONObject jobj = new JSONObject(listJson);
-                System.out.println("Jobj: " + jobj);
                 thisPage = jobj.getInt("number") + 1;
                 maxPage = jobj.getInt("totalPages");
                 listJson = jobj.get("content").toString();
                 listJson = listJson.substring(1, listJson.length() - 1);
-                listJson = listJson.replace("},{", "};{");
-                String[] users = listJson.split(";");
+                listJson = listJson.replace("},{", "}&nbsp;{");
+                String[] users = listJson.split("&nbsp;");
                 List<User> listUser = new ArrayList<User>();
                 for (int i = 0; i < users.length; i++) {
                     JSONObject obj = new JSONObject(users[i]);
                     User userObj = new User();
-                    userObj.setUsername(obj.getString("userId"));
-                    userObj.setName(obj.getString("name"));
-                    userObj.setEmail(obj.getString("email"));
+                    userObj.setUsername(obj.getString("userName"));
+                    userObj.setRole(obj.getString("role"));
+                    userObj.setIsAvailable(obj.getBoolean("available"));
                     JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                    userObj.setPassword(obj1.getString("password"));
-                    userObj.setRole(obj1.getString("role"));
-                    userObj.setIsAvailable(obj1.getBoolean("available"));
-                    System.out.println(userObj.toString());
-                    //có noti thì thêm vào đây
+                    userObj.setName(obj1.getString("name"));
+                    userObj.setEmail(obj1.getString("email"));
                     listUser.add(userObj);
                 }
 

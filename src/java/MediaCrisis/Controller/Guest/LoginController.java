@@ -6,14 +6,9 @@
 package MediaCrisis.Controller.Guest;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -30,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -57,14 +51,16 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException, JSONException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String url = "https://media-crisis-api.herokuapp.com/user/login/?";
+            String url = "http://localhost:8181/user/login/?";
             String nextPage = "";
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
+            HttpSession session = request.getSession();
+            User userDTO = new User();
+
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
-            url += "username=";
-            url += username;
-            url += "&password=";
-            HttpSession session = request.getSession();
+
             //Hash password
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] passwordInByte = md.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -72,52 +68,49 @@ public class LoginController extends HttpServlet {
             for (byte b : passwordInByte) {
                 sb.append(String.format("%02x", b));
             }
-            url += sb.toString();
-            System.out.println(url);
 
-            APIConnection ac = new APIConnection(url, "GET");
+            //Prepare value for connection
+            params.add("username");
+            params.add("password");
+            value.add(username);
+            value.add(sb.toString());
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
             String result = ac.connect();
-            System.out.println(result);
+            //System.out.println(result);
 
-            if (result.isEmpty()) {
-                session.setAttribute("CREATE_MESSAGE", "Invalid username or passowrd, please try again.");
-                session.setAttribute("RESULT", 4);
-                session.setAttribute("SEND", true);
-                nextPage = login;
-            } else {
-                try {
-                    JSONObject obj = new JSONObject(result);
-                    User userDTO = new User();
-                    userDTO.setUsername(obj.getString("userId"));
-                    userDTO.setName(obj.getString("name"));
-                    userDTO.setEmail(obj.getString("email"));
+            try {
+                JSONObject returnObject = new JSONObject(result);
+                int resultCode = returnObject.getInt("statusCode");
+                System.out.println(returnObject.toString());
+                //Paging
+                if (resultCode == 2) {
+                    JSONObject obj = new JSONObject(returnObject.get("obj").toString());
+                    userDTO.setUsername(obj.getString("userName"));
+                    userDTO.setPassword(obj.getString("password"));
+                    userDTO.setRole(obj.getString("role"));
+                    userDTO.setIsAvailable(obj.getBoolean("available"));
                     JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                    userDTO.setPassword(obj1.getString("password"));
-                    userDTO.setRole(obj1.getString("role"));
-                    userDTO.setIsAvailable(obj1.getBoolean("available"));
-                    System.out.println(userDTO.toString());
-
-                    System.out.println(userDTO);
-                    if (userDTO.isIsAvailable()) {
-                        if (userDTO.getRole().equals("admin")) {
-                            nextPage = adminPage;
-                        } else if (userDTO.getRole().equals("user")) {
-                            nextPage = mainPage;
-                        }
-                    } else {
-                        session.setAttribute("CREATE_MESSAGE", "Your account have been disabled. Please contact admin for more infomation.");
-                        session.setAttribute("RESULT", 4);
-                        session.setAttribute("SEND", true);
-                        nextPage = login;
+                    userDTO.setName(obj1.getString("name"));
+                    userDTO.setEmail(obj1.getString("email"));
+                    if (userDTO.getRole().equals("admin")) {
+                        nextPage = adminPage;
+                    } else if (userDTO.getRole().equals("user")) {
+                        nextPage = mainPage;
                     }
-
-                    session.setAttribute("USERLOGIN", userDTO);
-                    session.setAttribute("USERID", userDTO.getUsername());
-                    session.setAttribute("PWD", password);
-                } catch (JSONException e) {
-                    System.out.println("Login controller: K parse duoc ve JSONObj");
-                    //
+                } else {
+                    session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
+                    session.setAttribute("RESULT", resultCode);
+                    session.setAttribute("SEND", true);
+                    nextPage = login;
                 }
+
+                session.setAttribute("USERLOGIN", userDTO);
+                session.setAttribute("USERID", userDTO.getUsername());
+                session.setAttribute("PWD", password);
+            } catch (JSONException e) {
+                System.out.println("Login controller: K parse duoc ve JSONObj");
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);

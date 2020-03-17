@@ -7,20 +7,10 @@ package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.Keyword;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,6 +40,7 @@ public class GetUserKeywordController extends HttpServlet {
      */
     private final String keywordList = "Keyword_JSP.jsp";
     private final String error = "error.html";
+    private final String login = "login_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -64,76 +55,41 @@ public class GetUserKeywordController extends HttpServlet {
             String userId = request.getParameter("userId");
 
             //url get all keyword config
-            String urlGetAllKeyword = "http://media-crisis-api.herokuapp.com/keyword/search";
-            System.out.println(urlGetAllKeyword);
+            String urlGetAllKeyword = "http://localhost:8181/user/getUserKeyword/?username=";
+            urlGetAllKeyword += session.getAttribute("USERID");
 
             //Call API Connection get all keyword
-            try {
-                URL urlForGetRequest = new URL(urlGetAllKeyword);
-                String readLine = null;
+            APIConnection ac = new APIConnection(urlGetAllKeyword, "GET");
+            String result = ac.connectWithoutParam();
 
-                HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-                conection.setRequestMethod("POST");
-                conection.setDoOutput(true);
-                Map<String, String> arguments = new HashMap<>();
-                arguments.put("page", "1");
-                arguments.put("username", userId);
-                arguments.put("keyword", "");
-                StringJoiner sj = new StringJoiner("&");
-                for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                            + URLEncoder.encode(entry.getValue(), "UTF-8"));
-                }
-                byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
-                try (OutputStream os = conection.getOutputStream()) {
-                    os.write(out1);
-                }
-                int responseCode = conection.getResponseCode();
-                StringBuffer rp = new StringBuffer();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(
-                            new InputStreamReader(conection.getInputStream()));
-                    while ((readLine = in.readLine()) != null) {
-                        rp.append(readLine);
-                    }
-                    in.close();
-                    System.out.println("JSON String Result " + rp.toString());
-                    jsonString = rp.toString();
-                } else {
-                    System.out.println("Loi api roi");
-                    nextPage = error;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //System.out.println(jsonString);
-            if (jsonString.isEmpty()) {
-                session.setAttribute("CREATE_MESSAGE", "Your account has been disabled. Please contact admin for more information!");
-                session.setAttribute("RESULT", 3);
-                session.setAttribute("SEND", true);
-            } else {
-                //Parse JSONOBJ Keyword to Keyword class
-                try {
-                    JSONObject jobj = new JSONObject(jsonString);
-//                System.out.println("Jobj: " + jobj);
-                    jsonString = jobj.get("content").toString();
+            try {
+                JSONObject returnObject = new JSONObject(result);
+                int resultCode = returnObject.getInt("statusCode");
+                //System.out.println(returnObject.toString());
+                if (resultCode == 2) {
+                    jsonString = returnObject.get("obj").toString();
                     jsonString = jsonString.substring(1, jsonString.length() - 1);
                     jsonString = jsonString.replace("},{", "}&nbsp;{");
                     String[] keywords = jsonString.split("&nbsp;");
                     for (int i = 0; i < keywords.length; i++) {
                         JSONObject obj = new JSONObject(keywords[i]);
+                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
                         Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
-                                obj.get("userId").toString(), obj.getBoolean("available"), obj.getInt("version"));
+                                obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"));
                         listKeyword.add(keyWord);
                     }
-                } catch (JSONException e) {
-                    //Add logger later
-                    System.out.println("Ko parse duoc json obj");
+                    session.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("COUNT", listKeyword.size());
+                    nextPage = keywordList;
+                } else {
+                    session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
+                    session.setAttribute("RESULT", resultCode);
+                    session.setAttribute("SEND", true);
+                    nextPage = login;
                 }
-
-                session.setAttribute("LISTKEYWORD", listKeyword);
-                session.setAttribute("COUNT", listKeyword.size());
-                nextPage = keywordList;
+            } catch (JSONException e) {
+                //Add logger later
+                System.out.println("Ko parse duoc json obj");
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);

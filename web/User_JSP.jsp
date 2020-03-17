@@ -250,7 +250,7 @@
                                                         <td><%= users.get(i).getName()%></td>
                                                         <td><%= users.get(i).getEmail()%></td>
                                                         <td><%= users.get(i).getRole()%></td>
-                                                        <td><a href="MainController?btnAction=ChangeUserStatus&username=<%= users.get(i).getUsername()%>&no=<%= i%>" onclick="return confirm('Are you sure you want to ' + <%
+                                                        <td><a href="MainController?btnAction=ChangeUserStatus&username=<%= users.get(i).getUsername()%>" onclick="return confirm('Are you sure you want to ' + <%
                                                             if (users.get(i).isIsAvailable()) { %>
                                                                 'disable'
                                                                <%

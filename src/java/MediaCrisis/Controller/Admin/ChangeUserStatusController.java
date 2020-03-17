@@ -5,6 +5,7 @@
  */
 package MediaCrisis.Controller.Admin;
 
+import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.User;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -46,45 +49,31 @@ public class ChangeUserStatusController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             response.setContentType("text/html;charset=UTF-8");
-            String url = "https://media-crisis-api.herokuapp.com/user/changeStatus/?username=";
+            String url = "http://localhost:8181/user/changeStatus/?";
             url += request.getParameter("username");
             String nextPage = "";
+            HttpSession session = request.getSession();
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
 
-            URL urlForGetRequest = new URL(url);
-            String readLine = null;
-            HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-            connection.setRequestMethod("POST");
-            int responseCode = connection.getResponseCode();
-            StringBuffer rp = new StringBuffer();
-            boolean result = true;
+            params.add("username");
+            value.add(request.getParameter("username"));
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            String result = ac.connect();
+            System.out.println(result);
             
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
-                }
-                in.close();
-                System.out.println("JSON String Result " + rp.toString());
-                try {
-                    JSONObject jobj = new JSONObject(rp.toString());
-                    JSONObject jobj1 = new JSONObject(jobj.get("user").toString());
-                    result = jobj1.getBoolean("available");
-                } catch (Exception e) {
-                }
-            } else {
-                System.out.println("Loi api");
+            try {
+                JSONObject jsonResult = new JSONObject(result);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                session.setAttribute("RESULT", jsonResult.get("statusCode"));
+                session.setAttribute("SEND", true);
+                nextPage = "MainController?btnAction=SearchUser&page=" + session.getAttribute("USERADMINTHISPAGE") + "&searchUser=" + session.getAttribute("SEARCHINGUSER");
+            } catch (JSONException e) {
+                System.out.println("Ko parse duoc json object");
                 nextPage = error;
             }
-            HttpSession session = request.getSession();
-            session.setAttribute("CREATE_MESSAGE", "User status changed!");
-            session.setAttribute("RESULT", 2);
-            session.setAttribute("SEND", true);
-            List<User> list = (List<User>) session.getAttribute("LISTUSER");
-            int changeStatusUserLocation = Integer.parseInt(request.getParameter("no"));
-            list.get(changeStatusUserLocation).setIsAvailable(result);
-            session.setAttribute("LISTUSER", list);
-            nextPage = userPage;
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

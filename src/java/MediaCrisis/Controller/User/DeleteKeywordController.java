@@ -33,8 +33,6 @@ import sun.security.pkcs11.wrapper.Functions;
 @WebServlet(name = "DeleteKeywordController", urlPatterns = {"/DeleteKeywordController"})
 public class DeleteKeywordController extends HttpServlet {
 
-    private final String keywordList = "Keyword_JSP.jsp";
-    private final String keywordAdminList = "Keyword_Admin_JSP.jsp";
     private final String error = "error.html";
 
     /**
@@ -50,22 +48,25 @@ public class DeleteKeywordController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        String url = "http://media-crisis-api.herokuapp.com/keyword/deleteKeyword/?";
+        String url = "http://localhost:8181/keyword/deleteKeyword/?";
         String idString = request.getParameter("id");
-        int id = Integer.parseInt(idString);
         String keywordVersion = request.getParameter("version");
-        url += "id=";
-        url += id;
-        url += "&logVersion=";
-        url += keywordVersion;
-        url += "&author=";
-        url += session.getAttribute("USERID");
-        
-        String nextPage = "";
-        
+        List<String> params = new ArrayList<>();
+        List<String> value = new ArrayList<>();
 
-        APIConnection ac = new APIConnection(url, "POST");
+        params.add("id");
+        params.add("logVersion");
+        params.add("author");
+        value.add(idString);
+        value.add(keywordVersion);
+        value.add(session.getAttribute("USERID").toString());
+
+        String nextPage = "";
+
+        //Call API connection and get return JSON string
+        APIConnection ac = new APIConnection(url, params, value);
         String result = ac.connect();
+        System.out.println(result);
         try {
             JSONObject jsonResult = new JSONObject(result);
             session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
@@ -79,6 +80,7 @@ public class DeleteKeywordController extends HttpServlet {
             }
         } catch (Exception e) {
             System.out.println("Ko parse duoc json object");
+            nextPage = error;
         }
         RequestDispatcher rd = request.getRequestDispatcher(nextPage);
         rd.forward(request, response);

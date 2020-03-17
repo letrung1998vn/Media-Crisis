@@ -54,78 +54,42 @@ public class UpdateKeywordAdminController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String url = "http://media-crisis-api.herokuapp.com/keyword/updateKeyword";
+            String url = "http://localhost:8181/keyword/updateKeyword";
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
             String newKeyword = request.getParameter("txtNewKeyword");
             String posString = request.getParameter("txtNo");
             int pos = Integer.parseInt(posString);
-            boolean validate = true;
-            String nextPage = "";
+            String nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
+                    + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
+                    + session.getAttribute("SEARCHINGKEYWORD");;
             String result = "";
             int resultCode = 0;
-            
+
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
+
+            params.add("keyword");
+            params.add("keywordId");
+            params.add("logVersion");
+            params.add("author");
+            value.add(newKeyword);
+            value.add(idString);
+            value.add(keywordVersion);
+            value.add(session.getAttribute("USERID").toString());
+
             if (newKeyword.isEmpty()) {
-                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not add");
+                session.setAttribute("UPDATINGVALUE", newKeyword);
+                session.setAttribute("UPDATINGPOS", pos);
+                session.setAttribute("CREATE_MESSAGE", "Keyword field is empty, can not update");
                 session.setAttribute("RESULT", 4);
                 session.setAttribute("SEND", true);
-                nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
-                        + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
-                        + session.getAttribute("SEARCHINGKEYWORD");
-                validate = false;
-            }
 
-            if (validate) {
-//                url += "keyword=";
-//                url += newKeyword;
-//                url += "&keywordId=";
-//                url += id;
-//                url += "&logVersion=";
-//                url += keywordVersion;
-//                url += "&author=";
-//                url += session.getAttribute("USERID");
-//
-//                System.out.println(url);
-                try {
-                    URL urlForGetRequest = new URL(url);
-                    String readLine = null;
-                    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-                    conection.setRequestMethod("POST");
-                    conection.setDoOutput(true);
-                    Map<String, String> arguments = new HashMap<>();
-                    arguments.put("keyword", newKeyword);
-                    arguments.put("keywordId", idString);
-                    arguments.put("logVersion", keywordVersion);
-                    arguments.put("author", session.getAttribute("USERID").toString());
-                    StringJoiner sj = new StringJoiner("&");
-                    for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                        sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                                + URLEncoder.encode(entry.getValue(), "UTF-8"));
-                    }
-                    byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
-                    try (OutputStream os = conection.getOutputStream()) {
-                        os.write(out1);
-                    }
-                    int responseCode = conection.getResponseCode();
-                    StringBuffer rp = new StringBuffer();
-
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        BufferedReader in = new BufferedReader(
-                                new InputStreamReader(conection.getInputStream()));
-                        while ((readLine = in.readLine()) != null) {
-                            rp.append(readLine);
-                        }
-                        in.close();
-                        result = rp.toString();
-                    } else {
-                        System.out.println("Loi api roi");
-                        nextPage = error;
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error at Create new keyword controller: ");
-                    e.printStackTrace();
-                }
+            } else {
+                //Call API connection and get return JSON string
+                APIConnection ac = new APIConnection(url, params, value);
+                result = ac.connect();
                 System.out.println(result);
                 try {
                     JSONObject jsonResult = new JSONObject(result);
@@ -136,6 +100,10 @@ public class UpdateKeywordAdminController extends HttpServlet {
                     if (resultCode == 3) {
                         nextPage = "login_JSP.jsp";
                     } else {
+                        if (resultCode == 4) {
+                            session.setAttribute("UPDATINGVALUE", newKeyword);
+                            session.setAttribute("UPDATINGPOS", pos);
+                        }
                         nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINTHISPAGE")
                                 + "&userId=" + session.getAttribute("SEARCHINGUSERNAMEOFKEYWORD") + "&searchValue="
                                 + session.getAttribute("SEARCHINGKEYWORD");
@@ -143,10 +111,6 @@ public class UpdateKeywordAdminController extends HttpServlet {
                 } catch (Exception e) {
                     System.out.println("Ko parse duoc json object");
                 }
-            } 
-            if ((!validate) || (resultCode == 4)) {
-                session.setAttribute("UPDATINGVALUE", newKeyword);
-                session.setAttribute("UPDATINGPOS", pos);
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);

@@ -45,9 +45,9 @@
                             Sign up
                         </span>
 
-                        <% User user = (User) request.getAttribute("INPUT_USER"); %>
+                        <% User user = (User) session.getAttribute("INPUT_USER"); %>
                         <div class="wrap-input100 validate-input validate-username-exist" data-validate = "Enter username">
-                            <input class="input100" type="text" name="txtUsername" value="">
+                            <input class="input100" type="text" name="txtUsername" value="<% if (user != null) {%><%= user.getUsername()%><% }%>">
                             <span class="focus-input100" data-placeholder="Username"></span>
                         </div>
                         <div class="wrap-input100 validate-input" data-validate = "Enter name">
@@ -81,7 +81,7 @@
                                 </button>
                             </div>
                         </div>
-                            
+
                         <div class="text-center">
                             <span class="txt1">
                                 Already have an account?
@@ -149,29 +149,30 @@
         <script src="assets/js/demo.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-                if (<%=request.getAttribute("SEND")%>) {
+                if (<%=session.getAttribute("SEND")%>) {
                     $.notify({
                         icon: "pe-7s-bell",
-                        message: '<%=request.getAttribute("CREATE_MESSAGE")%>'
+                        message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
                     }, {
-                        type: type[<%=request.getAttribute("RESULT")%>],
+                        type: type[<%=session.getAttribute("RESULT")%>],
                         timer: 4000,
                         placement: {
                             from: 'top',
                             align: 'left'
                         }
                     });
+            <% session.removeAttribute("SEND"); %>
+            <% session.removeAttribute("CREATE_MESSAGE"); %>
+            <% session.removeAttribute("RESULT");%>
                 }
-                if (<%= request.getAttribute("INPUT_USER") != null%>) {
+                if (<%= session.getAttribute("INPUT_USER") != null%>) {
                     $('.input100').each(function () {
-                        if ($(this).attr("name") != "txtUsername") {
                             $(this).focus();
-                        }
                     });
-                    var validateUsername = $('.validate-username-exist');
-                    validateUsername.attr('data-validate', 'Existed username, please pick another!');
-                    validateUsername.addClass('alert-validate');
+//                    var validateUsername = $('.validate-username-exist');
+//                    validateUsername.attr('data-validate', 'Existed username, please pick another!');
+//                    validateUsername.addClass('alert-validate');
                     $("[name='txtPasswordConf']").blur();
                 }
 

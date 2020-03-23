@@ -101,7 +101,7 @@ public class CreateUserAdminController extends HttpServlet {
                 session.setAttribute("SEND", true);
                 if (resultCode != 2) {
                     session.setAttribute("CREATE_MESSAGE", jobj.get("statusMessage"));
-                    User inputedUser = new User(username, "", "", name, email, true);
+                    User inputedUser = new User(username, "", "", name, email, "", true);
                     request.setAttribute("INPUT_USER", inputedUser);
                     nextPage = createUserPage;
                 } else {

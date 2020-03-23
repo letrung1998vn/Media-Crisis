@@ -6,7 +6,8 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.Keyword;
+import MediaCrisis.Model.User;
+import com.sun.prism.Texture;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,16 +19,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
  * @author Administrator
  */
-@WebServlet(name = "GetUserKeywordController", urlPatterns = {"/GetUserKeywordController"})
-public class GetUserKeywordController extends HttpServlet {
+@WebServlet(name = "UpdateWebhookController", urlPatterns = {"/UpdateWebhookController"})
+public class UpdateWebhookController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,60 +37,49 @@ public class GetUserKeywordController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private final String keywordList = "Keyword_JSP.jsp";
     private final String error = "error.html";
+    private final String webhookPage = "webhook.jsp";
     private final String login = "login_JSP.jsp";
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            List<Keyword> listKeyword = new ArrayList<>();
-            String nextPage = "";
+            String linkWebhook = request.getParameter("txtLinkWebhook");
             HttpSession session = request.getSession();
-            String jsonString = "";
+            int resultCode = 0;
+            String result = "";
+            String nextPage = "";
 
-            //url get all keyword config
-            String urlGetAllKeyword = "http://localhost:8181/user/getUserKeyword/?username=";
-            urlGetAllKeyword += session.getAttribute("USERID");
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
+            String url = "http://localhost:8181/user/updateLinkWebhook/?";
 
-            //Call API Connection get all keyword
-            APIConnection ac = new APIConnection(urlGetAllKeyword, "GET");
-            String result = ac.connectWithoutParam();
+            params.add("link");
+            params.add("username");
+            value.add(linkWebhook);
+            value.add(session.getAttribute("USERID").toString());
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            result = ac.connect();
 
             try {
-                JSONObject returnObject = new JSONObject(result);
-                int resultCode = returnObject.getInt("statusCode");
-                //System.out.println(returnObject.toString());
-                if (resultCode == 2) {
-                    jsonString = returnObject.get("obj").toString();
-                    jsonString = jsonString.substring(1, jsonString.length() - 1);
-                    jsonString = jsonString.replace("},{", "}&nbsp;{");
-                    String[] keywords = jsonString.split("&nbsp;");
-                    for (int i = 0; i < keywords.length; i++) {
-                        JSONObject obj = new JSONObject(keywords[i]);
-                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                        Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
-                                obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"));
-                        listKeyword.add(keyWord);
-                    }
-                    session.setAttribute("LISTKEYWORD", listKeyword);
-                    session.setAttribute("COUNT", listKeyword.size());
-                    nextPage = keywordList;
-                } else if (resultCode == 3) {
-                    session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
-                    session.setAttribute("RESULT", resultCode);
-                    session.setAttribute("SEND", true);
+                JSONObject jsonResult = new JSONObject(result);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                session.setAttribute("RESULT", resultCode);
+                session.setAttribute("SEND", true);
+                if (resultCode == 3) {
                     nextPage = login;
                 } else {
-                    session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
-                    session.setAttribute("RESULT", resultCode);
-                    session.setAttribute("SEND", true);
-                    nextPage = keywordList;
+                    User user = (User) session.getAttribute("USERLOGIN");
+                    user.setLink_webhook(jsonResult.get("obj").toString());
+                    session.setAttribute("USERLOGIN", user);
+                    nextPage = webhookPage;
                 }
-            } catch (JSONException e) {
-                //Add logger later
-                System.out.println("Ko parse duoc json obj");
+            } catch (Exception e) {
+                System.out.println("Ko parse duoc json object");
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);

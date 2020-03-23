@@ -135,6 +135,11 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
+                                    <a href="webhook.jsp">
+                                        <p>Webhook</p>
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="#">
                                         <p>Change password</p>
                                     </a>

@@ -51,9 +51,6 @@ public class GetUserKeywordController extends HttpServlet {
             HttpSession session = request.getSession();
             String jsonString = "";
 
-            //get parameter
-            String userId = request.getParameter("userId");
-
             //url get all keyword config
             String urlGetAllKeyword = "http://localhost:8181/user/getUserKeyword/?username=";
             urlGetAllKeyword += session.getAttribute("USERID");

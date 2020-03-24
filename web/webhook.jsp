@@ -135,7 +135,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="webhook.jsp">
+                                    <a href="#">
                                         <p>Webhook</p>
                                     </a>
                                 </li>
@@ -164,53 +164,74 @@
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Edit Profile</h4>
+                                        <h4 class="title">Webhook</h4>
                                     </div>
-                                    <div class="content">
-                                        <% User user = (User) session.getAttribute("USERLOGIN");%>
-                                        <form action="MainController" method="post" class="validate-form-update-profile">
+                                    <% User user = (User) session.getAttribute("USERLOGIN"); %>
+                                    <% if (!user.getLink_webhook().isEmpty()) {%>
+                                    <div id="update-window" class="content">
+                                        <form action="MainController" method="post" class="">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label>Username</label>
-                                                        <input type="text" name="txtUsername" disabled class="form-control" placeholder="Username" value="<%= user.getUsername()%>">
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Name</label>
-                                                        <input type="text" name="txtName" class="form-control validate-input input100" placeholder="Name" value="<%= user.getName()%>">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Email Address</label>
-                                                        <input type="email" name="txtEmail" class="form-control validate-input input100" placeholder="Email Address" value="<%= user.getEmail()%>">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4"><label>Your webhook link:</label></div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-9">
+                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <button type="submit" class="btn btn-info btn-fill col-md-2 pull-right" value="updateWebhook" name="btnAction">Save</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <button type="submit" class="btn btn-info btn-fill pull-left" value="Update" name="btnAction">Update Profile</button>
-                                            <div class="clearfix"></div>
                                         </form>
                                     </div>
+                                    <div id="activate-window" class="content hidden">
+                                        <div class="row">
+                                            <div class="col-md-12"><label>Your account have not activate webhook yet!</label></div>
+                                            <div class="col-md-12"><button onclick="activateUpdateWindow()" class="btn btn-success btn-fill col-md-2">Activate</button></div>
+                                        </div>
+                                    </div>
+                                    <% } else {%>
+                                    <div id="update-window" class="content hidden">
+                                        <form action="MainController" method="post" class="">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-4"><label>Your webhook link:</label></div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-9">
+                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>">
+                                                            </div>
+                                                            <div class="col-md-9">
+                                                                <button type="submit" class="btn btn-info btn-fill col-md-2 pull-right" value="updateWebhook" name="btnAction">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div id="activate-window" class="content">
+                                        <div class="row">
+                                            <div class="col-md-12"><label>Your account have not activate webhook yet!</label></div>
+                                            <div class="col-md-12"><button onclick="activateUpdateWindow()" class="btn btn-success btn-fill col-md-2">Activate</button></div>
+                                        </div>
+                                    </div>
+                                    <% }%>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
-
                 <footer class="footer">
                     <div class="container-fluid">
                         <nav class="pull-left">
@@ -238,7 +259,7 @@
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="#">Creative Tim</a>, made with love for a better web
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
                         </p>
                     </div>
                 </footer>
@@ -270,35 +291,31 @@
 
 </html>
 
-<script>
-//    function showPassword() {
-//        var x = document.getElementById("inputPassword");
-//        if (x.type === "password") {
-//            x.type = "text";
-//        } else {
-//            x.type = "password";
-//  }
-//    }
-</script>
+<script src="js/main.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        if (<%=session.getAttribute("SEND")%>) {
-            $.notify({
-                icon: "pe-7s-bell",
-                message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
+                                function activateUpdateWindow() {
+                                    var updateWindow = document.getElementById("update-window");
+                                    var activateWindow = document.getElementById("activate-window");
+                                    activateWindow.classList.add("hidden");
+                                    updateWindow.classList.remove("hidden");
+                                }
+                                $(document).ready(function () {
+                                    if (<%=session.getAttribute("SEND")%>) {
+                                        $.notify({
+                                            icon: "pe-7s-bell",
+                                            message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
-            }, {
-                type: type[<%=session.getAttribute("RESULT")%>],
-                timer: 4000,
-                placement: {
-                    from: 'top',
-                    align: 'left'
-                }
-            });
-        }
+                                        }, {
+                                            type: type[<%=session.getAttribute("RESULT")%>],
+                                            timer: 4000,
+                                            placement: {
+                                                from: 'top',
+                                                align: 'left'
+                                            }
+                                        });
     <% session.removeAttribute("SEND"); %>
     <% session.removeAttribute("CREATE_MESSAGE"); %>
     <% session.removeAttribute("RESULT");%>
-    });
+                                    }
+                                });
 </script>
-<script src="js/main.js"></script>

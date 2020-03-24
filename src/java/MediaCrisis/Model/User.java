@@ -11,19 +11,20 @@ package MediaCrisis.Model;
  */
 public class User {
 
-    String username, password, role, name, email;
+    String username, password, role, name, email, link_webhook;
     boolean isAvailable;
     
     public User() {
     }
 
-    public User(String username, String password, String role, String name, String email, boolean isAvailable) {
+    public User(String username, String password, String role, String name, String email, String link_webhook, boolean isAvailable) {
         this.username = username;
         this.password = password;
         this.role = role;
         this.name = name;
         this.email = email;
         this.isAvailable = isAvailable;
+        this.link_webhook = link_webhook;
     }
     
     public User(String username, String name, String email) {
@@ -85,9 +86,18 @@ public class User {
         this.isAvailable = isAvailable;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "username=" + username + ", password=" + password + ", role=" + role + ", name=" + name + ", email=" + email + ", isAvailable=" + isAvailable + '}';
+    public String getLink_webhook() {
+        return link_webhook;
     }
 
+    public void setLink_webhook(String link_webhook) {
+        this.link_webhook = link_webhook;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "username=" + username + ", password=" + password + ", role=" + role + ", name=" + name + ", email=" + email + ", link_webhook=" + link_webhook + ", isAvailable=" + isAvailable + '}';
+    }
+
+    
 }

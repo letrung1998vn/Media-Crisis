@@ -94,6 +94,7 @@ public class LoginController extends HttpServlet {
                     JSONObject obj1 = new JSONObject(obj.get("user").toString());
                     userDTO.setName(obj1.getString("name"));
                     userDTO.setEmail(obj1.getString("email"));
+                    userDTO.setLink_webhook(obj1.getString("link_webhook"));
                     if (userDTO.getRole().equals("admin")) {
                         nextPage = adminPage;
                     } else if (userDTO.getRole().equals("user")) {

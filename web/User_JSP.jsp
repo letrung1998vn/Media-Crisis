@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="userProfile.jsp">
+                            <a href="userProfile_Admin.jsp">
                                 <i class="pe-7s-user"></i>
                                 <p>User Profile</p>
                             </a>

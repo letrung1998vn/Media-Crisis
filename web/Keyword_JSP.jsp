@@ -72,12 +72,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="MainController?btnAction=ShowUser">
-                                <i class="pe-7s-news-paper"></i>
-                                <p>User manager</p>
-                            </a>
-                        </li>
-                        <li>
                             <a href="icons.html">
                                 <i class="pe-7s-science"></i>
                                 <p>Icons</p>

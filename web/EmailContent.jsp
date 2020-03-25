@@ -79,7 +79,7 @@
                                                     <td>
                                                         <%=i + 1%>
                                                     </td>
-                                                    <td><%=list.get(i)%></td>
+                                                    <td><a href="<%=list.get(i)%>" target='_blank'><%=list.get(i)%></a></td>
                                                 </tr>
                                                 <%
                                                         }

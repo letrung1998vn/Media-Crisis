@@ -30,7 +30,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
-        navigator.serviceWorker.register('./firebase-messaging-sw.js')
+        navigator.serviceWorker.register('./js/firebase-messaging-sw.js')
                 .then((registration) => {
                     messaging.useServiceWorker(registration);
                     // Request permission and get token.....

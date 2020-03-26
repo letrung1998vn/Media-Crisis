@@ -135,7 +135,7 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="Notification.jsp">
+                                    <a href="CheckToken.jsp">
                                         <p>Notification</p>
                                     </a>
                                 </li>

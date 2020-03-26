@@ -24,8 +24,8 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "UpdateNotiBrowserToken", urlPatterns = {"/UpdateNotiBrowserToken"})
-public class UpdateNotiBrowserTokenController extends HttpServlet {
+@WebServlet(name = "DisableNotiBrowserToken", urlPatterns = {"/DisableNotiBrowserToken"})
+public class DisableNotiBrowserTokenController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,15 +44,15 @@ public class UpdateNotiBrowserTokenController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String token = request.getParameter("txtToken");
             HttpSession session = request.getSession();
+            String token = session.getAttribute("notiToken").toString();
             int resultCode = 0;
             String result = "";
             String nextPage = "";
 
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
-            String url = "http://localhost:8181/user/updateNotiToken";
+            String url = "http://localhost:8181/notificationToken/disableNotiToken";
 
             params.add("token");
             params.add("username");
@@ -71,6 +71,7 @@ public class UpdateNotiBrowserTokenController extends HttpServlet {
                 if (resultCode == 3) {
                     nextPage = login;
                 } else {
+                    session.setAttribute("isEnable", true);
                     nextPage = notificationPage;
                 }
             } catch (Exception e) {

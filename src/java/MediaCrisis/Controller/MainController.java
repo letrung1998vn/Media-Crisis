@@ -45,8 +45,9 @@ public class MainController extends HttpServlet {
     private final String updateUserProfile = "UpdateUserProfileController";
     private final String updatePassword = "UpdatePasswordController";
     private final String updateWebhook = "UpdateWebhookController";
-    private final String updateNotification = "UpdateNotiBrowserToken";
-
+    private final String enableNotiBrowserToken = "EnableNotiBrowserToken";
+    private final String checkNotiToken = "checkNotiTokenController";
+    private final String disableNotiBrowserToken = "DisableNotiBrowserToken";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -93,10 +94,13 @@ public class MainController extends HttpServlet {
             url = updatePassword;
         } else if (button.equals("updateWebhook")) {
             url = updateWebhook;
-        } else if (button.equals("UpdateNotiBrowser")) {
-            url = updateNotification;
+        } else if (button.equals("CheckNotificationToken")) {
+            url = checkNotiToken;
+        } else if (button.equals("EnableNotiBrowser")) {
+            url = enableNotiBrowserToken;
+        } else if (button.equals("DisableNotiBrowser")) {
+            url = disableNotiBrowserToken;
         }
-
         RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);
 

@@ -135,6 +135,11 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
+                                    <a href="CheckToken.jsp">
+                                        <p>Notification</p>
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="#">
                                         <p>Webhook</p>
                                     </a>

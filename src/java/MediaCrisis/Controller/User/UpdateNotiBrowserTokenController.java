@@ -37,7 +37,7 @@ public class UpdateNotiBrowserTokenController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private final String error = "error.html";
-    private final String mainPage = "mainPage_JSP.jsp";
+    private final String notificationPage = "Notification.jsp";
     private final String login = "login_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -71,10 +71,7 @@ public class UpdateNotiBrowserTokenController extends HttpServlet {
                 if (resultCode == 3) {
                     nextPage = login;
                 } else {
-                    User user = (User) session.getAttribute("USERLOGIN");
-                    user.setLink_webhook(jsonResult.get("obj").toString());
-                    session.setAttribute("USERLOGIN", user);
-                    nextPage = mainPage;
+                    nextPage = notificationPage;
                 }
             } catch (Exception e) {
                 System.out.println("Ko parse duoc json object");

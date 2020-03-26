@@ -135,6 +135,11 @@
 
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
+                                    <a href="Notification.jsp">
+                                        <p>Notification</p>
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="webhook.jsp">
                                         <p>Webhook</p>
                                     </a>

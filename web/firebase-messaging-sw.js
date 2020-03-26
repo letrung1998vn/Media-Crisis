@@ -52,28 +52,20 @@ self.addEventListener('push', function (event) {
                                 console.error('The API returned an error.', data.error.message);
                                 throw new Error();
                             }
-                            var data = data.data;
-                            var title = data.notification.title;
-                            var message = data.notification.message;
-                            var icon = data.notification.icon;
+                           var data = data.notification;
+                            var title = data.title;
+                            var message = data.message;
                             var data = {
-                                url: data.notification.url
+                                url: data.click_action
                             };
 
                             return self.registration.showNotification(title, {
                                 body: message,
-                                icon: icon,
                                 data: data
                             });
                         })
                         .catch(function (err) {
-                            return self.registration.showNotification('Notification', {
-                                body: 'Có một sự kiện sắp diễn ra',
-                                icon: 'image/pn_logo.png',
-                                data: {
-                                    url: "/"
-                                }
-                            });
+                            console.log("error: " + err);
                         });
             })
             );

@@ -45,58 +45,61 @@ public class MainController extends HttpServlet {
     private final String updateUserProfile = "UpdateUserProfileController";
     private final String updatePassword = "UpdatePasswordController";
     private final String updateWebhook = "UpdateWebhookController";
+    private final String updateNotification = "UpdateNotiBrowserToken";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-            String button = request.getParameter("btnAction");
-            String url = "error.html";
-            System.out.println(button);
-            if (button == null) {
-                System.out.println("Btn bị null");
-                //do nothing
-            } else if (button.equals("Login")) {
-                url = loginController;
-            } else if (button.equals("SignUp")) {
-                url = signupController;
-            } else if (button.equals("LogOut")) {
-                HttpSession session = request.getSession();
-                session.invalidate();
-                url = loginPage;
-            } else if (button.equals("DeleteKeyword")) {
-                url = deleteKeyword;
-            } else if (button.equals("CreateKeyword")) {
-                url = createKeyword;
-            } else if (button.equals("DeleteKeywordAdmin")) {
-                url = deleteKeywordAdmin;
-            } else if (button.equals("CreateKeywordAdmin")) {
-                url = createKeywordAdmin;
-            } else if (button.equals("SearchKeyword")) {
-                url = keywordSearch;
-            } else if (button.equals("SearchKeywordUser")) {
-                url = keywordUserGetAll;
-            } else if (button.equals("SearchUser")) {
-                url = userSearch;
-            } else if (button.equals("ChangeUserStatus")) {
-                url = changeUserStatus;
-            } else if (button.equals("CreateUser")) {
-                url = createUserAdmin;
-            } else if (button.equals("UpdateKeyword")) {
-                url = updateKeywordUser;
-            } else if (button.equals("UpdateKeywordAdmin")) {
-                url = updateKeywordAdmin;
-            } else if (button.equals("Update")) {
-                url = updateUserProfile;
-            } else if (button.equals("ChangePassword")) {
-                url = updatePassword;
-            } else if (button.equals("updateWebhook")) {
-                url = updateWebhook;
-            }
-            
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        
+
+        String button = request.getParameter("btnAction");
+        String url = "error.html";
+        System.out.println(button);
+        if (button == null) {
+            System.out.println("Btn bị null");
+            //do nothing
+        } else if (button.equals("Login")) {
+            url = loginController;
+        } else if (button.equals("SignUp")) {
+            url = signupController;
+        } else if (button.equals("LogOut")) {
+            HttpSession session = request.getSession();
+            session.invalidate();
+            url = loginPage;
+        } else if (button.equals("DeleteKeyword")) {
+            url = deleteKeyword;
+        } else if (button.equals("CreateKeyword")) {
+            url = createKeyword;
+        } else if (button.equals("DeleteKeywordAdmin")) {
+            url = deleteKeywordAdmin;
+        } else if (button.equals("CreateKeywordAdmin")) {
+            url = createKeywordAdmin;
+        } else if (button.equals("SearchKeyword")) {
+            url = keywordSearch;
+        } else if (button.equals("SearchKeywordUser")) {
+            url = keywordUserGetAll;
+        } else if (button.equals("SearchUser")) {
+            url = userSearch;
+        } else if (button.equals("ChangeUserStatus")) {
+            url = changeUserStatus;
+        } else if (button.equals("CreateUser")) {
+            url = createUserAdmin;
+        } else if (button.equals("UpdateKeyword")) {
+            url = updateKeywordUser;
+        } else if (button.equals("UpdateKeywordAdmin")) {
+            url = updateKeywordAdmin;
+        } else if (button.equals("Update")) {
+            url = updateUserProfile;
+        } else if (button.equals("ChangePassword")) {
+            url = updatePassword;
+        } else if (button.equals("updateWebhook")) {
+            url = updateWebhook;
+        } else if (button.equals("UpdateNotiBrowser")) {
+            url = updateNotification;
+        }
+
+        RequestDispatcher rd = request.getRequestDispatcher(url);
+        rd.forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

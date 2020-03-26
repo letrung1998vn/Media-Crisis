@@ -214,7 +214,7 @@
                                                     <td>$36,738</td>
                                                     <td><a href="#"><button><i class="pe-7s-trash" style="width: 20px; height: 20px"></i></button></a></td>
                                                 </tr>
-                                                
+
                                             </tbody>
                                         </table>
 

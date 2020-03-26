@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/web/User_JSP.jsp</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/UpdateKeywordAdminController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/SearchUserController.java</file>
-            <file>file:/C:/Users/Administrator/Documents/Capstone%20project/Media-Crisis-Web/src/java/MediaCrisis/Controller/Admin/CreateUserAdminController.java</file>
+            <file>file:/D:/Capstone/code/Media-Crisis/Web/web/webhook.jsp</file>
+            <file>file:/D:/Capstone/code/Media-Crisis/Web/web/userProfile.jsp</file>
+            <file>file:/D:/Capstone/code/Media-Crisis/Web/web/Keyword_JSP.jsp</file>
+            <file>file:/D:/Capstone/code/Media-Crisis/Web/src/java/MediaCrisis/Controller/User/UpdateNotiBrowserTokenController.java</file>
+            <file>file:/D:/Capstone/code/Media-Crisis/Web/web/Notification.jsp</file>
         </group>
     </open-files>
 </project-private>

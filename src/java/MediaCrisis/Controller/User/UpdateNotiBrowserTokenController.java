@@ -52,13 +52,12 @@ public class UpdateNotiBrowserTokenController extends HttpServlet {
 
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
-            String url = "http://localhost:8181/user/updateNotiToken/?";
+            String url = "http://localhost:8181/user/updateNotiToken";
 
             params.add("token");
             params.add("username");
             value.add(token);
             value.add(session.getAttribute("USERID").toString());
-
             //Call API connection and get return JSON string
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();

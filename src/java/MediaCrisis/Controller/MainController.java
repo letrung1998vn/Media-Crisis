@@ -45,7 +45,7 @@ public class MainController extends HttpServlet {
     private final String updateUserProfile = "UpdateUserProfileController";
     private final String updatePassword = "UpdatePasswordController";
     private final String updateWebhook = "UpdateWebhookController";
-    private final String enableNotiBrowserToken = "EnableNotiBrowserToken";
+    private final String enableNotiBrowserToken = "EnableNotiBrowserTokenController";
     private final String checkNotiToken = "checkNotiTokenController";
     private final String disableNotiBrowserToken = "DisableNotiBrowserToken";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

@@ -99,6 +99,59 @@ public class LoginController extends HttpServlet {
                         nextPage = adminPage;
                     } else if (userDTO.getRole().equals("user")) {
                         nextPage = mainPage;
+                        String token = request.getParameter("txtToken");
+                        if (!token.isEmpty()) {
+                            params = new ArrayList<>();
+                            value = new ArrayList<>();
+                            url = "http://localhost:8181/notificationToken/checkNotiTokenExist";
+                            params.add("token");
+                            params.add("username");
+                            value.add(token);
+                            value.add(userDTO.getUsername());
+                            //Call API connection and get return JSON string
+                            ac = new APIConnection(url, params, value);
+                            result = ac.connect();
+                            System.out.println("Check Result:" + result);
+                            try {
+                                JSONObject jsonResult = new JSONObject(result);
+                                resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                                if (resultCode == 0) {
+                                    session.setAttribute("isEnable", true);
+                                    System.out.println("Register Token: " + true);
+                                    url = "http://localhost:8181/notificationToken/enableNotiToken";
+                                    params.add("token");
+                                    params.add("username");
+                                    value.add(token);
+                                    value.add(userDTO.getUsername());
+                                    //Call API connection and get return JSON string
+                                    ac = new APIConnection(url, params, value);
+                                    result = ac.connect();
+                                    System.out.println("Enable Result:" + result);
+                                    try {
+                                        jsonResult = new JSONObject(result);
+                                        session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                                        resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                                        session.setAttribute("RESULT", resultCode);
+                                        session.setAttribute("SEND", true);
+                                        if (resultCode == 3) {
+                                            nextPage = login;
+                                        } else {
+                                            session.setAttribute("isEnable", false);
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Ko parse duoc json object");
+                                    }
+                                } else {
+                                    session.setAttribute("isEnable", false);
+                                    System.out.println("Register Token: " + false);
+                                }
+                                session.setAttribute("notiToken", token);
+                            } catch (Exception e) {
+                                System.out.println("Ko parse duoc json object");
+                            }
+                        } else{
+                            session.setAttribute("isEnable", true);
+                        }
                     }
                 } else {
                     session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
@@ -106,7 +159,6 @@ public class LoginController extends HttpServlet {
                     session.setAttribute("SEND", true);
                     nextPage = login;
                 }
-
                 session.setAttribute("USERLOGIN", userDTO);
                 session.setAttribute("USERID", userDTO.getUsername());
                 session.setAttribute("PWD", password);

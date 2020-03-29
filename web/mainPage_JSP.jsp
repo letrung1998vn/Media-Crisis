@@ -112,12 +112,12 @@
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-left">
-<!--                                <li>
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-dashboard"></i>
-                                        <p class="hidden-lg hidden-md">Dashboard</p>
-                                    </a>
-                                </li>-->
+                                <!--                                <li>
+                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                                        <i class="fa fa-dashboard"></i>
+                                                                        <p class="hidden-lg hidden-md">Dashboard</p>
+                                                                    </a>
+                                                                </li>-->
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="fa fa-globe"></i>
@@ -136,12 +136,12 @@
                                         <li><a href="#">Another notification</a></li>
                                     </ul>
                                 </li>
-<!--                                <li>
-                                    <a href="">
-                                        <i class="fa fa-search"></i>
-                                        <p class="hidden-lg hidden-md">Search</p>
-                                    </a>
-                                </li>-->
+                                <!--                                <li>
+                                                                    <a href="">
+                                                                        <i class="fa fa-search"></i>
+                                                                        <p class="hidden-lg hidden-md">Search</p>
+                                                                    </a>
+                                                                </li>-->
                             </ul>
 
                             <ul class="nav navbar-nav navbar-right">
@@ -150,24 +150,24 @@
                                         <p>Account</p>
                                     </a>
                                 </li>
-<!--                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <p>
-                                            Dropdown
-                                            <b class="caret"></b>
-                                        </p>
-
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a></li>
-                                    </ul>
-                                </li>-->
+                                <!--                                <li class="dropdown">
+                                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                                        <p>
+                                                                            Dropdown
+                                                                            <b class="caret"></b>
+                                                                        </p>
+                                
+                                                                    </a>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#">Action</a></li>
+                                                                        <li><a href="#">Another action</a></li>
+                                                                        <li><a href="#">Something</a></li>
+                                                                        <li><a href="#">Another action</a></li>
+                                                                        <li><a href="#">Something</a></li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="#">Separated link</a></li>
+                                                                    </ul>
+                                                                </li>-->
                                 <li>
                                     <a href="MainController?btnAction=LogOut">
                                         <p>Log out</p>
@@ -405,16 +405,16 @@
                                         Company
                                     </a>
                                 </li>
-<!--                                <li>
-                                    <a href="#">
-                                        Portfolio
-                                    </a>
-                                </li>-->
-<!--                                <li>
-                                    <a href="#">
-                                        Blog
-                                    </a>
-                                </li>-->
+                                <!--                                <li>
+                                                                    <a href="#">
+                                                                        Portfolio
+                                                                    </a>
+                                                                </li>-->
+                                <!--                                <li>
+                                                                    <a href="#">
+                                                                        Blog
+                                                                    </a>
+                                                                </li>-->
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
@@ -457,5 +457,25 @@
                                     demo.initChartist(dataPreferences);
                                 });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            if (<%=session.getAttribute("SEND")%>) {
+                $.notify({
+                    icon: "pe-7s-bell",
+                    message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
+                }, {
+                    type: type[<%=session.getAttribute("RESULT")%>],
+                    timer: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'left'
+                    }
+                });
+            }
+        <% session.removeAttribute("SEND"); %>
+        <% session.removeAttribute("CREATE_MESSAGE"); %>
+        <% session.removeAttribute("RESULT");%>
+        });
+    </script>
 </html>

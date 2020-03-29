@@ -39,7 +39,7 @@
         <div class="limiter">
             <div class="container-login100">
                 <div class="wrap-login100">
-                    <form class="login100-form validate-form-login" action="MainController" method="post">
+                    <form class="login100-form validate-form-login" action="MainController" method="post" id="form-update-token">
                         <span class="login100-form-title p-b-26">
                             Welcome
                         </span>
@@ -72,7 +72,9 @@
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">
                                 <div class="login100-form-bgbtn"></div>
-                                <button class="login100-form-btn" type="submit" value="Login" name="btnAction">
+                                <input id="tokenString" type="hidden" name="txtToken">
+                                <input type="hidden" name="btnAction" value="Login">
+                                <button class="login100-form-btn" type="submit" onclick="getToken(event)">
                                     Login
                                 </button>
                             </div>
@@ -110,28 +112,122 @@
         <script src="vendor/countdowntime/countdowntime.js"></script>
         <!--===============================================================================================-->
         <script src="js/main.js"></script>
-
+        <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-messaging.js"></script>
         <script type="text/javascript">
-            $(document).ready(function () {
-                if (<%=session.getAttribute("SEND")%>) {
-                    $.notify({
-                        icon: "pe-7s-bell",
-                        message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
+                                    $(document).ready(function () {
+                                        if (<%=session.getAttribute("SEND")%>) {
+                                            $.notify({
+                                                icon: "pe-7s-bell",
+                                                message: '<%=session.getAttribute("CREATE_MESSAGE")%>'
 
-                    }, {
-                        type: type[<%=session.getAttribute("RESULT")%>],
-                        timer: 4000,
-                        placement: {
-                            from: 'top',
-                            align: 'left'
-                        }
-                    });
+                                            }, {
+                                                type: type[<%=session.getAttribute("RESULT")%>],
+                                                timer: 4000,
+                                                placement: {
+                                                    from: 'top',
+                                                    align: 'left'
+                                                }
+                                            });
             <% session.removeAttribute("SEND"); %>
             <% session.removeAttribute("CREATE_MESSAGE"); %>
             <% session.removeAttribute("RESULT");%>
-                }
+                                        }
             <% session.invalidate();%>
-            });
+                                    });
+                                    function getToken(event) {
+                                        if (Notification.permission === "default") {
+                                            if (window.confirm("Do you want to get notiication from this page")) {
+                                                alert("Click Alow Button to get Notification");
+                                                event.preventDefault();
+                                                var tokenForm = document.getElementById("form-update-token");
+                                                var tokenString = document.getElementById("tokenString");
+                                                var firebaseConfig = {
+                                                    apiKey: "AIzaSyDu0alR16fuDysOrsWMWF9bm-IkscLH4Zw",
+                                                    authDomain: "media-crisis.firebaseapp.com",
+                                                    databaseURL: "https://media-crisis.firebaseio.com",
+                                                    projectId: "media-crisis",
+                                                    storageBucket: "media-crisis.appspot.com",
+                                                    messagingSenderId: "721141867711",
+                                                    appId: "1:721141867711:web:b2ea06e0e59157b6ae520a",
+                                                    measurementId: "G-YBT6NGHPTL"
+                                                };
+                                                // Initialize Firebase
+                                                firebase.initializeApp(firebaseConfig);
+                                                const messaging = firebase.messaging();
+                                                navigator.serviceWorker.register('./firebase-messaging-sw.js')
+                                                        .then((registration) => {
+                                                            messaging.useServiceWorker(registration);
+                                                            // Request permission and get token.....
+                                                            messaging
+                                                                    .requestPermission()
+                                                                    .then(function () {
+                                                                        console.log("Notification permission granted.");
+                                                                        // get the token in the form of promise
+                                                                        return messaging.getToken()
+                                                                    })
+                                                                    .then(function (token) {
+                                                                        // print the token on the HTML page
+                                                                        tokenString.value = token;
+                                                                        tokenForm.submit();
+                                                                        console.log("Token: " + token);
+                                                                    })
+                                                                    .catch(function (err) {
+                                                                        tokenForm.submit();
+                                                                        console.log("Unable to get permission to notify.", err);
+                                                                    });
+                                                            messaging.onMessage(function (payload) {
+                                                                console.log("Message received. ", payload);
+                                                            });
+                                                        }
+                                                        );
+                                            } else {
+                                                tokenForm.submit();
+                                            }
+                                        } else if (Notification.permission === "granted") {
+                                            var tokenForm = document.getElementById("form-update-token");
+                                            var tokenString = document.getElementById("tokenString");
+                                            var firebaseConfig = {
+                                                apiKey: "AIzaSyDu0alR16fuDysOrsWMWF9bm-IkscLH4Zw",
+                                                authDomain: "media-crisis.firebaseapp.com",
+                                                databaseURL: "https://media-crisis.firebaseio.com",
+                                                projectId: "media-crisis",
+                                                storageBucket: "media-crisis.appspot.com",
+                                                messagingSenderId: "721141867711",
+                                                appId: "1:721141867711:web:b2ea06e0e59157b6ae520a",
+                                                measurementId: "G-YBT6NGHPTL"
+                                            };
+                                            // Initialize Firebase
+                                            firebase.initializeApp(firebaseConfig);
+                                            const messaging = firebase.messaging();
+                                            navigator.serviceWorker.register('./firebase-messaging-sw.js')
+                                                    .then((registration) => {
+                                                        messaging.useServiceWorker(registration);
+                                                        // Request permission and get token.....
+                                                        messaging
+                                                                .requestPermission()
+                                                                .then(function () {
+                                                                    console.log("Notification permission granted.");
+                                                                    // get the token in the form of promise
+                                                                    return messaging.getToken()
+                                                                })
+                                                                .then(function (token) {
+                                                                    // print the token on the HTML page
+                                                                    tokenString.value = token;
+                                                                    tokenForm.submit();
+                                                                    console.log("Token: " + token);
+                                                                })
+                                                                .catch(function (err) {
+                                                                    tokenForm.submit();
+                                                                    console.log("Unable to get permission to notify.", err);
+                                                                });
+                                                        messaging.onMessage(function (payload) {
+                                                            console.log("Message received. ", payload);
+                                                        });
+                                                    }
+                                                    );
+                                        }
+                                    }
         </script>
         <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
         <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>

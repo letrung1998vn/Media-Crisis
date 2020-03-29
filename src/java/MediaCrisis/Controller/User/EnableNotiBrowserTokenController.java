@@ -24,7 +24,7 @@ import org.json.JSONObject;
  *
  * @author Administrator
  */
-@WebServlet(name = "EnableNotiBrowserToken", urlPatterns = {"/EnableNotiBrowserToken"})
+@WebServlet(name = "EnableNotiBrowserTokenController", urlPatterns = {"/EnableNotiBrowserTokenController"})
 public class EnableNotiBrowserTokenController extends HttpServlet {
 
     /**
@@ -45,7 +45,7 @@ public class EnableNotiBrowserTokenController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-            String token = session.getAttribute("notiToken").toString();
+            String token = request.getParameter("txtToken").toString();
             int resultCode = 0;
             String result = "";
             String nextPage = "";
@@ -53,7 +53,6 @@ public class EnableNotiBrowserTokenController extends HttpServlet {
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
             String url = "http://localhost:8181/notificationToken/enableNotiToken";
-
             params.add("token");
             params.add("username");
             value.add(token);

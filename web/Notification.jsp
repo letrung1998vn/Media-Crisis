@@ -182,20 +182,24 @@
                                         <h4 class="title">Web Notification</h4>
                                     </div>
                                     <div class="content">
+                                        <div class="col-md-12">
+                                            <div class="col-md-12" style="visibility: hidden" id="warningText"><h4 class="title">You already block the notification of this page. Please allow it and refresh the page to enable notification</h4></div>
+                                        </div>
                                         <form action="MainController" method="post" class="validate-form-update-profile" id="form-update-token">
+                                            <input id="tokenString" type="hidden" name="txtToken">
                                             <%
                                                 boolean exist = (boolean) session.getAttribute("isEnable");
                                                 if (exist) {
                                             %>
-                                            <button type="submit" class="btn btn-info btn-fill pull-left" name="btnAction" value="EnableNotiBrowser">Enable Notification</button>
+                                            <input type="hidden" name="btnAction" value="EnableNotiBrowser">
+                                            <button type="submit" class="btn btn-info btn-fill pull-left" id="Notibtn" onclick="getToken(event)">Enable Notification</button>
                                             <%
                                             } else {
                                             %>
-                                            <button type="submit" class="btn btn-info btn-fill pull-left" name="btnAction" value="DisableNotiBrowser">Disable Notification</button>
+                                            <button type="submit" class="btn btn-info btn-fill pull-left" name="btnAction" value="DisableNotiBrowser" >Disable Notification</button>
                                             <%
                                                 }
                                             %>
-
                                             <div class="clearfix"></div>
                                         </form>
                                     </div>
@@ -277,12 +281,59 @@
                                             }
                                         });
                                     }
+                                    if (Notification.permission === "denied") {
+                                        document.getElementById('Notibtn').style.visibility = 'hidden';
+                                        document.getElementById("warningText").style.visibility = 'visible';
+                                    }
             <% session.removeAttribute("SEND"); %>
             <% session.removeAttribute("CREATE_MESSAGE"); %>
             <% session.removeAttribute("RESULT");%>
             <% session.removeAttribute("UPDATINGPOS");%>
             <% session.removeAttribute("UPDATINGVALUE");%>
                                 })
+                                function getToken(event) {
+                                    event.preventDefault();
+                                    var tokenForm = document.getElementById("form-update-token");
+                                    var tokenString = document.getElementById("tokenString");
+                                    var firebaseConfig = {
+                                        apiKey: "AIzaSyDu0alR16fuDysOrsWMWF9bm-IkscLH4Zw",
+                                        authDomain: "media-crisis.firebaseapp.com",
+                                        databaseURL: "https://media-crisis.firebaseio.com",
+                                        projectId: "media-crisis",
+                                        storageBucket: "media-crisis.appspot.com",
+                                        messagingSenderId: "721141867711",
+                                        appId: "1:721141867711:web:b2ea06e0e59157b6ae520a",
+                                        measurementId: "G-YBT6NGHPTL"
+                                    };
+                                    // Initialize Firebase
+                                    firebase.initializeApp(firebaseConfig);
+                                    const messaging = firebase.messaging();
+                                    navigator.serviceWorker.register('./firebase-messaging-sw.js')
+                                            .then((registration) => {
+                                                messaging.useServiceWorker(registration);
+                                                // Request permission and get token.....
+                                                messaging
+                                                        .requestPermission()
+                                                        .then(function () {
+                                                            console.log("Notification permission granted.");
+                                                            // get the token in the form of promise
+                                                            return messaging.getToken()
+                                                        })
+                                                        .then(function (token) {
+                                                            // print the token on the HTML page
+                                                            tokenString.value = token;
+                                                            tokenForm.submit();
+                                                            console.log("Token: " + token);
+                                                        })
+                                                        .catch(function (err) {
+                                                            console.log("Unable to get permission to notify.", err);
+                                                        });
+                                                messaging.onMessage(function (payload) {
+                                                    console.log("Message received. ", payload);
+                                                });
+                                            }
+                                            );
+                                }
         </script>
     </body>
 </html>

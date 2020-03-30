@@ -6,7 +6,6 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;

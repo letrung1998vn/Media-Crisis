@@ -114,12 +114,10 @@ public class SearchKeywordsController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-            //System.out.println(jsonString);
 
             //Parse JSONOBJ Keyword to Keyword class
             try {
                 JSONObject jobj = new JSONObject(jsonString);
-//                System.out.println("Jobj: " + jobj);
                 thisPage = jobj.getInt("number") + 1;
                 maxPage = jobj.getInt("totalPages");
                 jsonString = jobj.get("content").toString();

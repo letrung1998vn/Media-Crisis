@@ -6,13 +6,7 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.Keyword;
-import MediaCrisis.Model.User;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
@@ -22,9 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.JSONException;
 import org.json.JSONObject;
-import sun.security.pkcs11.wrapper.Functions;
 
 /**
  *

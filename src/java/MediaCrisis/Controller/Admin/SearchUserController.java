@@ -6,14 +6,9 @@
 package MediaCrisis.Controller.Admin;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.Keyword;
 import MediaCrisis.Model.User;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;

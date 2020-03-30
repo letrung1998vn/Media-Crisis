@@ -78,7 +78,6 @@ public class LoginController extends HttpServlet {
             //Call API connection and get return JSON string
             APIConnection ac = new APIConnection(url, params, value);
             String result = ac.connect();
-            //System.out.println(result);
 
             try {
                 JSONObject returnObject = new JSONObject(result);

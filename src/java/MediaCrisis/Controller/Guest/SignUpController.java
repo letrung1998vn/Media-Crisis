@@ -7,12 +7,8 @@ package MediaCrisis.Controller.Guest;
 
 import MediaCrisis.APIConnection.APIConnection;
 import MediaCrisis.Model.User;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -87,7 +83,6 @@ public class SignUpController extends HttpServlet {
             //Call API connection and get return JSON string
             APIConnection ac = new APIConnection(url, params, value);
             String result = ac.connect();
-            //System.out.println(result);
 
             try {
                 JSONObject returnObject = new JSONObject(result);

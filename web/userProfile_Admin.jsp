@@ -71,31 +71,6 @@
                                 <p>User manager</p>
                             </a>
                         </li>
-                        <li>
-                        <li>
-                            <a href="icons.html">
-                                <i class="pe-7s-science"></i>
-                                <p>Icons</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="maps.html">
-                                <i class="pe-7s-map-marker"></i>
-                                <p>Maps</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="notifications.html">
-                                <i class="pe-7s-bell"></i>
-                                <p>Notifications</p>
-                            </a>
-                        </li>
-                        <li class="active-pro">
-                            <a href="upgrade.html">
-                                <i class="pe-7s-rocket"></i>
-                                <p>Upgrade to PRO</p>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -113,27 +88,6 @@
                             <a class="navbar-brand" href="#">User Profile</a>
                         </div>
                         <div class="collapse navbar-collapse">
-                            <ul class="nav navbar-nav navbar-left">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-globe"></i>
-                                        <b class="caret hidden-sm hidden-xs"></b>
-                                        <!--<span class="notification hidden-sm hidden-xs">5</span>-->
-                                        <p class="hidden-lg hidden-md">
-                                            5 Notifications
-                                            <b class="caret"></b>
-                                        </p>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Notification 1</a></li>
-                                        <li><a href="#">Notification 2</a></li>
-                                        <li><a href="#">Notification 3</a></li>
-                                        <li><a href="#">Notification 4</a></li>
-                                        <li><a href="#">Another notification</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
                                     <a href="changePassword.jsp">
@@ -141,12 +95,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="userProfile.jsp">
                                         <p>Account</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="MainController?btnAction=LogOut">
                                         <p>Log out</p>
                                     </a>
                                 </li>
@@ -266,16 +220,6 @@
 
 </html>
 
-<script>
-//    function showPassword() {
-//        var x = document.getElementById("inputPassword");
-//        if (x.type === "password") {
-//            x.type = "text";
-//        } else {
-//            x.type = "password";
-//  }
-//    }
-</script>
 <script type="text/javascript">
     $(document).ready(function () {
         if (<%=session.getAttribute("SEND")%>) {

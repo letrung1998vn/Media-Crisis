@@ -59,7 +59,7 @@
                             <span class="focus-input100" data-placeholder="Email"></span>
                         </div>
 
-                        <div class="wrap-input100 validate-input" data-validate="8chars min, atleast 1 char and num">
+                        <div class="wrap-input100 validate-input" data-validate="8chars min, at least 1 char and number">
                             <span class="btn-show-pass">
                                 <i class="zmdi zmdi-eye"></i>
                             </span>

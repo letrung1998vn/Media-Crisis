@@ -106,7 +106,6 @@ public class LoginController extends HttpServlet {
                             params.add("token");
                             params.add("username");
                             value.add(token);
-                            System.out.println("Token: " + token);
                             value.add(userDTO.getUsername());
                             //Call API connection and get return JSON string
                             ac = new APIConnection(url, params, value);
@@ -129,8 +128,8 @@ public class LoginController extends HttpServlet {
                                     System.out.println("Enable Result:" + result);
                                     try {
                                         jsonResult = new JSONObject(result);
-                                        resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                                         session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                                        resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                                         session.setAttribute("RESULT", resultCode);
                                         session.setAttribute("SEND", true);
                                         if (resultCode == 3) {
@@ -141,17 +140,16 @@ public class LoginController extends HttpServlet {
                                     } catch (Exception e) {
                                         System.out.println("Ko parse duoc json object");
                                     }
-                                } else if (resultCode == 1) {
+                                } else {
                                     session.setAttribute("isEnable", false);
-                                } else if(resultCode==5){
-                                    session.setAttribute("isEnable", true);
+                                    System.out.println("Register Token: " + false);
                                 }
                                 session.setAttribute("notiToken", token);
                             } catch (Exception e) {
                                 System.out.println("Ko parse duoc json object");
                             }
-                        } else {
-                            session.setAttribute("isEnable", false);
+                        } else{
+                            session.setAttribute("isEnable", true);
                         }
                     }
                 } else {

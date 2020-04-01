@@ -143,7 +143,7 @@ public class LoginController extends HttpServlet {
                                     }
                                 } else if (resultCode == 1) {
                                     session.setAttribute("isEnable", false);
-                                } else if(resultCode==5){
+                                } else if (resultCode == 5) {
                                     session.setAttribute("isEnable", true);
                                 }
                                 session.setAttribute("notiToken", token);

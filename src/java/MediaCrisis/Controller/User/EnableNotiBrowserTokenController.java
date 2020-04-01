@@ -70,6 +70,7 @@ public class EnableNotiBrowserTokenController extends HttpServlet {
                     nextPage = login;
                 } else {
                     session.setAttribute("isEnable", false);
+                    session.setAttribute("notiToken", token);
                     nextPage = notificationPage;
                 }
             } catch (Exception e) {

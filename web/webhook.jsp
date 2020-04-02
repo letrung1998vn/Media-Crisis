@@ -89,7 +89,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                     <a href="webhook.jsp">
+                                    <a href="webhook.jsp">
                                         <p>Web hook</p>
                                     </a>
                                 </li>
@@ -121,7 +121,10 @@
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h4 class="title">Web hook</h4>
+                                        <h4 class="title col-md-3">Web hook</h4>
+                                        <a class="btn btn-danger col-md-2 pull-right" href="MainController?btnAction=DisableWebhook">
+                                            Disable
+                                        </a>
                                     </div>
                                     <% User user = (User) session.getAttribute("USERLOGIN"); %>
                                     <% if (!user.getLink_webhook().isEmpty()) {%>

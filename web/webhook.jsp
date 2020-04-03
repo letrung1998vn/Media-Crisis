@@ -120,14 +120,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
+                                    <% User user = (User) session.getAttribute("USERLOGIN"); %>
+                                    <% if (!user.getLink_webhook().isEmpty()) {%>
                                     <div class="header">
                                         <h4 class="title col-md-3">Web hook</h4>
                                         <a class="btn btn-danger col-md-2 pull-right" href="MainController?btnAction=DisableWebhook">
                                             Disable
                                         </a>
                                     </div>
-                                    <% User user = (User) session.getAttribute("USERLOGIN"); %>
-                                    <% if (!user.getLink_webhook().isEmpty()) {%>
                                     <div id="update-window" class="content">
                                         <form action="MainController" method="post" class="">
                                             <div class="row">
@@ -138,7 +138,7 @@
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="col-md-9">
-                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>">
+                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>" required="true">
                                                             </div>
                                                             <div class="col-md-9">
                                                                 <button type="submit" class="btn btn-info btn-fill col-md-2 pull-right" value="updateWebhook" name="btnAction">Save</button>
@@ -166,7 +166,7 @@
                                                         </div>
                                                         <div class="col-md-12">
                                                             <div class="col-md-9">
-                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>">
+                                                                <input id="pwd1" type="text" name="txtLinkWebhook" class="form-control input100" placeholder="Webhook link" value="<%= user.getLink_webhook()%>" required="true">
                                                             </div>
                                                             <div class="col-md-9">
                                                                 <button type="submit" class="btn btn-info btn-fill col-md-2 pull-right" value="updateWebhook" name="btnAction">Save</button>

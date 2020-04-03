@@ -6,6 +6,7 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
+import MediaCrisis.Model.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -40,38 +41,41 @@ public class DisableWebhookController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String url = "http://localhost:8181/user/disableWebhook/?";
-        HttpSession session = request.getSession();
-        String userId = session.getAttribute("USERID").toString();
-        String result = "";
-        String nextPage = "";
-        List<String> params = new ArrayList<>();
-        List<String> value = new ArrayList<>();
+            HttpSession session = request.getSession();
+            String userId = session.getAttribute("USERID").toString();
+            String result = "";
+            String nextPage = "";
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
 
-        params.add("userName");
-        value.add(userId);
+            params.add("userName");
+            value.add(userId);
 
-        //Call API connection and get return JSON string
-        APIConnection ac = new APIConnection(url, params, value);
-        result = ac.connect();
-        System.out.println(result);
-        
-        try {
-            JSONObject jsonResult = new JSONObject(result);
-            session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-            int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
-            session.setAttribute("RESULT", resultCode);
-            session.setAttribute("SEND", true);
-            if (resultCode == 3) {
-                nextPage = "login_JSP.jsp";
-            } else {
-                nextPage = "webhook.jsp";
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            result = ac.connect();
+            System.out.println(result);
+
+            try {
+                JSONObject jsonResult = new JSONObject(result);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                session.setAttribute("RESULT", resultCode);
+                session.setAttribute("SEND", true);
+                if (resultCode == 3) {
+                    nextPage = "login_JSP.jsp";
+                } else {
+                    nextPage = "webhook.jsp";
+                    User user = (User) session.getAttribute("USERLOGIN");
+                    user.setLink_webhook("");
+                    session.setAttribute("USERLOGIN", user);
+                }
+            } catch (Exception e) {
+                System.out.println("Ko parse duoc json object");
             }
-        } catch (Exception e) {
-            System.out.println("Ko parse duoc json object");
-        }
 
-        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-        rd.forward(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

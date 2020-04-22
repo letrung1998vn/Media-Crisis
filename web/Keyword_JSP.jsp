@@ -126,7 +126,7 @@
                                                     <div class="col-md-5">
 
                                                         <div class="wrap-input100 validate-input" data-validate = "">
-                                                            <input class="input100" type="text" name="txtKeyword">
+                                                            <input class="input100" type="text" name="txtKeyword" maxlength="50">
                                                             <span class="focus-input100"></span>
                                                         </div>
                                                         <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeyword" name="btnAction">
@@ -175,7 +175,7 @@
                                                         <td class="keywordsNo"><%= i + 1%></td>
                                                 <form class="login100-form validate-form-update-keyword" action="MainController" method="POST">
                                                     <td class="keywords">
-                                                        <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled>    
+                                                        <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled maxlength="50">    
                                                     </td>
                                                     <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
                                                     <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">

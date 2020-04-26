@@ -42,7 +42,7 @@ public class WebLinkContent extends HttpServlet {
             String keyWord = request.getParameter("keyword");
             String id = request.getParameter("id");
             String nextPage = "";
-            String url = "http://localhost:8181/notification/emailContent";
+            String url = "http://localhost:8181/notification/emailContentList";
             String result = "";
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();

@@ -68,7 +68,7 @@ public class DeleteKeywordController extends HttpServlet {
             if (resultCode == 3) {
                 nextPage = "login_JSP.jsp";
             } else {
-                nextPage = "MainController?btnAction=SearchKeywordUser&userId=" + session.getAttribute("USERID");
+                nextPage = "MainController?btnAction=SearchKeywordUser";
             }
         } catch (Exception e) {
             System.out.println("Ko parse duoc json object");

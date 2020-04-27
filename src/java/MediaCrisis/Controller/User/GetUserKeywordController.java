@@ -79,11 +79,15 @@ public class GetUserKeywordController extends HttpServlet {
                     session.setAttribute("COUNT", listKeyword.size());
                     nextPage = keywordList;
                 } else if (resultCode == 3) {
+                    session.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("COUNT", listKeyword.size());
                     session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
                     session.setAttribute("RESULT", resultCode);
                     session.setAttribute("SEND", true);
                     nextPage = login;
                 } else {
+                    session.setAttribute("LISTKEYWORD", listKeyword);
+                    session.setAttribute("COUNT", listKeyword.size());
                     session.setAttribute("CREATE_MESSAGE", returnObject.get("statusMessage"));
                     session.setAttribute("RESULT", resultCode);
                     session.setAttribute("SEND", true);

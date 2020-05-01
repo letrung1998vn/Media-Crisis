@@ -1,3 +1,4 @@
+<%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.List"%>
 <!doctype html>
 <html lang="en">
@@ -67,6 +68,8 @@
                                         <table class="table table-hover table-striped">
                                             <thead>
                                             <th>No</th>
+                                            <th>Content</th>
+                                            <th>Special Interest</th>
                                             <th>List Detail</th>
                                             </thead>
                                             <tbody>
@@ -74,12 +77,26 @@
                                                     List<String> list = (List<String>) request.getAttribute("list");
                                                     if (list != null) {
                                                         for (int i = 0; i < list.size(); i++) {
+                                                            String str = list.get(i);
+                                                            String delim = "and||and";
+                                                            String post_content = str.substring(0, str.indexOf(delim) - 1);
+                                                            str = str.substring(str.indexOf(delim) + delim.length() + 1, str.length());
+                                                            String linkDetail = str.substring(0, str.indexOf(delim) - 1);
+                                                            str = str.substring(str.indexOf(delim) + +delim.length() + 1, str.length());
+                                                            String strConfidence = str;
+                                                            String highRow = str.substring(0, str.indexOf(" "));
+                                                            String lowRow = str.substring(str.indexOf(" "), str.length());
                                                 %>
                                                 <tr>
                                                     <td>
                                                         <%=i + 1%>
                                                     </td>
-                                                    <td><a href="<%=list.get(i)%>" target='_blank'><%=list.get(i)%></a></td>
+                                                    <td><p><%=post_content%></p></td>
+                                                    <td>
+                                                        <p><%=highRow%></p>
+                                                        <p><%=lowRow%></p>
+                                                    </td>
+                                                    <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
                                                 </tr>
                                                 <%
                                                         }

@@ -79,19 +79,24 @@
                                                         for (int i = 0; i < list.size(); i++) {
                                                             String str = list.get(i);
                                                             String delim = "and||and";
-                                                            String post_content = str.substring(0, str.indexOf(delim) - 1);
-                                                            str = str.substring(str.indexOf(delim) + delim.length() + 1, str.length());
-                                                            String linkDetail = str.substring(0, str.indexOf(delim) - 1);
-                                                            str = str.substring(str.indexOf(delim) + +delim.length() + 1, str.length());
-                                                            String strConfidence = str;
-                                                            String highRow = str.substring(0, str.indexOf(" "));
-                                                            String lowRow = str.substring(str.indexOf(" "), str.length());
+                                                            String content = str.substring(0, str.indexOf(delim));
+                                                            str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                                                            String linkDetail = str.substring(0, str.indexOf(delim));
+                                                            str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                                                            String highRow = "";
+                                                            String lowRow = "";
+                                                            if (!str.isEmpty()) {
+                                                                highRow = str.substring(0, str.indexOf(" "));
+                                                                lowRow = str.substring(str.indexOf(" "), str.length());
+                                                                System.out.println("high: " + highRow);
+                                                                System.out.println("low: " + lowRow);
+                                                            }
                                                 %>
                                                 <tr>
                                                     <td>
                                                         <%=i + 1%>
                                                     </td>
-                                                    <td><p><%=post_content%></p></td>
+                                                    <td><p><%=content%></p></td>
                                                     <td>
                                                         <p><%=highRow%></p>
                                                         <p><%=lowRow%></p>

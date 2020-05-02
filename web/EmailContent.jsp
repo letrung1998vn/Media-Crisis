@@ -88,8 +88,6 @@
                                                             if (!str.isEmpty()) {
                                                                 highRow = str.substring(0, str.indexOf(" "));
                                                                 lowRow = str.substring(str.indexOf(" "), str.length());
-                                                                System.out.println("high: " + highRow);
-                                                                System.out.println("low: " + lowRow);
                                                             }
                                                 %>
                                                 <tr>

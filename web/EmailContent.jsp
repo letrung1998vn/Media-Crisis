@@ -108,10 +108,7 @@
                                                     <td><p><%=content%></p></td>
                                                     <td><%=showType%></td>
                                                     <td style="width: 700px; height: 500px;">
-                                                        <input type="button" value="Show Chart" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')"/>
-                                                        <script>
-                                                            document.getElementById('<%=loadChartName%>').addEventListener("load", drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>'));
-                                                        </script>
+                                                        <input type="button" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')"/>
                                                         <p id="<%=loadChartName%>"></p>
                                                     </td>
                                                     <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
@@ -233,7 +230,7 @@
                                         vAxis: {title: vAxis},
                                         hAxis: {title: ''},
                                         seriesType: 'bars',
-                                        series: {1: {type: 'line'}}, chartArea: {left: 20, top: 0, width: '75%', height: '90%'}};
+                                        series: {1: {type: 'line'}}, chartArea: {left: 20, top: 20, width: '75%', height: '75%'}};
                                     var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
                                     chart.draw(data, options);
                                 }

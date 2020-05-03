@@ -6,6 +6,7 @@
 package MediaCrisis.Controller;
 
 import MediaCrisis.APIConnection.APIConnection;
+import MediaCrisis.Model.EmailContentListModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 @WebServlet(name = "WebLinkContentListComment", urlPatterns = {"/WebLinkContentListComment"})
 public class WebLinkContentListComment extends HttpServlet {
 
-    private final String emailContent = "EmailContent.jsp";
+    private final String emailContent = "EmailContentRatio.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,15 +59,39 @@ public class WebLinkContentListComment extends HttpServlet {
             try {
                 JSONObject jsonResult = new JSONObject(result);
                 String commentKeyword = jsonResult.getString("keyword");
-                System.out.println("Keyword: " + commentKeyword);
-                JSONArray listLink = (JSONArray) jsonResult.get("listLinkDetail");
-                List<String> list = new ArrayList<>();
+                System.out.println("List Comment");
+                JSONArray listLink = (JSONArray) jsonResult.get("listContentAndLink");
+                JSONArray listRatio = (JSONArray) jsonResult.get("listRatio");
+                List<EmailContentListModel> listEmailContent = new ArrayList<>();
+                List<String> listRatioStr = new ArrayList<>();
+                List<String> listDateStr = new ArrayList<>();
                 for (int i = 0; i < listLink.length(); i++) {
-                    list.add(listLink.getString(i));
+                    String str = listLink.getString(i);
+                    String delim = "and||and";
+                    String content = str.substring(0, str.indexOf(delim));
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String linkDetail = str;
+                    EmailContentListModel eclm = new EmailContentListModel();
+                    eclm.setContent(content);
+                    eclm.setLink(linkDetail);
+                    listEmailContent.add(eclm);
                 }
-                System.out.println("Size: " + list.size());
+                for (int i = 0; i < listRatio.length(); i++) {
+                    String str = listRatio.getString(i);
+                    String delim = "and||and";
+                    String ratio = str.substring(0, str.indexOf(delim));
+                    listRatioStr.add(ratio);
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String date = str;
+                    listDateStr.add(date);
+
+                }
                 request.setAttribute("keyword", commentKeyword);
-                request.setAttribute("list", list);
+                request.setAttribute("listEmailContent", listEmailContent);
+                request.setAttribute("listRatio", listRatioStr);
+                request.setAttribute("listDate", listDateStr);
                 nextPage = emailContent;
             } catch (Exception e) {
                 e.printStackTrace();

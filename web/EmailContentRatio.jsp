@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.EmailContentListModel"%>
 <%@page import="MediaCrisis.Model.EmailContentModel"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.List"%>
@@ -32,7 +33,44 @@
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+        <%
+            List<String> listRatioStr = (List<String>) request.getAttribute("listRatio");
+            List<String> listDateStr = (List<String>) request.getAttribute("listDate");
+        %>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(drawVisualization);
+            function drawVisualization() {
+                var listRatio =<%=listRatioStr%>;
+                var listDate = [];
+            <% for (int i = 0; i < listDateStr.size(); i++) {
+                    String date = listDateStr.get(i);
+            %>
+                listDate.push('<%=date%>');
+            <%
+                }
+            %>
+                var len = listRatio.length;
+                var i;
+                var formatDate = new google.visualization.DateFormat({
+                    pattern: 'yyyy-mm-dd hh:mm:ss'
+                });
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Time');
+                data.addColumn('number', 'Percentage of Negative');
+                for (i = 0; i < len; i++) {
+                    console.log(listDate[i]);
+                    var rowDate = new Date(listDate[i]);
+                    data.addRow([formatDate.formatValue(rowDate), listRatio[i] * 100]);
+                }
+                var options = {chartArea: {left: 20, top: 10, width: '80%', height: '80%'}};
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_ratio'));
+                chart.draw(data, options);
+            }
+        </script>
     </head>
+
     <body>
 
         <div class="wrapper">
@@ -60,6 +98,19 @@
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="col-md-8">
+                                <div class="card">
+
+                                    <div class="header">
+                                        <h4 class="title">Ratio Chart</h4>
+                                    </div>
+                                    <div class="content">
+                                        <div id="chart_ratio"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="header">
@@ -70,50 +121,22 @@
                                             <thead>
                                             <th>No</th>
                                             <th>Content</th>
-                                            <th>Type of Crisis</th>
-                                            <th>Crisis Reason</th>
                                             <th>Link Detail</th>
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    List<EmailContentModel> list = (List<EmailContentModel>) request.getAttribute("list");
+                                                    List<EmailContentListModel> list = (List<EmailContentListModel>) request.getAttribute("listEmailContent");
                                                     if (list != null) {
                                                         for (int i = 0; i < list.size(); i++) {
-                                                            EmailContentModel ecm = list.get(i);
-                                                            String content = ecm.getContent();
-                                                            String linkDetail = ecm.getLink();
-                                                            String type = ecm.getType();
-                                                            String std = ecm.getStd();
-                                                            String number = ecm.getNumber();
-                                                            String loadChartName = i + type;
-                                                            String showType = "";
-                                                            if (type.equals("react")) {
-                                                                showType = "Abnormal High React";
-                                                            } else if (type.equals("retweet")) {
-                                                                showType = "Abnormal High Retweet";
-                                                            } else if (type.equals("reply")) {
-                                                                showType = "Abnormal High Reply";
-                                                            } else if (type.equals("increaseReact")) {
-                                                                showType = "Abnormal Increase React";
-                                                            } else if (type.equals("increaseRetweet")) {
-                                                                showType = "Abnormal Increase Retweet";
-                                                            } else if (type.equals("increaseReply")) {
-                                                                showType = "Abnormal Increase Reply";
-                                                            }
+                                                            EmailContentListModel eclm = list.get(i);
+                                                            String content = eclm.getContent();
+                                                            String linkDetail = eclm.getLink();
                                                 %>
                                                 <tr>
                                                     <td>
                                                         <%=i + 1%>
                                                     </td>
                                                     <td><p><%=content%></p></td>
-                                                    <td><%=showType%></td>
-                                                    <td style="width: 700px; height: 500px;">
-                                                        <input type="button" value="Show Chart" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')"/>
-                                                        <script>
-                                                            document.getElementById('<%=loadChartName%>').addEventListener("load", drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>'));
-                                                        </script>
-                                                        <p id="<%=loadChartName%>"></p>
-                                                    </td>
                                                     <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
                                                 </tr>
                                                 <%
@@ -189,53 +212,4 @@
 
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-                                google.charts.load('current', {'packages': ['corechart']});
-                                function drawVisualization(type, std, number, loadChart) {
-                                    var firstValue;
-                                    var secondValue;
-                                    var title;
-                                    var vAxis;
-                                    if (type === "react") {
-                                        firstValue = 'React Number ';
-                                        secondValue = 'highest normal react number';
-                                        title = 'React Number Chart';
-                                    } else if (type === "retweet") {
-                                        firstValue = 'Retweet Number ';
-                                        secondValue = 'highest normal retweet number';
-                                        title = 'Retweet Number Chart';
-                                    } else if (type === "reply") {
-                                        firstValue = 'Reply Number ';
-                                        secondValue = 'highest normal reply number';
-                                        title = 'Reply Number Chart';
-                                    } else if (type === "increaseReact") {
-                                        firstValue = 'Increase React Number ';
-                                        secondValue = 'highest normal increase react number';
-                                        title = 'Increase React Number Chart';
-                                    } else if (type === "increaseRetweet") {
-                                        firstValue = 'Increase Retweet Number ';
-                                        secondValue = 'highest normal increase retweet number';
-                                        title = 'Increase Retweet Number Chart';
-                                    } else if (type === "increaseReply") {
-                                        firstValue = 'Increase Reply Number ';
-                                        secondValue = 'highest normal increase reply number';
-                                        title = 'Increase Reply Number Chart';
-                                    }
-                                    var data = google.visualization.arrayToDataTable([
-                                        ['', firstValue, secondValue],
-                                        ['', 0, std],
-                                        ['', number, std],
-                                        ['', 0, std]
-                                    ]);
-                                    var options = {
-                                        title: title,
-                                        vAxis: {title: vAxis},
-                                        hAxis: {title: ''},
-                                        seriesType: 'bars',
-                                        series: {1: {type: 'line'}}, chartArea: {left: 20, top: 0, width: '75%', height: '90%'}};
-                                    var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
-                                    chart.draw(data, options);
-                                }
-    </script>
 </html>

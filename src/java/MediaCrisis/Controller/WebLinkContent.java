@@ -6,6 +6,7 @@
 package MediaCrisis.Controller;
 
 import MediaCrisis.APIConnection.APIConnection;
+import MediaCrisis.Model.EmailContentModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -56,9 +57,30 @@ public class WebLinkContent extends HttpServlet {
                 JSONObject jsonResult = new JSONObject(result);
                 String crisisKeyword = jsonResult.getString("keyword");
                 JSONArray listLink = (JSONArray) jsonResult.get("listLinkDetail");
-                List<String> list = new ArrayList<>();
+                List<EmailContentModel> list = new ArrayList<>();
                 for (int i = 0; i < listLink.length(); i++) {
-                    list.add(listLink.getString(i));
+                    String str = listLink.getString(i);
+                    EmailContentModel ecm = new EmailContentModel();
+                    String delim = "and||and";
+                    String content = str.substring(0, str.indexOf(delim));
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String linkDetail = str.substring(0, str.indexOf(delim));
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String type = str.substring(0, str.indexOf(delim));
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String std = str.substring(0, str.indexOf(delim));
+                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                    str = str.trim();
+                    String number = str;
+                    ecm.setContent(content.trim());
+                    ecm.setLink(linkDetail.trim());
+                    ecm.setType(type.trim());
+                    ecm.setStd(std.trim());
+                    ecm.setNumber(number.trim());
+                    list.add(ecm);
                 }
                 request.setAttribute("keyword", crisisKeyword);
                 request.setAttribute("list", list);

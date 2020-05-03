@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.EmailContentModel"%>
 <%@page import="java.util.StringTokenizer"%>
 <%@page import="java.util.List"%>
 <!doctype html>
@@ -69,35 +70,35 @@
                                             <thead>
                                             <th>No</th>
                                             <th>Content</th>
-                                            <th>Special Interest</th>
+                                            <th>Type of Crisis</th>
+                                            <th>Crisis Reason</th>
                                             <th>List Detail</th>
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    List<String> list = (List<String>) request.getAttribute("list");
+                                                    List<EmailContentModel> list = (List<EmailContentModel>) request.getAttribute("list");
                                                     if (list != null) {
                                                         for (int i = 0; i < list.size(); i++) {
-                                                            String str = list.get(i);
-                                                            String delim = "and||and";
-                                                            String content = str.substring(0, str.indexOf(delim));
-                                                            str = str.substring(str.indexOf(delim) + delim.length(), str.length());
-                                                            String linkDetail = str.substring(0, str.indexOf(delim));
-                                                            str = str.substring(str.indexOf(delim) + delim.length(), str.length());
-                                                            String highRow = "";
-                                                            String lowRow = "";
-                                                            if (!str.isEmpty()) {
-                                                                highRow = str.substring(0, str.indexOf(" "));
-                                                                lowRow = str.substring(str.indexOf(" "), str.length());
-                                                            }
+                                                            EmailContentModel ecm = list.get(i);
+                                                            String content = ecm.getContent();
+                                                            String linkDetail = ecm.getLink();
+                                                            String type = ecm.getType();
+                                                            String std = ecm.getStd();
+                                                            String number = ecm.getNumber();
+                                                            String loadChartName = i + type;
                                                 %>
                                                 <tr>
                                                     <td>
                                                         <%=i + 1%>
                                                     </td>
                                                     <td><p><%=content%></p></td>
-                                                    <td>
-                                                        <p><%=highRow%></p>
-                                                        <p><%=lowRow%></p>
+                                                    <td><%=type%></td>
+                                                    <td style="width: 700px; height: 500px;">
+                                                        <input type="button" value="Show Chart" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')"/>
+                                                        <script>
+                                                            document.getElementById('<%=loadChartName%>').addEventListener("load", drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>'));
+                                                        </script>
+                                                        <p id="<%=loadChartName%>"></p>
                                                     </td>
                                                     <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
                                                 </tr>
@@ -174,6 +175,53 @@
 
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
-
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+                                google.charts.load('current', {'packages': ['corechart']});
+                                function drawVisualization(type, std, number, loadChart) {
+                                    var firstValue;
+                                    var secondValue;
+                                    var title;
+                                    var vAxis;
+                                    if (type === "react") {
+                                        firstValue = 'React Number ';
+                                        secondValue = 'highest normal react number';
+                                        title = 'React Number Chart';
+                                    } else if (type === "retweet") {
+                                        firstValue = 'Retweet Number ';
+                                        secondValue = 'highest normal retweet number';
+                                        title = 'Retweet Number Chart';
+                                    }else if (type === "reply") {
+                                        firstValue = 'Reply Number ';
+                                        secondValue = 'highest normal reply number';
+                                        title = 'Reply Number Chart';
+                                    } else if (type === "increaseReact") {
+                                        firstValue = 'Increase React Number ';
+                                        secondValue = 'highest normal increase react number';
+                                        title = 'Increase React Number Chart';
+                                    } else if (type === "increaseRetweet") {
+                                        firstValue = 'Increase Retweet Number ';
+                                        secondValue = 'highest normal increase retweet number';
+                                        title = 'Increase Retweet Number Chart';
+                                    } else if (type === "increaseReply") {
+                                        firstValue = 'Increase Reply Number ';
+                                        secondValue = 'highest normal increase reply number';
+                                        title = 'Increase Reply Number Chart';
+                                    }
+                                    var data = google.visualization.arrayToDataTable([
+                                        ['', firstValue, secondValue],
+                                        ['', 0, std],
+                                        ['', number, std],
+                                        ['', 0, std]
+                                    ]);
+                                    var options = {
+                                        title: title,
+                                        vAxis: {title: vAxis},
+                                        hAxis: {title: ''},
+                                        seriesType: 'bars',
+                                        series: {1: {type: 'line'}}, chartArea: {left: 20, top: 0, width: '75%', height: '90%'}};
+                                    var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
+                                    chart.draw(data, options);
+                                }
+    </script>
 </html>

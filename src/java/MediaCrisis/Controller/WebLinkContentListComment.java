@@ -44,6 +44,7 @@ public class WebLinkContentListComment extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String keyWord = request.getParameter("keyword");
             String id = request.getParameter("comment_id");
+            String time = request.getParameter("time");
             String nextPage = "";
             String url = "http://localhost:8181/notification/emailContentListComment";
             String result = "";
@@ -51,8 +52,10 @@ public class WebLinkContentListComment extends HttpServlet {
             List<String> value = new ArrayList<>();
             params.add("keyword");
             params.add("comment_id");
+            params.add("time");
             value.add(keyWord);
             value.add(id);
+            value.add(time);
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();
             System.out.println("Result: " + result);

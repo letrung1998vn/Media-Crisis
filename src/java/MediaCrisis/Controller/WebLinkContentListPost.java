@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.catalina.util.URLEncoder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,6 +45,8 @@ public class WebLinkContentListPost extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             String keyWord = request.getParameter("keyword");
             String id = request.getParameter("post_id");
+            String time = request.getParameter("time");
+            System.out.println("Time check: "+time);
             String nextPage = "";
             String url = "http://localhost:8181/notification/emailContentListPost";
             String result = "";
@@ -51,8 +54,10 @@ public class WebLinkContentListPost extends HttpServlet {
             List<String> value = new ArrayList<>();
             params.add("keyword");
             params.add("post_id");
+            params.add("time");
             value.add(keyWord);
             value.add(id);
+            value.add(time);
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();
             try {

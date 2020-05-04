@@ -108,7 +108,7 @@
                                                     <td><p><%=content%></p></td>
                                                     <td><%=showType%></td>
                                                     <td style="width: 700px; height: 500px;">
-                                                        <img src="images/STD.PNG"/>
+                                                        <img src="images/STD1.png"/>
                                                         <!--<input type="button" id="drawChart<%=i%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')" style="visibility: hidden"/>-->
                                                         <!--<p id="<%=loadChartName%>"></p>-->
                                                     </td>

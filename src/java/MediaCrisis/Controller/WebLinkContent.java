@@ -82,6 +82,7 @@ public class WebLinkContent extends HttpServlet {
                     ecm.setNumber(number.trim());
                     list.add(ecm);
                 }
+                request.setAttribute("size", list.size());
                 request.setAttribute("keyword", crisisKeyword);
                 request.setAttribute("list", list);
                 nextPage = emailContent;

@@ -108,7 +108,7 @@
                                                     <td><p><%=content%></p></td>
                                                     <td><%=showType%></td>
                                                     <td style="width: 700px; height: 500px;">
-                                                        <input type="button" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')"/>
+                                                        <input type="button" id="drawChart<%=i%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')" style="visibility: hidden"/>
                                                         <p id="<%=loadChartName%>"></p>
                                                     </td>
                                                     <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
@@ -187,52 +187,69 @@
     <!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
     <script src="assets/js/demo.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <%
+        int size = (int) request.getAttribute("size");
+    %>
+    <script>
+//                                $(document).ready(function () {
+
+//                                })
+    </script>
     <script type="text/javascript">
-                                google.charts.load('current', {'packages': ['corechart']});
-                                function drawVisualization(type, std, number, loadChart) {
-                                    var firstValue;
-                                    var secondValue;
-                                    var title;
-                                    var vAxis;
-                                    if (type === "react") {
-                                        firstValue = 'React Number ';
-                                        secondValue = 'highest normal react number';
-                                        title = 'React Number Chart';
-                                    } else if (type === "retweet") {
-                                        firstValue = 'Retweet Number ';
-                                        secondValue = 'highest normal retweet number';
-                                        title = 'Retweet Number Chart';
-                                    } else if (type === "reply") {
-                                        firstValue = 'Reply Number ';
-                                        secondValue = 'highest normal reply number';
-                                        title = 'Reply Number Chart';
-                                    } else if (type === "increaseReact") {
-                                        firstValue = 'Increase React Number ';
-                                        secondValue = 'highest normal increase react number';
-                                        title = 'Increase React Number Chart';
-                                    } else if (type === "increaseRetweet") {
-                                        firstValue = 'Increase Retweet Number ';
-                                        secondValue = 'highest normal increase retweet number';
-                                        title = 'Increase Retweet Number Chart';
-                                    } else if (type === "increaseReply") {
-                                        firstValue = 'Increase Reply Number ';
-                                        secondValue = 'highest normal increase reply number';
-                                        title = 'Increase Reply Number Chart';
-                                    }
-                                    var data = google.visualization.arrayToDataTable([
-                                        ['', firstValue, secondValue],
-                                        ['', 0, std],
-                                        ['', number, std],
-                                        ['', 0, std]
-                                    ]);
-                                    var options = {
-                                        title: title,
-                                        vAxis: {title: vAxis},
-                                        hAxis: {title: ''},
-                                        seriesType: 'bars',
-                                        series: {1: {type: 'line'}}, chartArea: {left: 20, top: 20, width: '75%', height: '75%'}};
-                                    var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
-                                    chart.draw(data, options);
-                                }
+        google.charts.load('current', {'packages': ['corechart']});
+        google.setOnLoadCallback(drawChart);
+        function drawVisualization(type, std, number, loadChart) {
+            var firstValue;
+            var secondValue;
+            var title;
+            var vAxis;
+            if (type === "react") {
+                firstValue = 'React Number ';
+                secondValue = 'highest normal react number';
+                title = 'React Number Chart';
+            } else if (type === "retweet") {
+                firstValue = 'Retweet Number ';
+                secondValue = 'highest normal retweet number';
+                title = 'Retweet Number Chart';
+            } else if (type === "reply") {
+                firstValue = 'Reply Number ';
+                secondValue = 'highest normal reply number';
+                title = 'Reply Number Chart';
+            } else if (type === "increaseReact") {
+                firstValue = 'Increase React Number ';
+                secondValue = 'highest normal increase react number';
+                title = 'Increase React Number Chart';
+            } else if (type === "increaseRetweet") {
+                firstValue = 'Increase Retweet Number ';
+                secondValue = 'highest normal increase retweet number';
+                title = 'Increase Retweet Number Chart';
+            } else if (type === "increaseReply") {
+                firstValue = 'Increase Reply Number ';
+                secondValue = 'highest normal increase reply number';
+                title = 'Increase Reply Number Chart';
+            }
+            var data = google.visualization.arrayToDataTable([
+                ['', firstValue, secondValue],
+                ['', 0, std],
+                ['', number, std],
+                ['', 0, std]
+            ]);
+            var options = {
+                title: title,
+                vAxis: {title: vAxis},
+                hAxis: {title: ''},
+                seriesType: 'bars',
+                series: {1: {type: 'line'}}, chartArea: {left: 20, top: 20, width: '75%', height: '75%'}};
+            var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
+            chart.draw(data, options);
+        }
+        function drawChart() {
+            var size =<%= size%>;
+            var i;
+            for (i = 0; i < size; i++) {
+                var idButton = "drawChart" + i;
+                document.getElementById(idButton).click();
+            }
+        }
     </script>
 </html>

@@ -82,7 +82,7 @@ public class GetNewCrawlPostController extends HttpServlet {
                     post.setUploadDate(dateStr);
                     dateStr = obj.getString("crawlDate");
                     dateStr = dateStr.replace("T", " ");
-                    dateStr = dateStr.replace(".000+0000", "");
+                    dateStr = dateStr.replace("+0000", "");
                     post.setCrawlDate(dateStr);
                     listPost.add(post);
                 }

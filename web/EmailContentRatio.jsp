@@ -54,7 +54,7 @@
                 var len = listRatio.length;
                 var i;
                 var formatDate = new google.visualization.DateFormat({
-                    pattern: 'yyyy-mm-dd hh:mm:ss'
+                    pattern: 'yyyy-MM-dd hh:mm:ss'
                 });
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Time');

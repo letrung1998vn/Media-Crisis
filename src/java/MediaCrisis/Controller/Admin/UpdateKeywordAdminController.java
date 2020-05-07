@@ -43,6 +43,7 @@ public class UpdateKeywordAdminController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
             String url = "http://localhost:8181/keyword/updateKeyword";
+            String crisisRateString = request.getParameter("txtCrisisRate");
             String idString = request.getParameter("txtKeywordId");
             int id = Integer.parseInt(idString);
             String keywordVersion = request.getParameter("txtLogversion");
@@ -62,11 +63,13 @@ public class UpdateKeywordAdminController extends HttpServlet {
             params.add("keywordId");
             params.add("logVersion");
             params.add("author");
+            params.add("crisis_rate");
             value.add(newKeyword);
             value.add(idString);
             value.add(keywordVersion);
             value.add(session.getAttribute("USERID").toString());
-
+            value.add(crisisRateString);
+            
             if (newKeyword.isEmpty()) {
                 session.setAttribute("UPDATINGVALUE", newKeyword);
                 session.setAttribute("UPDATINGPOS", pos);

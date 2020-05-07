@@ -49,6 +49,9 @@ public class MainController extends HttpServlet {
     private final String checkNotiToken = "checkNotiTokenController";
     private final String disableNotiBrowserToken = "DisableNotiBrowserToken";
     private final String disableWebhook = "DisableWebhookController";
+    private final String getNewCrawlPost = "GetNewCrawlPostController";
+    private final String getNegativeCrawlPost = "GetAllNegativePostController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -103,7 +106,12 @@ public class MainController extends HttpServlet {
             url = disableNotiBrowserToken;
         } else if (button.equals("DisableWebhook")) {
             url = disableWebhook;
+        } else if (button.equals("GetNewCrawlPost")) {
+            url = getNewCrawlPost;
+        } else if (button.equals("GetNegativeCrawlPost")) {
+            url = getNegativeCrawlPost;
         }
+        
         RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);
 

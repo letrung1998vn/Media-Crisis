@@ -222,6 +222,13 @@
                                                 <form class="login100-form validate-form-update-keyword" action="MainController" method="POST">
                                                     <td class="keywords">
                                                         <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled maxlength="50">    
+<!--                                                        <select id="keyword-value-<%= i%>">
+                                                            <option value="84.1">84.1</option>
+                                                            <option value="93.3">93.3</option>
+                                                            <option value="97.7" selected="selected">97.7</option>
+                                                            <option value="99.4">99.4</option>
+                                                            <option value="99.9">99.9</option>
+                                                        </select>-->
                                                     </td>
                                                     <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
                                                     <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">

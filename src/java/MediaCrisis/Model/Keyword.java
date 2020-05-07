@@ -15,16 +15,18 @@ public class Keyword {
     private String userId;
     private boolean available;
     private int log_version;
+    private double normal_rate;
 
     public Keyword() {
     }
 
-    public Keyword(int id, String keyword, String userId, boolean available, int log_version) {
+    public Keyword(int id, String keyword, String userId, boolean available, int log_version, double normal_rate) {
         this.id = id;
         this.keyword = keyword;
         this.userId = userId;
         this.available = available;
         this.log_version = log_version;
+        this.normal_rate = normal_rate;
     }
 
     public boolean isAvailable() {
@@ -67,8 +69,18 @@ public class Keyword {
         this.userId = userId;
     }
 
+    public double getNormal_rate() {
+        return normal_rate;
+    }
+
+    public void setNormal_rate(double normal_rate) {
+        this.normal_rate = normal_rate;
+    }
+
     @Override
     public String toString() {
-        return "Keyword{" + "id=" + id + ", keyword=" + keyword + ", userId=" + userId + ", available=" + available + ", log_version=" + log_version + '}';
+        return "Keyword{" + "id=" + id + ", keyword=" + keyword + ", userId=" + userId + ", available=" + available + ", log_version=" + log_version + ", normal_rate=" + normal_rate + '}';
     }
+
+    
 }

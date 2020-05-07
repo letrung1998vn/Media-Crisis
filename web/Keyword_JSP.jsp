@@ -189,12 +189,12 @@
                                                         <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled maxlength="50">    
                                                     </td>
                                                     <td>
-                                                        <select id="percentage-<%= i%>" class="form-control" disabled>
+                                                        <select id="percentage-<%= i%>" class="form-control" name="txtCrisisRate" disabled>
                                                             <!--                                                            <option value="84.1">84.1</option>-->
-                                                            <option value="93.3">93.3</option>
-                                                            <option value="97.7" selected="selected">97.7</option>
-                                                            <option value="99.4">99.4</option>
-                                                            <option value="99.9">99.9</option>
+                                                            <option value="93.3"<% if(keywordDTO.getNormal_rate() == 93.3){ %>selected="selected"<%}%>>93.3</option>
+                                                            <option value="97.7"<% if(keywordDTO.getNormal_rate() == 97.7){ %>selected="selected"<%}%>>97.7</option>
+                                                            <option value="99.4"<% if(keywordDTO.getNormal_rate() == 99.4){ %>selected="selected"<%}%>>99.4</option>
+                                                            <option value="99.9"<% if(keywordDTO.getNormal_rate() == 99.9){ %>selected="selected"<%}%>>99.9</option>
                                                         </select>
                                                     </td>
                                                     <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">

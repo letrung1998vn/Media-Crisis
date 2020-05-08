@@ -51,6 +51,8 @@ public class MainController extends HttpServlet {
     private final String disableWebhook = "DisableWebhookController";
     private final String getNewCrawlPost = "GetNewCrawlPostController";
     private final String getNegativeCrawlPost = "GetAllNegativePostController";
+    private final String getNewCrawlComment = "GetNewCrawlCommentController";
+    private final String getNegativeCrawlComment = "GetAllNegativeCommentController";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -110,6 +112,10 @@ public class MainController extends HttpServlet {
             url = getNewCrawlPost;
         } else if (button.equals("GetNegativeCrawlPost")) {
             url = getNegativeCrawlPost;
+        } else if (button.equals("GetNewCrawlComment")) {
+            url = getNewCrawlComment;
+        } else if (button.equals("GetNegativeCrawlComment")) {
+            url = getNegativeCrawlComment;
         }
         
         RequestDispatcher rd = request.getRequestDispatcher(url);

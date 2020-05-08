@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.Comment"%>
 <%@page import="MediaCrisis.Model.Post"%>
 <%@page import="java.util.List"%>
 <!doctype html>
@@ -71,18 +72,18 @@
                 <a href="MainController?btnAction=GetNegativeCrawlComment&page=1">Check negative comment</a>
                 <div class="content">
                     <div class="col-md-12">
-                        <div class="col-md-3">Total: <% if (session.getAttribute("totalPost") != null) {%><%= (int) session.getAttribute("totalPost")%><% } %></div>
+                        <div class="col-md-3">Total: <% if (session.getAttribute("totalComment") != null) {%><%= (int) session.getAttribute("totalComment")%><% } %></div>
                         <div class="col-md-3">
                             <% if (session.getAttribute("THISPAGE") != null) { %>
                             <% if (((int) session.getAttribute("THISPAGE") != 0)) {%>
                             <% if (((int) session.getAttribute("THISPAGE") > 1)) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                            <a class="" href="MainController?btnAction=GetNewCrawlComment&page=<%= ((int) session.getAttribute("THISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
                                         <% }%>
                             <span style="padding-left: 25px; padding-right: 25px">
                                 Page <%= session.getAttribute("THISPAGE")%>/<%= session.getAttribute("MAXPAGE")%>
                             </span>
                             <% if (((int) session.getAttribute("THISPAGE")) != (int) (session.getAttribute("MAXPAGE"))) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+                            <a class="" href="MainController?btnAction=GetNewCommentPost&page=<%= ((int) session.getAttribute("THISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
 
                             <% }
                                     }
@@ -93,28 +94,26 @@
                         <table id="myTable" class="table table-hover table-striped">
                             <thead>
                             <th>NO</th>
-                            <th>Post Content</th>
+                            <th>Comment Content</th>
                             <th>Likes</th>
-                            <th>Comments</th>
-                            <th>Shares</th>
+                            <th>Replies</th>
                             <th>Post time</th>
                             <th>Crawl time</th>
                             </thead>
                             <tbody>
-                                <% List<Post> list = (List) session.getAttribute("POSTS");
+                                <% List<Comment> list = (List) session.getAttribute("COMMENTS");
                                     if (list != null) {
                                 %>
                                 <% for (int i = 0; i < list.size(); i++) {%>
-                                <% Post postDTO = list.get(i);%>
+                                <% Comment commentDTO = list.get(i);%>
 
                                 <tr>
                                     <td class="keywordsNo"><%= i + 1%></td>
-                                    <td><%= postDTO.getContent()%></td>
-                                    <td><%= postDTO.getLike()%></td>
-                                    <td><%= postDTO.getComment()%></td>
-                                    <td><%= postDTO.getShare()%></td>
-                                    <td><%= postDTO.getUploadDate()%></td>
-                                    <td><%= postDTO.getCrawlDate()%></td>
+                                    <td><%= commentDTO.getContent()%></td>
+                                    <td><%= commentDTO.getLikes()%></td>
+                                    <td><%= commentDTO.getReplies()%></td>
+                                    <td><%= commentDTO.getUploadDate()%></td>
+                                    <td><%= commentDTO.getCrawlDate()%></td>
                                 </tr>
                                 <% } %>
                                 <% }%>

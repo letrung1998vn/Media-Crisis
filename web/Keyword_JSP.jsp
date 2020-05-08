@@ -123,15 +123,25 @@
                                         <div class="content">
                                             <form class="login100-form validate-form-add-keyword" action="MainController" method="POST">
                                                 <div class="row">
-                                                    <div class="col-md-5">
+                                                    <div class="col-md-12">
 
-                                                        <div class="wrap-input100 validate-input" data-validate = "">
-                                                            <input class="input100" type="text" name="txtKeyword" maxlength="50">
-                                                            <span class="focus-input100"></span>
+                                                        <div class="validate-input col-md-12" data-validate = "">
+                                                            <div class="col-md-7"><input class="input100 form-control" type="text" name="txtKeyword" maxlength="50"></div>
+                                                            <div class="col-md-1">
+                                                                <select id="" class="form-control" name="txtCrisisRate">
+                                                                    <!--                                                            <option value="84.1">84.1</option>-->
+                                                                    <option value="93.3">93.3</option>
+                                                                    <option value="97.7" selected="selected">97.7</option>
+                                                                    <option value="99.4">99.4</option>
+                                                                    <option value="99.9">99.9</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button class="btn btn-add-new-keyword btn-primary" style="width: 150px" type="submit" value="CreateKeyword" name="btnAction">
+                                                                    Add
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <button class="login100-form-btn btn-add-new-keyword" type="submit" value="CreateKeyword" name="btnAction">
-                                                            Add
-                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -160,6 +170,7 @@
                                                 <thead>
                                                 <th>NO</th>
                                                 <th>Keyword</th>
+                                                <th>Normal rate</th>
                                                 <th>Edit</th>
                                                 <th>User Id</th>
                                                 <th>Delete</th>
@@ -176,6 +187,15 @@
                                                 <form class="login100-form validate-form-update-keyword" action="MainController" method="POST">
                                                     <td class="keywords">
                                                         <input id="keyword-value-<%= i%>" type="text" name="txtNewKeyword" class="form-control keyword-value validate-input input100" value="<%= keywordDTO.getKeyword()%>" disabled maxlength="50">    
+                                                    </td>
+                                                    <td>
+                                                        <select id="percentage-<%= i%>" class="form-control" name="txtCrisisRate" disabled>
+                                                            <!--                                                            <option value="84.1">84.1</option>-->
+                                                            <option value="93.3"<% if(keywordDTO.getNormal_rate() == 93.3){ %>selected="selected"<%}%>>93.3</option>
+                                                            <option value="97.7"<% if(keywordDTO.getNormal_rate() == 97.7){ %>selected="selected"<%}%>>97.7</option>
+                                                            <option value="99.4"<% if(keywordDTO.getNormal_rate() == 99.4){ %>selected="selected"<%}%>>99.4</option>
+                                                            <option value="99.9"<% if(keywordDTO.getNormal_rate() == 99.9){ %>selected="selected"<%}%>>99.9</option>
+                                                        </select>
                                                     </td>
                                                     <input type="hidden" name="txtKeywordId" value="<%= keywordDTO.getId()%>">
                                                     <input type="hidden" name="txtLogversion" value="<%= keywordDTO.getLog_version()%>">
@@ -287,12 +307,14 @@
                                     var idOfInput = "keyword-value-" + i;
                                     var idOfEdit = "btn-edit-keyword-" + i;
                                     var idOfButton = "btn-update-keyword-" + i;
+                                    var idOfList = "percentage-" + i;
 
 //                                    $('.keyword-value').each(function () {
 //                                        $(this).disabled = true;
 //                                    });
 
                                     document.getElementById(idOfInput).disabled = false;
+                                    document.getElementById(idOfList).disabled = false;
                                     document.getElementById(idOfEdit).classList.add("hidden");
                                     document.getElementById(idOfButton).classList.remove("hidden");
                                 }

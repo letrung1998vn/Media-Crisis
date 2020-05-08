@@ -42,6 +42,7 @@ public class CreateKeywordAdminController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String newKeyword = request.getParameter("txtKeyword");
+        String crisisRateString = request.getParameter("txtCrisisRate");
         String url = "http://localhost:8181/keyword/createKeyword/?";
         HttpSession session = request.getSession();
         String userId = session.getAttribute("USERID").toString();
@@ -52,8 +53,10 @@ public class CreateKeywordAdminController extends HttpServlet {
 
         params.add("keyword");
         params.add("userId");
+        params.add("crisis_rate");
         value.add(newKeyword);
         value.add(userId);
+        value.add(crisisRateString);
 
         //Call API connection and get return JSON string
         APIConnection ac = new APIConnection(url, params, value);

@@ -128,7 +128,7 @@ public class SearchKeywordsController extends HttpServlet {
                     JSONObject obj = new JSONObject(keywords[i]);
                     JSONObject obj1 = new JSONObject(obj.get("user").toString());
                     Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
-                            obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"));
+                            obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"), obj.getDouble("percent_of_crisis"));
                     listKeyword.add(keyWord);
                 }
             } catch (JSONException e) {

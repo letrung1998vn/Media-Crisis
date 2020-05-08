@@ -71,15 +71,11 @@ public class WebLinkContent extends HttpServlet {
                     String type = str.substring(0, str.indexOf(delim));
                     str = str.substring(str.indexOf(delim) + delim.length(), str.length());
                     str = str.trim();
-                    String std = str.substring(0, str.indexOf(delim));
-                    str = str.substring(str.indexOf(delim) + delim.length(), str.length());
-                    str = str.trim();
-                    String number = str;
+                    String std = str;
                     ecm.setContent(content.trim());
                     ecm.setLink(linkDetail.trim());
                     ecm.setType(type.trim());
                     ecm.setStd(std.trim());
-                    ecm.setNumber(number.trim());
                     list.add(ecm);
                 }
                 request.setAttribute("size", list.size());

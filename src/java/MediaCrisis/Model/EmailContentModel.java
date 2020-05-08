@@ -15,7 +15,6 @@ public class EmailContentModel {
     private String link;
     private String type;
     private String std;
-    private String number;
 
     public String getContent() {
         return content;
@@ -47,14 +46,6 @@ public class EmailContentModel {
 
     public void setStd(String std) {
         this.std = std;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
 }

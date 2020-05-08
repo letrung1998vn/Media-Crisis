@@ -84,7 +84,6 @@
                                                             String linkDetail = ecm.getLink();
                                                             String type = ecm.getType();
                                                             String std = ecm.getStd();
-                                                            String number = ecm.getNumber();
                                                             String loadChartName = i + type;
                                                             String showType = "";
                                                             if (type.equals("react")) {
@@ -108,9 +107,8 @@
                                                     <td><p><%=content%></p></td>
                                                     <td><%=showType%></td>
                                                     <td style="width: 700px; height: 500px;">
-                                                        <img src="images/STD1.png"/>
-                                                        <!--<input type="button" id="drawChart<%=i%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization('<%=type%>',<%=std%>,<%=number%>, '<%=loadChartName%>')" style="visibility: hidden"/>-->
-                                                        <!--<p id="<%=loadChartName%>"></p>-->
+                                                        <input type="button" id="drawChart<%=i%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization(<%=std%>, '<%=loadChartName%>')" style="visibility: hidden"/>
+                                                        <p id="<%=loadChartName%>"></p>
                                                     </td>
                                                     <td><a href="<%=linkDetail%>" target='_blank'><%=linkDetail%></a></td>
                                                 </tr>
@@ -199,49 +197,60 @@
     <script type="text/javascript">
         google.charts.load('current', {'packages': ['corechart']});
         google.setOnLoadCallback(drawChart);
-        function drawVisualization(type, std, number, loadChart) {
-            var firstValue;
-            var secondValue;
-            var title;
-            var vAxis;
-            if (type === "react") {
-                firstValue = 'React Number ';
-                secondValue = 'highest normal react number';
-                title = 'React Number Chart';
-            } else if (type === "retweet") {
-                firstValue = 'Retweet Number ';
-                secondValue = 'highest normal retweet number';
-                title = 'Retweet Number Chart';
-            } else if (type === "reply") {
-                firstValue = 'Reply Number ';
-                secondValue = 'highest normal reply number';
-                title = 'Reply Number Chart';
-            } else if (type === "increaseReact") {
-                firstValue = 'Increase React Number ';
-                secondValue = 'highest normal increase react number';
-                title = 'Increase React Number Chart';
-            } else if (type === "increaseRetweet") {
-                firstValue = 'Increase Retweet Number ';
-                secondValue = 'highest normal increase retweet number';
-                title = 'Increase Retweet Number Chart';
-            } else if (type === "increaseReply") {
-                firstValue = 'Increase Reply Number ';
-                secondValue = 'highest normal increase reply number';
-                title = 'Increase Reply Number Chart';
+        function NormalDensityZx(x, Mean, StdDev) {
+
+            var a = x - Mean;
+            return Math.exp(-(a * a) / (2 * StdDev * StdDev)) / (Math.sqrt(2 * Math.PI) * StdDev);
+        }
+        function drawVisualization(std, loadChart) {
+            var data = new google.visualization.DataTable();
+
+            data.addColumn('number', 'X Value');
+
+            data.addColumn('number', 'Blue');
+            data.addColumn('number', 'Red');
+
+            var chartData = new Array([]);
+            var index = 0;
+            for (var i = -3; i < std; i += 0.1) {
+
+                chartData[index] = new Array(3);
+
+                chartData[index][0] = i;
+
+                chartData[index][1] = NormalDensityZx(i, 0, 1);
+                //chartData[index][2] = 0;
+                index++;
+
             }
-            var data = google.visualization.arrayToDataTable([
-                ['', firstValue, secondValue],
-                ['', 0, std],
-                ['', number, std],
-                ['', 0, std]
-            ]);
-            var options = {
-                title: title,
-                vAxis: {title: vAxis},
-                hAxis: {title: ''},
-                seriesType: 'bars',
-                series: {1: {type: 'line'}}, chartArea: {left: 20, top: 20, width: '75%', height: '75%'}};
-            var chart = new google.visualization.ComboChart(document.getElementById(loadChart));
+
+            index--;
+            chartData[index][2] = chartData[index][1];
+            index++;
+
+            for (var i = std; i < 3.1; i += 0.1) {
+
+                chartData[index] = new Array(3);
+                chartData[index][0] = i;
+                //chartData[index][1] = 0;
+
+                chartData[index][2] = NormalDensityZx(i, 0, 1);
+                index++;
+
+            }
+            data.addRows(chartData);
+            var options;
+            options = {
+                height: 500,
+                width: 900,
+                legend: 'none',
+                isStacked: false,
+                series: {
+                    0: {color: 'blue', visibleInLegend: false},
+                    1: {color: 'blue', visibleInLegend: false, type: 'line'}
+                }
+            };
+            var chart = new google.visualization.AreaChart(document.getElementById(loadChart));
             chart.draw(data, options);
         }
         function drawChart() {

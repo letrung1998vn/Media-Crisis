@@ -241,13 +241,16 @@
             data.addRows(chartData);
             var options;
             options = {
-                height: 500,
-                width: 900,
+                height: 300,
+                width: 700,
                 legend: 'none',
                 isStacked: false,
                 series: {
                     0: {color: 'blue', visibleInLegend: false},
                     1: {color: 'blue', visibleInLegend: false, type: 'line'}
+                },
+                hAxis: {
+                    ticks: [{v: -3, f: '0.1%'}, {v: -2, f: '2.3%'}, {v: -1, f: '15.9%'}, {v: 0, f: '50%'}, {v: 1, f: '84.1%'}, {v: 2, f: '97.7%'}, {v: 3, f: '99.9%'}]
                 }
             };
             var chart = new google.visualization.AreaChart(document.getElementById(loadChart));

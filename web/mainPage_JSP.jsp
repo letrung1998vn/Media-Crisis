@@ -1,3 +1,6 @@
+<%@page import="MediaCrisis.Model.Crisis"%>
+<%@page import="MediaCrisis.Model.UserCrisis"%>
+<%@page import="java.util.List"%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -97,7 +100,70 @@
                         </div>
                     </div>
                 </nav>
-                
+                <body>
+                    <div class="content">
+                        <div class="col-md-12">
+                            <div class="col-md-12" style="padding-left: 15px">
+                                <div class="form-group">
+                                    <span>Keywords: </span><br>
+                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS"); %>
+                                    <select onchange="changeCrisisDetails(this.value)" class="form-control">
+                                        <option value="3">Blabla</option>
+                                        <% if (listUserCrisis != null) {%>
+                                        <% for (int i = 0; i < listUserCrisis.size(); i++) {
+                                        %>
+                                        <option value="<%= i%>"><%= listUserCrisis.get(i).getKeyword()%></option>
+                                        <% } %>
+                                        <% }%>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card margin-top">
+                            <table id="table-crisis-3" class="table table-hover table-striped">
+                                <tbody>
+                                <th>blabla</th>
+                                </tbody>
+                            </table>
+                            <% if (listUserCrisis != null) {%>
+                            <% for (int i = 0; i < listUserCrisis.size(); i++) {
+                            %>
+                            <table id="table-crisis-<%= i%>" class="table table-hover table-striped <% if(i!=3) { %>hidden<%}%>">
+                                <thead>
+                                <th>NO</th>
+                                <th>Crisis content</th>
+                                <th>Type</th>
+                                <th>Chart</th>
+                                <th>Description</th>
+                                </thead>
+                                <% List<Crisis> crisis = listUserCrisis.get(i).getCrisisList();
+                                    for (int j = 0; j < crisis.size(); j++) {
+                                %>
+                                <tbody>  
+                                <th>
+                                    <%= j%>
+                                </th>
+                                <th>
+                                    <%= crisis.get(j).getContent()%>
+                                </th>
+                                <th>
+                                    <%= crisis.get(j).getType()%>
+                                </th>
+                                <th>
+                                    Chart
+                                </th>
+                                <th>
+                                    Why crisis?
+                                </th>
+                                </tbody>
+
+                                <% } %>
+                            </table>
+                            <% } %>
+                            <% }%>
+                        </div>
+                    </div>
+                </body>
                 <footer class="footer">
                     <div class="container-fluid">
                         <nav class="pull-left">
@@ -165,6 +231,7 @@
                                 });
     </script>
     <script type="text/javascript">
+        var currentPointer = 3;
         $(document).ready(function () {
             if (<%=session.getAttribute("SEND")%>) {
                 $.notify({
@@ -183,6 +250,14 @@
         <% session.removeAttribute("SEND"); %>
         <% session.removeAttribute("CREATE_MESSAGE"); %>
         <% session.removeAttribute("RESULT");%>
-        });
+            });
+
+            function changeCrisisDetails(i) {
+                var tableHide = "table-crisis-" + currentPointer;
+                var tableShow = "table-crisis-" + i;
+                document.getElementById(tableHide).classList.add("hidden");
+                document.getElementById(tableShow).classList.remove("hidden");
+                currentPointer = i;
+            }
     </script>
 </html>

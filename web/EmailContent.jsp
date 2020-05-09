@@ -204,39 +204,29 @@
         }
         function drawVisualization(std, loadChart) {
             var data = new google.visualization.DataTable();
-
             data.addColumn('number', 'X Value');
-
             data.addColumn('number', 'Blue');
             data.addColumn('number', 'Red');
-
             var chartData = new Array([]);
             var index = 0;
-            for (var i = -3; i < std; i += 0.1) {
+            for (var i = -3; i < (std + 0.1); i += 0.1) {
 
                 chartData[index] = new Array(3);
-
                 chartData[index][0] = i;
-
                 chartData[index][1] = NormalDensityZx(i, 0, 1);
-                //chartData[index][2] = 0;
                 index++;
-
             }
 
             index--;
             chartData[index][2] = chartData[index][1];
             index++;
-
-            for (var i = std; i < 3.1; i += 0.1) {
+            for (var i = (std-0.1); i < 3.1; i += 0.1) {
 
                 chartData[index] = new Array(3);
                 chartData[index][0] = i;
-                //chartData[index][1] = 0;
 
                 chartData[index][2] = NormalDensityZx(i, 0, 1);
                 index++;
-
             }
             data.addRows(chartData);
             var options;
@@ -247,10 +237,10 @@
                 isStacked: false,
                 series: {
                     0: {color: 'blue', visibleInLegend: false},
-                    1: {color: 'blue', visibleInLegend: false, type: 'line'}
+                    1: {color: 'red', visibleInLegend: false}
                 },
                 hAxis: {
-                    ticks: [{v: -3, f: '0.1%'}, {v: -2, f: '2.3%'}, {v: -1, f: '15.9%'}, {v: 0, f: '50%'}, {v: 1, f: '84.1%'}, {v: 2, f: '97.7%'}, {v: 3, f: '99.9%'}]
+                    ticks: [{v: -3, f: '0.1%'}, {v: -2.5, f: '1%'}, {v: -2, f: '2.3%'}, {v: -1.5, f: '5%'}, {v: -1, f: '15.9%'}, {v: -0.5, f: '30%'}, {v: 0, f: '50%'}, {v: 0.5, f: '70%'}, {v: 1, f: '84.1%'}, {v: 1.5, f: '95%'}, {v: 2, f: '97.7%'}, {v: 2.5, f: '99.4'}, {v: 3, f: '99.9%'}]
                 }
             };
             var chart = new google.visualization.AreaChart(document.getElementById(loadChart));

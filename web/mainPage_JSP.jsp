@@ -106,7 +106,7 @@
                             <div class="col-md-12" style="padding-left: 15px">
                                 <div class="form-group">
                                     <span>Keywords: </span><br>
-                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS"); %>
+                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS"); int size = listUserCrisis.size(); %>
                                     <select onchange="changeCrisisDetails(this.value)" class="form-control">
                                         <option value="3">Blabla</option>
                                         <% if (listUserCrisis != null) {%>
@@ -128,7 +128,7 @@
                             <% if (listUserCrisis != null) {%>
                             <% for (int i = 0; i < listUserCrisis.size(); i++) {
                             %>
-                            <table id="table-crisis-<%= i%>" class="table table-hover table-striped <% if(i!=3) { %>hidden<%}%>">
+                            <table id="table-crisis-<%= i%>" class="table table-hover table-striped <% if (i != 3) { %>hidden<%}%>">
                                 <thead>
                                 <th>NO</th>
                                 <th>Crisis content</th>
@@ -149,8 +149,10 @@
                                 <th>
                                     <%= crisis.get(j).getType()%>
                                 </th>
-                                <th>
-                                    Chart
+                                <% double std = 0.0; if(crisis.get(j).getPercentage() == 93.3) {std=1.5;}else if(crisis.get(j).getPercentage() == 97.7) {std=2;}else if(crisis.get(j).getPercentage() == 99.4) {std=2.5;}else if(crisis.get(j).getPercentage() == 99.9) {std=3;}; %>
+                                <th style="width: 700px; height: 500px;">
+                                    <input type="button" id="drawChart<%=j%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization(<%=std%>, '<%=j%><%= crisis.get(j).getType()%>')"/>
+                                    <p id="<%=j%><%= crisis.get(j).getType()%>"></p>
                                 </th>
                                 <th>
                                     Why crisis?
@@ -250,14 +252,75 @@
         <% session.removeAttribute("SEND"); %>
         <% session.removeAttribute("CREATE_MESSAGE"); %>
         <% session.removeAttribute("RESULT");%>
-            });
+        });
 
-            function changeCrisisDetails(i) {
-                var tableHide = "table-crisis-" + currentPointer;
-                var tableShow = "table-crisis-" + i;
-                document.getElementById(tableHide).classList.add("hidden");
-                document.getElementById(tableShow).classList.remove("hidden");
-                currentPointer = i;
+        function changeCrisisDetails(i) {
+            var tableHide = "table-crisis-" + currentPointer;
+            var tableShow = "table-crisis-" + i;
+            document.getElementById(tableHide).classList.add("hidden");
+            document.getElementById(tableShow).classList.remove("hidden");
+            currentPointer = i;
+        }
+    </script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.setOnLoadCallback(drawChart);
+        function NormalDensityZx(x, Mean, StdDev) {
+
+            var a = x - Mean;
+            return Math.exp(-(a * a) / (2 * StdDev * StdDev)) / (Math.sqrt(2 * Math.PI) * StdDev);
+        }
+        function drawVisualization(std, loadChart) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'X Value');
+            data.addColumn('number', 'Blue');
+            data.addColumn('number', 'Red');
+            var chartData = new Array([]);
+            var index = 0;
+            for (var i = -3; i < (std + 0.1); i += 0.1) {
+
+                chartData[index] = new Array(3);
+                chartData[index][0] = i;
+                chartData[index][1] = NormalDensityZx(i, 0, 1);
+                index++;
             }
+
+            index--;
+            chartData[index][2] = chartData[index][1];
+            index++;
+            for (var i = (std-0.1); i < 3.1; i += 0.1) {
+
+                chartData[index] = new Array(3);
+                chartData[index][0] = i;
+
+                chartData[index][2] = NormalDensityZx(i, 0, 1);
+                index++;
+            }
+            data.addRows(chartData);
+            var options;
+            options = {
+                height: 300,
+                width: 700,
+                legend: 'none',
+                isStacked: false,
+                series: {
+                    0: {color: 'blue', visibleInLegend: false},
+                    1: {color: 'red', visibleInLegend: false}
+                },
+                hAxis: {
+                    ticks: [{v: -3, f: '0.1%'}, {v: -2.5, f: '1%'}, {v: -2, f: '2.3%'}, {v: -1.5, f: '5%'}, {v: -1, f: '15.9%'}, {v: -0.5, f: '30%'}, {v: 0, f: '50%'}, {v: 0.5, f: '70%'}, {v: 1, f: '84.1%'}, {v: 1.5, f: '95%'}, {v: 2, f: '97.7%'}, {v: 2.5, f: '99.4'}, {v: 3, f: '99.9%'}]
+                }
+            };
+            var chart = new google.visualization.AreaChart(document.getElementById(loadChart));
+            chart.draw(data, options);
+        }
+        function drawChart() {
+            var size =<%= size %>;
+            var i;
+            for (i = 0; i < size; i++) {
+                var idButton = "drawChart" + i;
+                document.getElementById(idButton).click();
+            }
+        }
     </script>
 </html>

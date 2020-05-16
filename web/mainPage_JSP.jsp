@@ -106,7 +106,8 @@
                             <div class="col-md-12" style="padding-left: 15px">
                                 <div class="form-group">
                                     <span>Keywords: </span><br>
-                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS"); int size = listUserCrisis.size(); %>
+                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS");
+                                        int size = listUserCrisis.size(); %>
                                     <select onchange="changeCrisisDetails(this.value)" class="form-control">
                                         <option value="3">Blabla</option>
                                         <% if (listUserCrisis != null) {%>
@@ -149,7 +150,16 @@
                                 <th>
                                     <%= crisis.get(j).getType()%>
                                 </th>
-                                <% double std = 0.0; if(crisis.get(j).getPercentage() == 93.3) {std=1.5;}else if(crisis.get(j).getPercentage() == 97.7) {std=2;}else if(crisis.get(j).getPercentage() == 99.4) {std=2.5;}else if(crisis.get(j).getPercentage() == 99.9) {std=3;}; %>
+                                <% double std = 0.0;
+                                    if (crisis.get(j).getPercentage() == 93.3) {
+                                        std = 1.5;
+                                    } else if (crisis.get(j).getPercentage() == 97.7) {
+                                        std = 2;
+                                    } else if (crisis.get(j).getPercentage() == 99.4) {
+                                        std = 2.5;
+                                    } else if (crisis.get(j).getPercentage() == 99.9) {
+                                        std = 3;
+                                    };%>
                                 <th style="width: 700px; height: 500px;">
                                     <input type="button" id="drawChart<%=j%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization(<%=std%>, '<%=j%><%= crisis.get(j).getType()%>')"/>
                                     <p id="<%=j%><%= crisis.get(j).getType()%>"></p>
@@ -262,7 +272,8 @@
             currentPointer = i;
         }
     </script>
-        <script type="text/javascript">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
         google.charts.load('current', {'packages': ['corechart']});
         google.setOnLoadCallback(drawChart);
         function NormalDensityZx(x, Mean, StdDev) {
@@ -288,7 +299,7 @@
             index--;
             chartData[index][2] = chartData[index][1];
             index++;
-            for (var i = (std-0.1); i < 3.1; i += 0.1) {
+            for (var i = (std - 0.1); i < 3.1; i += 0.1) {
 
                 chartData[index] = new Array(3);
                 chartData[index][0] = i;
@@ -315,7 +326,7 @@
             chart.draw(data, options);
         }
         function drawChart() {
-            var size =<%= size %>;
+            var size =<%= size%>;
             var i;
             for (i = 0; i < size; i++) {
                 var idButton = "drawChart" + i;

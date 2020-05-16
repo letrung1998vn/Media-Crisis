@@ -91,14 +91,15 @@ public class GetAllUserCrisisController extends HttpServlet {
                 System.out.println("Dashboard convert json obj fail");
                 //e.printStackTrace();
             }
+            System.out.println("Keyword Size: " + listAllCrisis.size());
             for (int i = 0; i < listAllCrisis.size(); i++) {
-                System.out.println(listAllCrisis.get(i).getKeyword());
+                System.out.println("Keyword: " + listAllCrisis.get(i).getKeyword());
                 listCrisis = listAllCrisis.get(i).getCrisisList();
+                System.out.println("Crisis Size for keyword " + listAllCrisis.get(i).getKeyword() + ": " + listCrisis.size());
                 for (int j = 0; j < listCrisis.size(); j++) {
                     System.out.println(listCrisis.get(j).toString());
                 }
             }
-            System.out.println(listAllCrisis.size());
             String nextPage = "mainPage_JSP.jsp";
             session.setAttribute("USERALLCRISIS", listAllCrisis);
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);

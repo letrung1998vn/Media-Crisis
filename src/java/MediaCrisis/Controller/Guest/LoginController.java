@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
      */
     private final String error = "error.html";
     private final String login = "login_JSP.jsp";
-    private final String mainPage = "mainPage_JSP.jsp";
+    private final String mainPage = "GetAllUserCrisisController";
     private final String adminPage = "adminPage_JSP.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

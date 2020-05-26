@@ -105,74 +105,68 @@
                         <div class="col-md-12">
                             <div class="col-md-12" style="padding-left: 15px">
                                 <div class="form-group">
-                                    <span>Keywords: </span><br>
-                                    <% List<UserCrisis> listUserCrisis = (List<UserCrisis>) session.getAttribute("USERALLCRISIS");
-                                        int size = listUserCrisis.size(); %>
-                                    <select onchange="changeCrisisDetails(this.value)" class="form-control">
-                                        <option value="3">Blabla</option>
-                                        <% if (listUserCrisis != null) {%>
-                                        <% for (int i = 0; i < listUserCrisis.size(); i++) {
+                                    <span>Keyword:</span><br>
+                                    <input list="my-list" type="text" class="form-control search-keyword" placeholder="Enter Keyword">
+                                    <% List<String> listUserKeywords = (List<String>) session.getAttribute("KEYWORDLIIST");
+                                        int size = listUserKeywords.size(); %>
+                                    <datalist id="my-list">
+                                        <% for (int i = 0; i < size; i++) {
                                         %>
-                                        <option value="<%= i%>"><%= listUserCrisis.get(i).getKeyword()%></option>
+                                        <option class="keywords-details" value="<%= listUserKeywords.get(i)%>"></option>
                                         <% } %>
-                                        <% }%>
-                                    </select>
+                                    </datalist>
                                 </div>
                             </div>
                         </div>
                         <div class="card margin-top">
-                            <table id="table-crisis-3" class="table table-hover table-striped">
-                                <tbody>
-                                <th>blabla</th>
-                                </tbody>
-                            </table>
-                            <% if (listUserCrisis != null) {%>
-                            <% for (int i = 0; i < listUserCrisis.size(); i++) {
-                            %>
-                            <table id="table-crisis-<%= i%>" class="table table-hover table-striped <% if (i != 3) { %>hidden<%}%>">
+                            <table id="myTable" class="table table-hover table-striped">
                                 <thead>
                                 <th>NO</th>
                                 <th>Crisis content</th>
-                                <th>Type</th>
+                                <th>Keyword</th>
+                                <th>Detect date</th>
                                 <th>Chart</th>
                                 <th>Description</th>
                                 </thead>
-                                <% List<Crisis> crisis = listUserCrisis.get(i).getCrisisList();
-                                    for (int j = 0; j < crisis.size(); j++) {
+                                <% List<Crisis> listUserCrisis = (List<Crisis>) session.getAttribute("USERALLCRISIS");
+                                    size = listUserCrisis.size();
+                                    if (listUserCrisis != null) {%>
+                                <% for (int i = 0; i < listUserCrisis.size(); i++) {
                                 %>
-                                <tbody>  
-                                <th>
-                                    <%= j%>
-                                </th>
-                                <th>
-                                    <%= crisis.get(j).getContent()%>
-                                </th>
-                                <th>
-                                    <%= crisis.get(j).getType()%>
-                                </th>
+                                <tbody>
+                                <td>
+                                    <%= i%>
+                                </td>
+                                <td>
+                                    <%= listUserCrisis.get(i).getContent()%>
+                                </td>
+                                <td class="keywords">
+                                    <%= listUserCrisis.get(i).getKeyword()%>
+                                </td>
+                                <td>
+                                    <%= listUserCrisis.get(i).getDetectDate()%>
+                                </td>
                                 <% double std = 0.0;
-                                    if (crisis.get(j).getPercentage() == 93.3) {
+                                    if (listUserCrisis.get(i).getPercentage() == 93.3) {
                                         std = 1.5;
-                                    } else if (crisis.get(j).getPercentage() == 97.7) {
+                                    } else if (listUserCrisis.get(i).getPercentage() == 97.7) {
                                         std = 2;
-                                    } else if (crisis.get(j).getPercentage() == 99.4) {
+                                    } else if (listUserCrisis.get(i).getPercentage() == 99.4) {
                                         std = 2.5;
-                                    } else if (crisis.get(j).getPercentage() == 99.9) {
+                                    } else if (listUserCrisis.get(i).getPercentage() == 99.9) {
                                         std = 3;
                                     };%>
-                                <th style="width: 700px; height: 500px;">
-                                    <input type="button" id="drawChart<%=j%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left" onclick="drawVisualization(<%=std%>, '<%=j%><%= crisis.get(j).getType()%>')"/>
-                                    <p id="<%=j%><%= crisis.get(j).getType()%>"></p>
-                                </th>
-                                <th>
-                                    Why crisis?
-                                </th>
+                                <td>
+                                    <input type="button" id="drawChart<%=i%>" value="Show the reason of crisis" class="btn btn-info btn-fill col-md-4 pull-left hidden" onclick="drawVisualization(<%=std%>, '<%=i%><%= listUserCrisis.get(i).getType()%>')"/>
+                                    <p id="<%=i%><%= listUserCrisis.get(i).getType()%>"></p>
+                                </td>
+                                <td>
+                                    <%= listUserCrisis.get(i).getType()%> has reached <%= listUserCrisis.get(i).getPercentage()%>% of the top posts with the highest <%= listUserCrisis.get(i).getDetectType()%>
+                                </td>
                                 </tbody>
-
                                 <% } %>
+                                <% }%>
                             </table>
-                            <% } %>
-                            <% }%>
                         </div>
                     </div>
                 </body>
@@ -263,14 +257,19 @@
         <% session.removeAttribute("CREATE_MESSAGE"); %>
         <% session.removeAttribute("RESULT");%>
         });
-
-        function changeCrisisDetails(i) {
-            var tableHide = "table-crisis-" + currentPointer;
-            var tableShow = "table-crisis-" + i;
-            document.getElementById(tableHide).classList.add("hidden");
-            document.getElementById(tableShow).classList.remove("hidden");
-            currentPointer = i;
-        }
+        $('.search-keyword').on('input', function () {
+            var keywordsinput = $('.search-keyword').val().toLowerCase();
+            var keyword;
+            var keywordDecode;
+            $('#myTable td.keywords').each(function () {
+                keyword = $(this).html().toLowerCase();
+                keywordDecode = $('<textarea />').html(keyword).text();
+                $(this).parent().removeClass("hide");
+                if (keywordDecode.indexOf(keywordsinput) == -1) {
+                    $(this).parent().addClass("hide");
+                }
+            });
+        });
     </script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -310,8 +309,8 @@
             data.addRows(chartData);
             var options;
             options = {
-                height: 300,
-                width: 700,
+                height: 200,
+                width: 500,
                 legend: 'none',
                 isStacked: false,
                 series: {

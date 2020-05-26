@@ -46,15 +46,13 @@ public class GetAllUserCrisisController extends HttpServlet {
             String urlGetNewPost = "http://localhost:8181/user/getAllUserCrisis";
             String keyword, jsonString;
             List<Crisis> listCrisis = new ArrayList<>();
-            List<UserCrisis> listAllCrisis = new ArrayList<>();
-            UserCrisis uc = new UserCrisis();
             Crisis crisis = new Crisis();
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
+            List<String> keywords = new ArrayList<>();
             HttpSession session = request.getSession();
             params.add("userName");
-            //value.add(session.getAttribute("USERID")+"");
-            value.add("le");
+            value.add(session.getAttribute("USERID")+"");
 
             //Call API Connection get all keyword
             APIConnection ac = new APIConnection(urlGetNewPost, params, value);
@@ -62,46 +60,38 @@ public class GetAllUserCrisisController extends HttpServlet {
             //System.out.println(result);
 
             try {
-                JSONArray keywordHaveCrisisList = new JSONArray(result);
+                JSONArray crisisList = new JSONArray(result);
                 JSONObject keywordObj;
                 //System.out.println("This user have " + keywordHaveCrisisList.length() + " keywords have crisis.");
-                for (int i = 0; i < keywordHaveCrisisList.length(); i++) {
-                    uc = new UserCrisis();
-                    listCrisis = new ArrayList<>();
-                    keywordObj = new JSONObject(keywordHaveCrisisList.get(i).toString());
-                    JSONArray crisisList = (JSONArray) keywordObj.get("crisisList");
-                    keyword = keywordObj.getString("keyword");
-                    uc.setKeyword(keyword);
+                for (int i = 0; i < crisisList.length(); i++) {
+                    keywordObj = new JSONObject(crisisList.get(i).toString());
                     //System.out.println("This keyword have " + crisisList.length() + " crisis.");
-                    for (int j = 0; j < crisisList.length(); j++) {
-                        //System.out.println(crisisList.get(j).toString());
-                        JSONObject crisisOfEachKeyword = new JSONObject(crisisList.get(j).toString());
-                        crisis = new Crisis();
-                        crisis.setDetectType(crisisOfEachKeyword.getString("detectType"));
-                        crisis.setPercentage(crisisOfEachKeyword.getDouble("percentage"));
-                        crisis.setId(crisisOfEachKeyword.getInt("id"));
-                        crisis.setType(crisisOfEachKeyword.getString("type"));
-                        crisis.setContent(crisisOfEachKeyword.getString("content"));
-                        listCrisis.add(crisis);
+                    //System.out.println(crisisList.get(j).toString());
+                    crisis = new Crisis();
+                    crisis.setDetectType(keywordObj.getString("detectType"));
+                    crisis.setPercentage(keywordObj.getDouble("percentage"));
+                    crisis.setKeyword(keywordObj.getString("keyword"));
+                    if (!keywords.contains(crisis.getKeyword())) {
+                        keywords.add(crisis.getKeyword());
                     }
-                    uc.setCrisisList(listCrisis);
-                    listAllCrisis.add(uc);
+                    String dateStr = keywordObj.getString("detectDate");
+                    dateStr = dateStr.replace("T", " ");
+                    dateStr = dateStr.replace(".000+0000", "");
+                    crisis.setDetectDate(dateStr);
+                    crisis.setId(keywordObj.getInt("id"));
+                    crisis.setType(keywordObj.getString("type"));
+                    crisis.setContent(keywordObj.getString("content"));
+                    listCrisis.add(crisis);
                 }
             } catch (JSONException e) {
                 System.out.println("Dashboard convert json obj fail");
                 //e.printStackTrace();
             }
-            System.out.println("Keyword Size: " + listAllCrisis.size());
-            for (int i = 0; i < listAllCrisis.size(); i++) {
-                System.out.println("Keyword: " + listAllCrisis.get(i).getKeyword());
-                listCrisis = listAllCrisis.get(i).getCrisisList();
-                System.out.println("Crisis Size for keyword " + listAllCrisis.get(i).getKeyword() + ": " + listCrisis.size());
-                for (int j = 0; j < listCrisis.size(); j++) {
-                    System.out.println(listCrisis.get(j).toString());
-                }
-            }
+            System.out.println(listCrisis.size());
+            System.out.println(keywords.size());
             String nextPage = "mainPage_JSP.jsp";
-            session.setAttribute("USERALLCRISIS", listAllCrisis);
+            session.setAttribute("USERALLCRISIS", listCrisis);
+            session.setAttribute("KEYWORDLIIST", keywords);
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

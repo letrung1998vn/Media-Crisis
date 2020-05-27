@@ -298,7 +298,7 @@
             index--;
             chartData[index][2] = chartData[index][1];
             index++;
-            for (var i = (std - 0.1); i < 3.1; i += 0.1) {
+            for (var i = std; i < 3.1; i += 0.1) {
 
                 chartData[index] = new Array(3);
                 chartData[index][0] = i;

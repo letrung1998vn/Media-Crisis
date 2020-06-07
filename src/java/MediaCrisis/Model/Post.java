@@ -10,8 +10,18 @@ package MediaCrisis.Model;
  * @author Administrator
  */
 public class Post {
+
     String content, uploadDate, crawlDate;
-    int like,share,comment;
+    int like, share, comment;
+    String linkDetail;
+
+    public String getLinkDetail() {
+        return linkDetail;
+    }
+
+    public void setLinkDetail(String linkDetail) {
+        this.linkDetail = linkDetail;
+    }
 
     public Post() {
     }
@@ -69,7 +79,4 @@ public class Post {
         return "Post{" + "content=" + content + ", uploadDate=" + uploadDate + ", crawlDate=" + crawlDate + ", like=" + like + ", share=" + share + ", comment=" + comment + '}';
     }
 
-    
-    
-    
 }

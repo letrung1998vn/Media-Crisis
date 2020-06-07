@@ -85,6 +85,16 @@
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
+                                 <li>
+                                    <a href="mainPage_JSP.jsp">
+                                        <p>View Crisis Of All Keyword</p>
+                                    </a>
+                                </li>
+                                 <li>
+                                    <a href="RatioHistory.jsp">
+                                        <p>View Ratio Of All Keyword</p>
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="">
                                         <p>Account</p>

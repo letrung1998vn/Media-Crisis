@@ -6,8 +6,7 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
-import MediaCrisis.Model.Crisis;
-import MediaCrisis.Model.UserCrisis;
+import MediaCrisis.Model.HistoryRatioModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -20,15 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  *
- * @author Administrator
+ * @author letru
  */
-@WebServlet(name = "GetAllUserCrisisController", urlPatterns = {"/GetAllUserCrisisController"})
-public class GetAllUserCrisisController extends HttpServlet {
+@WebServlet(name = "GetAllUserRatioController", urlPatterns = {"/GetAllUserRatioController"})
+public class GetAllUserRatioController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,56 +41,54 @@ public class GetAllUserCrisisController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String urlGetNewPost = "http://localhost:8181/user/getAllUserCrisis";
-            List<Crisis> listCrisis = new ArrayList<>();
-            Crisis crisis = new Crisis();
+            HttpSession session = request.getSession();
+            String url = "http://localhost:8181/user/getAllUserRatio";
+            String result = "";
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
-            List<String> keywords = new ArrayList<>();
-            HttpSession session = request.getSession();
             params.add("userName");
-            value.add(session.getAttribute("USERID")+"");
-
-            //Call API Connection get all keyword
-            APIConnection ac = new APIConnection(urlGetNewPost, params, value);
-            String result = ac.connect();
-            //System.out.println(result);
-
+            value.add(session.getAttribute("USERID") + "");
+            APIConnection ac = new APIConnection(url, params, value);
+            result = ac.connect();
+            System.out.println("Result: " + result);
             try {
-                JSONArray crisisList = new JSONArray(result);
-                JSONObject keywordObj;
-                //System.out.println("This user have " + keywordHaveCrisisList.length() + " keywords have crisis.");
-                for (int i = 0; i < crisisList.length(); i++) {
-                    keywordObj = new JSONObject(crisisList.get(i).toString());
-                    //System.out.println("This keyword have " + crisisList.length() + " crisis.");
-                    //System.out.println(crisisList.get(j).toString());
-                    crisis = new Crisis();
-                    crisis.setDetectType(keywordObj.getString("detectType"));
-                    crisis.setPercentage(keywordObj.getDouble("percentage"));
-                    crisis.setKeyword(keywordObj.getString("keyword"));
-                    if (!keywords.contains(crisis.getKeyword())) {
-                        keywords.add(crisis.getKeyword());
+                JSONArray jsonResult = new JSONArray(result);
+                List<HistoryRatioModel> listRatioModel = new ArrayList<>();
+                for (int i = 0; i < jsonResult.length(); i++) {
+                    JSONObject json = jsonResult.getJSONObject(i);
+                    String postKeyword = json.getString("keyword");
+                    System.out.println("Keyword: " + postKeyword);
+                    JSONArray listRatio = (JSONArray) json.get("listRatio");
+                    String type = json.getString("type");
+                    List<String> listRatioStr = new ArrayList<>();
+                    List<String> listDateStr = new ArrayList<>();
+                    for (int x = 0; x < listRatio.length(); x++) {
+                        String str = listRatio.getString(x);
+                        String delim = "and||and";
+                        String ratio = str.substring(0, str.indexOf(delim));
+                        listRatioStr.add(ratio);
+                        str = str.substring(str.indexOf(delim) + delim.length(), str.length());
+                        str = str.trim();
+                        String date = str;
+                        listDateStr.add(date);
                     }
-                    String dateStr = keywordObj.getString("detectDate");
-                    dateStr = dateStr.replace("T", " ");
-                    dateStr = dateStr.replace(".000+0000", "");
-                    crisis.setDetectDate(dateStr);
-                    crisis.setId(keywordObj.getInt("id"));
-                    crisis.setType(keywordObj.getString("type"));
-                    crisis.setContent(keywordObj.getString("content"));
-                    listCrisis.add(crisis);
+                    HistoryRatioModel hrm = new HistoryRatioModel();
+                    System.out.println("Date:" + listDateStr);
+                    System.out.println("Ratio:" + listRatioStr);
+                    hrm.setKeyword(postKeyword);
+                    hrm.setListDateStr(listDateStr);
+                    hrm.setListRatioStr(listRatioStr);
+                    hrm.setType(type);
+                    listRatioModel.add(hrm);
                 }
-            } catch (JSONException e) {
-                System.out.println("Dashboard convert json obj fail");
-                //e.printStackTrace();
+                session.setAttribute("listRatioHistory", listRatioModel);
+                String nextPage = "mainPage_JSP.jsp";
+                RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+                rd.forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Get User ratio fail");
             }
-            System.out.println(listCrisis.size());
-            System.out.println(keywords.size());
-            String nextPage = "GetAllUserRatioController";
-            session.setAttribute("USERALLCRISIS", listCrisis);
-            session.setAttribute("KEYWORDLIIST", keywords);
-            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-            rd.forward(request, response);
         }
     }
 

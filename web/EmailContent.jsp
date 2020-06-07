@@ -86,18 +86,30 @@
                                                             String std = ecm.getStd();
                                                             String loadChartName = i + type;
                                                             String showType = "";
-                                                            if (type.equals("react")) {
-                                                                showType = "Abnormal High React";
-                                                            } else if (type.equals("retweet")) {
-                                                                showType = "Abnormal High Retweet";
-                                                            } else if (type.equals("reply")) {
-                                                                showType = "Abnormal High Reply";
-                                                            } else if (type.equals("increaseReact")) {
-                                                                showType = "Abnormal Increase React";
-                                                            } else if (type.equals("increaseRetweet")) {
-                                                                showType = "Abnormal Increase Retweet";
-                                                            } else if (type.equals("increaseReply")) {
-                                                                showType = "Abnormal Increase Reply";
+                                                            if (type.equals("reactpost")) {
+                                                                showType = "Abnormal High React Post";
+                                                            } else if (type.equals("retweetpost")) {
+                                                                showType = "Abnormal High Retweet Post";
+                                                            } else if (type.equals("replypost")) {
+                                                                showType = "Abnormal High Reply Post";
+                                                            } else if (type.equals("increaseReactpost")) {
+                                                                showType = "Abnormal Increase React Post";
+                                                            } else if (type.equals("increaseRetweetpost")) {
+                                                                showType = "Abnormal Increase Retweet Post";
+                                                            } else if (type.equals("increaseReplypost")) {
+                                                                showType = "Abnormal Increase Reply Post";
+                                                            } else if (type.equals("reactcomment")) {
+                                                                showType = "Abnormal High React Comment";
+                                                            } else if (type.equals("retweetcomment")) {
+                                                                showType = "Abnormal High Retweet Comment";
+                                                            } else if (type.equals("replycomment")) {
+                                                                showType = "Abnormal High Reply Comment";
+                                                            } else if (type.equals("increaseReactcomment")) {
+                                                                showType = "Abnormal Increase React Comment";
+                                                            } else if (type.equals("increaseRetweetcomment")) {
+                                                                showType = "Abnormal Increase Retweet Comment";
+                                                            } else if (type.equals("increaseReplycomment")) {
+                                                                showType = "Abnormal Increase Reply Comment";
                                                             }
                                                 %>
                                                 <tr>

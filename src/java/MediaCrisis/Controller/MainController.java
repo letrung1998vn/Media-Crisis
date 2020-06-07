@@ -53,7 +53,9 @@ public class MainController extends HttpServlet {
     private final String getNegativeCrawlPost = "GetAllNegativePostController";
     private final String getNewCrawlComment = "GetNewCrawlCommentController";
     private final String getNegativeCrawlComment = "GetAllNegativeCommentController";
-    
+    private final String getNegativePost = "GetNegativePostController";
+    private final String getNegativeComment = "GetNegativeCommentController";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -116,8 +118,11 @@ public class MainController extends HttpServlet {
             url = getNewCrawlComment;
         } else if (button.equals("GetNegativeCrawlComment")) {
             url = getNegativeCrawlComment;
+        } else if (button.equals("getNegativePost")) {
+            url = getNegativePost;
+        } else if (button.equals("getNegativeComment")) {
+            url = getNegativePost;
         }
-        
         RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);
 

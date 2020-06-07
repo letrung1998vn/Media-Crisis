@@ -6,16 +6,22 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
+import MediaCrisis.Model.Post;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -37,16 +43,57 @@ public class GetNegativePostController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            String keyword=request.getParameter("keyword");
+            String txtkeyword = request.getParameter("keyword");
             HttpSession session = request.getSession();
             String url = "http://localhost:8181/post/getNegativePostByKeyword";
             String result = "";
             List<String> params = new ArrayList<>();
             List<String> value = new ArrayList<>();
             params.add("keyword");
-            value.add(keyword);
+            value.add(txtkeyword);
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();
+            List<Post> listPost = new ArrayList<>();
+            try {
+                JSONArray list = new JSONArray(result);
+                for (int i = 0; i < list.length(); i++) {
+                    JSONObject json = list.getJSONObject(i);
+//                    String id = json.getString("id");
+//                    BigInteger postId = (BigInteger) json.get("postId");
+                    String postContent = json.getString("postContent");
+                    String createDate = (String) json.get("createDate");
+                    String linkDetail = json.getString("linkDetail");
+                    Double numberOfReact = (Double) json.get("numberOfReact");
+                    Double numberOfReweet = (Double) json.get("numberOfReweet");
+                    Double numberOfReply = (Double) json.get("numberOfReply");
+                    String crawlDate = (String) json.get("crawlDate");
+//                    String keyword = json.getString("keyword");
+//                    boolean isNew = (boolean) json.get("isNew");
+//                    boolean isNegative = (boolean) json.get("isNegative");
+//                    String language = json.getString("language");
+                    linkDetail = linkDetail.replace("', '", "");
+                    linkDetail = linkDetail.replace("', ", "");
+                    linkDetail = linkDetail.replace("'", "");
+                    linkDetail = linkDetail.replace("(", "");
+                    linkDetail = linkDetail.replace(")", "");
+                    Post post = new Post();
+                    post.setContent(postContent);
+                    post.setComment((int) Math.round(numberOfReply));
+                    post.setCrawlDate(crawlDate);
+                    post.setLike((int) Math.round(numberOfReact));
+                    post.setShare((int) Math.round(numberOfReweet));
+                    post.setUploadDate(createDate);
+                    post.setLinkDetail(linkDetail);
+                    listPost.add(post);
+                }
+                request.setAttribute("listPost", listPost);
+            } catch (Exception e) {
+                System.out.println("Error in Get Negative Post");
+                e.printStackTrace();
+            }
+            String nextPage = "NegativePostDetail.jsp";
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

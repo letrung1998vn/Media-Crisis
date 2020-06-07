@@ -194,16 +194,6 @@
                                         Company
                                     </a>
                                 </li>
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Portfolio
-                                                                    </a>
-                                                                </li>-->
-                                <!--                                <li>
-                                                                    <a href="#">
-                                                                        Blog
-                                                                    </a>
-                                                                </li>-->
                             </ul>
                         </nav>
                         <p class="copyright pull-right">

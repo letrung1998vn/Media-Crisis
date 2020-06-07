@@ -93,7 +93,7 @@
                                 </li>
                                 <li>
                                     <a href="RatioHistory.jsp">
-                                        <p>View Crisis Of All Keyword</p>
+                                        <p>View Ratio Of All Keyword</p>
                                     </a>
                                 </li>
                                 <li>
@@ -118,7 +118,7 @@
                                 <div class="form-group">
                                     <span>Keyword:</span><br>
                                     <input list="my-list" type="text" class="form-control search-keyword" placeholder="Enter Keyword">
-                                    <% List<String> listUserKeywords = (List<String>) session.getAttribute("KEYWORDLIIST");
+                                    <% List<String> listUserKeywords = (List<String>) session.getAttribute("RATIOKEYWORDLIST");
                                         int size = listUserKeywords.size(); %>
                                     <datalist id="my-list">
                                         <% for (int i = 0; i < size; i++) {

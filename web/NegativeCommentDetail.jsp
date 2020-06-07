@@ -1,3 +1,4 @@
+<%@page import="MediaCrisis.Model.Comment"%>
 <%@page import="MediaCrisis.Model.Post"%>
 <%@page import="MediaCrisis.Model.EmailContentModel"%>
 <%@page import="java.util.StringTokenizer"%>
@@ -75,20 +76,20 @@
                                             </thead>
                                             <tbody>
                                                 <%
-                                                    List<Post> list = (List<Post>) request.getAttribute("listPost");
+                                                    List<Comment> list = (List<Comment>) request.getAttribute("listComment");
                                                     if (list != null && list.size() > 0) {
                                                         for (int i = 0; i < list.size(); i++) {
-                                                            Post post = list.get(i);
+                                                            Comment comment = list.get(i);
                                                 %>
                                                 <tr>
                                                     <td>
                                                         <%= i + 1%>
                                                     </td>
                                                     <td>
-                                                        <%=post.getContent()%>
+                                                        <%=comment.getContent()%>
                                                     </td>
                                                     <td>
-                                                        <a href="<%=post.getLinkDetail()%>" target='_blank'><%=post.getLinkDetail()%></a>
+                                                        <a href="<%=comment.getLinkDetail()%>" target='_blank'><%=comment.getLinkDetail()%></a>
                                                     </td>
                                                 </tr>
                                                 <%                                                        }

@@ -145,7 +145,7 @@
                         <nav class="pull-left">
                             <ul>
                                 <li>
-                                    <a href="#">
+                                    <a href="mainPage_JSP.jsp">
                                         Home
                                     </a>
                                 </li>
@@ -154,20 +154,10 @@
                                         Company
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#">
-                                        Portfolio
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        Blog
-                                    </a>
-                                </li>
                             </ul>
                         </nav>
                         <p class="copyright pull-right">
-                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                            &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">Media Crisis</a>, for your better business 
                         </p>
                     </div>
                 </footer>

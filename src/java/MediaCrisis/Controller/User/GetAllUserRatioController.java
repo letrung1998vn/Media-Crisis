@@ -51,12 +51,16 @@ public class GetAllUserRatioController extends HttpServlet {
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();
             System.out.println("Result: " + result);
+            List<String> keywords = new ArrayList<>();
             try {
                 JSONArray jsonResult = new JSONArray(result);
                 List<HistoryRatioModel> listRatioModel = new ArrayList<>();
                 for (int i = 0; i < jsonResult.length(); i++) {
                     JSONObject json = jsonResult.getJSONObject(i);
                     String postKeyword = json.getString("keyword");
+                    if (!keywords.contains(postKeyword)) {
+                        keywords.add(postKeyword);
+                    }
                     System.out.println("Keyword: " + postKeyword);
                     JSONArray listRatio = (JSONArray) json.get("listRatio");
                     String type = json.getString("type");
@@ -82,6 +86,7 @@ public class GetAllUserRatioController extends HttpServlet {
                     listRatioModel.add(hrm);
                 }
                 session.setAttribute("listRatioHistory", listRatioModel);
+                session.setAttribute("RATIOKEYWORDLIST", keywords);
                 String nextPage = "mainPage_JSP.jsp";
                 RequestDispatcher rd = request.getRequestDispatcher(nextPage);
                 rd.forward(request, response);

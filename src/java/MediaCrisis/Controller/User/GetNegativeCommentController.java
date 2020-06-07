@@ -6,6 +6,7 @@
 package MediaCrisis.Controller.User;
 
 import MediaCrisis.APIConnection.APIConnection;
+import MediaCrisis.Model.Comment;
 import MediaCrisis.Model.Post;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -52,38 +54,40 @@ public class GetNegativeCommentController extends HttpServlet {
             value.add(txtkeyword);
             APIConnection ac = new APIConnection(url, params, value);
             result = ac.connect();
-            List<Post> listPost = new ArrayList<>();
+            List<Comment> listComment = new ArrayList<>();
             try {
                 JSONArray list = new JSONArray(result);
                 for (int i = 0; i < list.length(); i++) {
                     JSONObject json = list.getJSONObject(i);
-                    String id = json.getString("id");
-                    BigInteger postId = (BigInteger) json.get("postId");
-                    String postContent = json.getString("postContent");
+//                    String id = json.getString("id");
+//                    BigInteger comment_id = (BigInteger) json.get("comment_id");
+                    String comment_content = json.getString("comment_content");
+//                    String uuid_post = json.getString("uuid_post");
                     Date createDate = (Date) json.get("createDate");
                     String linkDetail = json.getString("linkDetail");
                     float numberOfReact = (float) json.get("numberOfReact");
-                    float numberOfReweet = (float) json.get("numberOfReweet");
                     float numberOfReply = (float) json.get("numberOfReply");
                     Date crawlDate = (Date) json.get("crawlDate");
-                    String keyword = json.getString("keyword");
-                    boolean isNew = (boolean) json.get("isNew");
-                    boolean isNegative = (boolean) json.get("isNegative");
-                    String language = json.getString("language");
-                    Post post = new Post();
-                    post.setContent(postContent);
-                    post.setComment(Math.round(numberOfReply));
-                    post.setCrawlDate(crawlDate.toString());
-                    post.setLike(Math.round(numberOfReact));
-                    post.setShare(Math.round(numberOfReweet));
-                    post.setUploadDate(createDate.toString());
-                    post.setLinkDetail(linkDetail);
-                    listPost.add(post);
+//                    boolean isNew = (boolean) json.get("isNew");
+//                    boolean isNegative = (boolean) json.get("isNegative");
+//                    String language = json.getString("language");
+                    Comment comment = new Comment();
+                    comment.setContent(comment_content);
+                    comment.setReplies(Math.round(numberOfReply));
+                    comment.setCrawlDate(crawlDate.toString());
+                    comment.setLikes(Math.round(numberOfReact));
+                    comment.setUploadDate(createDate.toString());
+                    comment.setLinkDetail(linkDetail);
+                    listComment.add(comment);
                 }
+                request.setAttribute("listComment", listComment);
             } catch (Exception e) {
                 System.out.println("Error in Get Negative Post");
                 e.printStackTrace();
             }
+            String nextPage = "NegativeCommentDetail.jsp";
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
         }
     }
 

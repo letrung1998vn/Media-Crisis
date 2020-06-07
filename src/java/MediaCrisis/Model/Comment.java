@@ -12,7 +12,15 @@ package MediaCrisis.Model;
 public class Comment {
     String content, uploadDate, crawlDate;
     int likes, replies;
+    String linkDetail;
 
+    public String getLinkDetail() {
+        return linkDetail;
+    }
+
+    public void setLinkDetail(String linkDetail) {
+        this.linkDetail = linkDetail;
+    }
     public Comment() {
     }
 

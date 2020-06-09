@@ -136,6 +136,7 @@
             <% session.invalidate();%>
                                     });
                                     function getToken(event) {
+                                        event.preventDefault();
                                         if (Notification.permission === "default") {
                                             if (window.confirm("Do you want to get notiication from this page")) {
                                                 alert("Click Alow Button to get Notification");

@@ -41,38 +41,48 @@ public class CreateKeywordAdminController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String newKeyword = request.getParameter("txtKeyword");
-        String crisisRateString = request.getParameter("txtCrisisRate");
-        String url = "http://localhost:8181/keyword/createKeyword/?";
-        HttpSession session = request.getSession();
-        String userId = session.getAttribute("USERID").toString();
-        String result = "";
-        String nextPage = "";
-        List<String> params = new ArrayList<>();
-        List<String> value = new ArrayList<>();
-
-        params.add("keyword");
-        params.add("userId");
-        params.add("crisis_rate");
-        value.add(newKeyword);
-        value.add(userId);
-        value.add(crisisRateString);
-
-        //Call API connection and get return JSON string
-        APIConnection ac = new APIConnection(url, params, value);
-        result = ac.connect();
-        System.out.println(result);
         try {
-            JSONObject jsonResult = new JSONObject(result);
-            session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-            session.setAttribute("RESULT", jsonResult.get("statusCode"));
+            String newKeyword = request.getParameter("txtKeyword");
+            String crisisRateString = request.getParameter("txtCrisisRate");
+            String url = "http://localhost:8181/keyword/createKeyword/?";
+            HttpSession session = request.getSession();
+            String userId = session.getAttribute("USERID").toString();
+            String result = "";
+            String nextPage = "";
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
+
+            params.add("keyword");
+            params.add("userId");
+            params.add("crisis_rate");
+            value.add(newKeyword);
+            value.add(userId);
+            value.add(crisisRateString);
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            result = ac.connect();
+            System.out.println(result);
+            try {
+                JSONObject jsonResult = new JSONObject(result);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                session.setAttribute("RESULT", jsonResult.get("statusCode"));
+                session.setAttribute("SEND", true);
+                nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
+            } catch (JSONException e) {
+                System.out.println("Ko parse duoc json object");
+            }
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
             session.setAttribute("SEND", true);
-            nextPage = "MainController?btnAction=SearchKeyword&page=" + session.getAttribute("KEYWORDADMINMAXPAGE") + "&userId=&searchValue=";
-        } catch (JSONException e) {
-            System.out.println("Ko parse duoc json object");
+            RequestDispatcher rd = request.getRequestDispatcher("login_JSP.jsp");
+            rd.forward(request, response);
         }
-        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-        rd.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

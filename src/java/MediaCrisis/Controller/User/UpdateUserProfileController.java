@@ -48,50 +48,51 @@ public class UpdateUserProfileController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        String userId = session.getAttribute("USERID").toString().trim();
-        String name = request.getParameter("txtName");
-        String email = request.getParameter("txtEmail");
-
-        String url = "http://localhost:8181/user/updateProfile";
-
-        String nextPage = "";
-
-        URL urlForGetRequest = new URL(url);
-        String readLine = null;
-        HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-        conection.setRequestMethod("POST");
-        conection.setDoOutput(true);
-        Map<String, String> arguments = new HashMap<>();
-        arguments.put("name", name);
-        arguments.put("email", email);
-        arguments.put("userId", userId);
-        StringJoiner sj = new StringJoiner("&");
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
-            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-        try (OutputStream os = conection.getOutputStream()) {
-            os.write(out);
-        }
-        int responseCode = conection.getResponseCode();
-        StringBuffer rp = new StringBuffer();
-        String result = "";
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(conection.getInputStream()));
-            while ((readLine = in.readLine()) != null) {
-                rp.append(readLine);
-            }
-            in.close();
-            System.out.println("JSON String Result " + rp.toString());
-            result = rp.toString();
-        } else {
-            System.out.println("Loi api roi");
-            nextPage = error;
-        }
         try {
+            HttpSession session = request.getSession();
+            String userId = session.getAttribute("USERID").toString().trim();
+            String name = request.getParameter("txtName");
+            String email = request.getParameter("txtEmail");
+
+            String url = "http://localhost:8181/user/updateProfile";
+
+            String nextPage = "";
+
+            URL urlForGetRequest = new URL(url);
+            String readLine = null;
+            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+            conection.setRequestMethod("POST");
+            conection.setDoOutput(true);
+            Map<String, String> arguments = new HashMap<>();
+            arguments.put("name", name);
+            arguments.put("email", email);
+            arguments.put("userId", userId);
+            StringJoiner sj = new StringJoiner("&");
+            for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+            byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+            try (OutputStream os = conection.getOutputStream()) {
+                os.write(out);
+            }
+            int responseCode = conection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+            String result = "";
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(conection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+                result = rp.toString();
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+            try {
                 JSONObject jsonResult = new JSONObject(result);
                 int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                 session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage").toString());
@@ -110,8 +111,17 @@ public class UpdateUserProfileController extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-        rd.forward(request, response);
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+            RequestDispatcher rd = request.getRequestDispatcher("login_JSP.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

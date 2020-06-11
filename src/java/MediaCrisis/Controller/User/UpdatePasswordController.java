@@ -46,22 +46,22 @@ public class UpdatePasswordController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NoSuchAlgorithmException {
         response.setContentType("text/html;charset=UTF-8");
-
-        String url = "http://localhost:8181/user/updatePassword/?";
+        try {
+            String url = "http://localhost:8181/user/updatePassword/?";
 
 //        String oldPassword = request.getParameter("txtOldPassword");
-        String newPassword = request.getParameter("txtPassword");
+            String newPassword = request.getParameter("txtPassword");
 //        String confirmPassword = request.getParameter("txtConfirmPassword");
 
-        String nextPage = "";
+            String nextPage = "";
 
-        HttpSession session = request.getSession();
-        String userId = session.getAttribute("USERID").toString().trim();
+            HttpSession session = request.getSession();
+            String userId = session.getAttribute("USERID").toString().trim();
 //        String oldPassword = session.getAttribute("PWD").toString().trim();
 
-        url += "userName=";
-        url += userId;
-        url += "&password=";
+            url += "userName=";
+            url += userId;
+            url += "&password=";
 
 //        MessageDigest md = MessageDigest.getInstance("SHA-256");
 //        byte[] oldPasswordInByte = md.digest(oldPassword.getBytes(StandardCharsets.UTF_8));
@@ -69,57 +69,65 @@ public class UpdatePasswordController extends HttpServlet {
 //        for (byte b : oldPasswordInByte) {
 //            inputtedSb.append(String.format("%02x", b));
 //        }
-        MessageDigest md1 = MessageDigest.getInstance("SHA-256");
-        byte[] newPasswordInByte = md1.digest(newPassword.getBytes(StandardCharsets.UTF_8));
-        StringBuilder newPasswordSb = new StringBuilder();
-        for (byte b1 : newPasswordInByte) {
-            newPasswordSb.append(String.format("%02x", b1));
-        }
-
-        url += newPasswordSb;
-        URL urlForGetRequest = new URL(url);
-        String readLine = null;
-        HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        int responseCode = connection.getResponseCode();
-        StringBuffer rp = new StringBuffer();
-        String result = "";
-        
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()));
-            while ((readLine = in.readLine()) != null) {
-                rp.append(readLine);
+            MessageDigest md1 = MessageDigest.getInstance("SHA-256");
+            byte[] newPasswordInByte = md1.digest(newPassword.getBytes(StandardCharsets.UTF_8));
+            StringBuilder newPasswordSb = new StringBuilder();
+            for (byte b1 : newPasswordInByte) {
+                newPasswordSb.append(String.format("%02x", b1));
             }
-            in.close();
-            System.out.println("JSON String Result " + rp.toString());
-            result = rp.toString();
-            
-        } else {
-            System.out.println("Loi api roi");
-            nextPage = error;
-        }
-        try {
+
+            url += newPasswordSb;
+            URL urlForGetRequest = new URL(url);
+            String readLine = null;
+            HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            int responseCode = connection.getResponseCode();
+            StringBuffer rp = new StringBuffer();
+            String result = "";
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
+                while ((readLine = in.readLine()) != null) {
+                    rp.append(readLine);
+                }
+                in.close();
+                System.out.println("JSON String Result " + rp.toString());
+                result = rp.toString();
+
+            } else {
+                System.out.println("Loi api roi");
+                nextPage = error;
+            }
+            try {
                 JSONObject jsonResult = new JSONObject(result);
                 int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
                 session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
                 session.setAttribute("RESULT", resultCode);
-                
+
                 if (resultCode == 3) {
                     nextPage = "login_JSP.jsp";
                 } else {
                     nextPage = updated;
                 }
-                
+
                 session.setAttribute("SEND", true);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-        rd.forward(request, response);
-
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+            RequestDispatcher rd = request.getRequestDispatcher("login_JSP.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

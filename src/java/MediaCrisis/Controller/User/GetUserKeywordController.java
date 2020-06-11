@@ -99,6 +99,14 @@ public class GetUserKeywordController extends HttpServlet {
             }
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+            RequestDispatcher rd = request.getRequestDispatcher(login);
+            rd.forward(request, response);
         }
     }
 

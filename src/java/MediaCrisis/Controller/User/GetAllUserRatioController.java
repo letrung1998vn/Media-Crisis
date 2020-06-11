@@ -94,6 +94,14 @@ public class GetAllUserRatioController extends HttpServlet {
                 e.printStackTrace();
                 System.out.println("Get User ratio fail");
             }
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+            RequestDispatcher rd = request.getRequestDispatcher("login_JSP.jsp");
+            rd.forward(request, response);
         }
     }
 

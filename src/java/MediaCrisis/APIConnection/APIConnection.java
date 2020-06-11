@@ -66,7 +66,7 @@ public class APIConnection {
 
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
+                        new InputStreamReader(connection.getInputStream(),"UTF-8"));
                 while ((readLine = in.readLine()) != null) {
                     rp.append(readLine);
                 }
@@ -79,6 +79,7 @@ public class APIConnection {
         }
         return output;
     }
+    
     public String connectWithoutParam() {
         String output = "";
         try {

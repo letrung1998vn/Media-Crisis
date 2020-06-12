@@ -39,44 +39,53 @@ public class DeleteKeywordController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        String url = "http://localhost:8181/keyword/deleteKeyword/?";
-        String idString = request.getParameter("id");
-        String keywordVersion = request.getParameter("version");
-        List<String> params = new ArrayList<>();
-        List<String> value = new ArrayList<>();
-
-        params.add("id");
-        params.add("logVersion");
-        params.add("author");
-        value.add(idString);
-        value.add(keywordVersion);
-        value.add(session.getAttribute("USERID").toString());
-
-        String nextPage = "";
-
-        //Call API connection and get return JSON string
-        APIConnection ac = new APIConnection(url, params, value);
-        String result = ac.connect();
-        System.out.println(result);
         try {
-            JSONObject jsonResult = new JSONObject(result);
-            session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
-            int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
-            session.setAttribute("RESULT", resultCode);
-            session.setAttribute("SEND", true);
-            if (resultCode == 3) {
-                nextPage = "login_JSP.jsp";
-            } else {
-                nextPage = "MainController?btnAction=SearchKeywordUser";
-            }
-        } catch (Exception e) {
-            System.out.println("Ko parse duoc json object");
-            nextPage = error;
-        }
-        RequestDispatcher rd = request.getRequestDispatcher(nextPage);
-        rd.forward(request, response);
+            HttpSession session = request.getSession();
+            String url = "http://localhost:8181/keyword/deleteKeyword/?";
+            String idString = request.getParameter("id");
+            String keywordVersion = request.getParameter("version");
+            List<String> params = new ArrayList<>();
+            List<String> value = new ArrayList<>();
 
+            params.add("id");
+            params.add("logVersion");
+            params.add("author");
+            value.add(idString);
+            value.add(keywordVersion);
+            value.add(session.getAttribute("USERID").toString());
+
+            String nextPage = "";
+
+            //Call API connection and get return JSON string
+            APIConnection ac = new APIConnection(url, params, value);
+            String result = ac.connect();
+            System.out.println(result);
+            try {
+                JSONObject jsonResult = new JSONObject(result);
+                session.setAttribute("CREATE_MESSAGE", jsonResult.get("statusMessage"));
+                int resultCode = Integer.parseInt(jsonResult.get("statusCode").toString());
+                session.setAttribute("RESULT", resultCode);
+                session.setAttribute("SEND", true);
+                if (resultCode == 3) {
+                    nextPage = "login_JSP.jsp";
+                } else {
+                    nextPage = "MainController?btnAction=SearchKeywordUser";
+                }
+            } catch (Exception e) {
+                System.out.println("Ko parse duoc json object");
+                nextPage = error;
+            }
+            RequestDispatcher rd = request.getRequestDispatcher(nextPage);
+            rd.forward(request, response);
+        } catch (Exception e) {
+            HttpSession session = request.getSession();
+            e.printStackTrace();
+            session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+            RequestDispatcher rd = request.getRequestDispatcher("login_JSP.jsp");
+            rd.forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

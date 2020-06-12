@@ -5,12 +5,17 @@
  */
 package MediaCrisis.Controller.DemoData;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -18,18 +23,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  *
  * @author Administrator
  */
-@WebServlet(name = "ImportScriptFileController", urlPatterns = {"/ImportScriptFileController"})
-public class ImportScriptFileController extends HttpServlet {
+@WebServlet(name = "ImportScriptFile3Controller", urlPatterns = {"/ImportScriptFile3Controller"})
+public class ImportScriptFile3Controller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,7 +46,7 @@ public class ImportScriptFileController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> listQuery = new ArrayList<String>();
             try {
-                File myObj = new File("C:\\Users\\Administrator\\Documents\\TestData.txt");
+                File myObj = new File("C:\\Users\\Administrator\\Documents\\TestDataIncrease.txt");
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
@@ -94,7 +94,7 @@ public class ImportScriptFileController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFile3Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -112,7 +112,7 @@ public class ImportScriptFileController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFile3Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -5,33 +5,32 @@
  */
 package MediaCrisis.Controller.DemoData;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import javafx.application.Application;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
  * @author Administrator
  */
-@WebServlet(name = "ImportScriptFileController", urlPatterns = {"/ImportScriptFileController"})
-public class ImportScriptFileController extends HttpServlet {
+@WebServlet(name = "ImportScriptFileIncreaseCase2Controller", urlPatterns = {"/ImportScriptFileIncreaseCase2Controller"})
+public class ImportScriptFileIncreaseCase2Controller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,7 +47,7 @@ public class ImportScriptFileController extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> listQuery = new ArrayList<String>();
             try {
-                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestData.txt"));
+                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataIncrease.txt"));
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
@@ -61,8 +60,6 @@ public class ImportScriptFileController extends HttpServlet {
 //                }
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
-                e.printStackTrace();
-            } catch(Exception e){
                 e.printStackTrace();
             }
             try {
@@ -101,7 +98,7 @@ public class ImportScriptFileController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFileIncreaseCase2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -119,7 +116,7 @@ public class ImportScriptFileController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFileIncreaseCase2Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

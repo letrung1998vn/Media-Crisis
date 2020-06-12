@@ -60,6 +60,7 @@ public class LoginController extends HttpServlet {
 
             String username = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
+            String token = request.getParameter("txtToken");
 
             //Hash password
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -72,9 +73,10 @@ public class LoginController extends HttpServlet {
             //Prepare value for connection
             params.add("username");
             params.add("password");
+            params.add("notiToken");
             value.add(username);
             value.add(sb.toString());
-
+            value.add(token);
             //Call API connection and get return JSON string
             APIConnection ac = new APIConnection(url, params, value);
             String result = ac.connect();
@@ -98,7 +100,6 @@ public class LoginController extends HttpServlet {
                         nextPage = adminPage;
                     } else if (userDTO.getRole().equals("user")) {
                         nextPage = mainPage;
-                        String token = request.getParameter("txtToken");
                         if (!token.isEmpty()) {
                             params = new ArrayList<>();
                             value = new ArrayList<>();

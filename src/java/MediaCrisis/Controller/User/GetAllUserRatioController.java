@@ -77,8 +77,6 @@ public class GetAllUserRatioController extends HttpServlet {
                         listDateStr.add(date);
                     }
                     HistoryRatioModel hrm = new HistoryRatioModel();
-                    System.out.println("Date:" + listDateStr);
-                    System.out.println("Ratio:" + listRatioStr);
                     hrm.setKeyword(postKeyword);
                     hrm.setListDateStr(listDateStr);
                     hrm.setListRatioStr(listRatioStr);

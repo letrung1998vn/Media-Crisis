@@ -137,6 +137,7 @@
                                 <th>Detect date</th>
                                 <th>Chart</th>
                                 <th>Description</th>
+                                <th>Link Detail</th>
                                 </thead>
                                 <% List<Crisis> listUserCrisis = (List<Crisis>) session.getAttribute("USERALLCRISIS");
                                     size = listUserCrisis.size();
@@ -172,6 +173,9 @@
                                 </td>
                                 <td>
                                     <%= listUserCrisis.get(i).getType()%> has reached <%= listUserCrisis.get(i).getPercentage()%>% of the top posts with the highest <%= listUserCrisis.get(i).getDetectType()%>
+                                </td>
+                                <td>
+                                    <a href="<%= listUserCrisis.get(i).getLink() %>" target="_blank"><%= listUserCrisis.get(i).getLink() %></a>
                                 </td>
                                 </tbody>
                                 <% } %>

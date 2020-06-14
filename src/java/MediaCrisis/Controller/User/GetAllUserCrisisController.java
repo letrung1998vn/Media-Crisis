@@ -80,6 +80,13 @@ public class GetAllUserCrisisController extends HttpServlet {
                     crisis.setId(keywordObj.getInt("id"));
                     crisis.setType(keywordObj.getString("type"));
                     crisis.setContent(keywordObj.getString("content"));
+                    String linkDetail=keywordObj.getString("link");
+                    linkDetail = linkDetail.replace("', '", "");
+                    linkDetail = linkDetail.replace("', ", "");
+                    linkDetail = linkDetail.replace("'", "");
+                    linkDetail = linkDetail.replace("(", "");
+                    linkDetail = linkDetail.replace(")", "");
+                    crisis.setLink(linkDetail);
                     listCrisis.add(crisis);
                 }
             } catch (JSONException e) {

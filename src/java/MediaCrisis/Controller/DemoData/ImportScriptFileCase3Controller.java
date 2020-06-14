@@ -55,10 +55,10 @@ public class ImportScriptFileCase3Controller extends HttpServlet {
                     listQuery.add(data);
                 }
                 myReader.close();
-//                for (int i = 0; i < listQuery.size(); i++) {
-//                    System.out.print("Query " + i + ": ");
-//                    System.out.println(listQuery.get(i));
-//                }
+                for (int i = 0; i < listQuery.size(); i++) {
+                    System.out.print("Query " + i + ": ");
+                    System.out.println(listQuery.get(i));
+                }
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
@@ -79,6 +79,9 @@ public class ImportScriptFileCase3Controller extends HttpServlet {
                 }
             } catch (SQLException ex) {
                 System.err.println("Cannot connect database, " + ex);
+            }
+            catch(Exception e){
+                e.printStackTrace();
             }
             String nextPage="Demo_Setup_Page.jsp";
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);

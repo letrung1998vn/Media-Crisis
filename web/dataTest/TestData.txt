@@ -1,3 +1,13 @@
+delete from Comment
+delete from Post
+delete from Last_Standard
+delete from Negative_Ratio
+delete from Notification_Content
+delete from [Notification]
+delete from Crisis
+delete from Keyword
+delete from Keyword_Crawler
+insert into Keyword_Crawler(keyword) values('Galaxy Note 7')
 INSERT INTO Post(uuid_post, post_id, post_content, create_date, link_detail, number_of_react, number_of_retweet, number_of_reply, crawl_date, keyword, isNew, isNegative, language) VALUES ('003cd79bfed24a0497d5e8fd2f7e5b90',867507121851650048, 'Samsung Galaxy Note 7 battery fire lawsuits spreading to Galaxy Note 5, S6, S7 models http://appleinsider.com/articles/17/05', '2020-04-29 20:43:27.000', '(''https://twitter.com/'', ''appleinsider'', ''/status/'', 867507121851650048)', 32, 35, 2, '2020-05-04 12:45:20.380', 'Galaxy Note 7', 1, 1, 'en');
 INSERT INTO Post(uuid_post, post_id, post_content, create_date, link_detail, number_of_react, number_of_retweet, number_of_reply, crawl_date, keyword, isNew, isNegative, language) VALUES ('00b5c7da09dd48448e19fece60d28ba9',846473925479600128, 'Why Samsung''s Galaxy Note 7 Battery Problem Is Deeply Troubling','2020-04-26 17:21:05.000', '(''https://twitter.com/'', ''TechSUPS_Now'', ''/status/'', 846473925479600128)', 1, 0, 0, '2020-05-04 12:59:05.513', 'Galaxy Note 7', 1, 1, 'en');
 INSERT INTO Post(uuid_post, post_id, post_content, create_date, link_detail, number_of_react, number_of_retweet, number_of_reply, crawl_date, keyword, isNew, isNegative, language) VALUES ('01b6c80f56304af3bea5d86f5695ef4b',850503631505940480, 'Just like the last incident of Samsung galaxy note 7 battery that combusted and took some lives which I believe it''s a manufacturing process error in which the anode and cathode touched and caused the combustion and the company acted immediately, within 2 weeks of release','2020-04-25 13:35:11.000', '(''https://twitter.com/'', ''Ian_Fry'', ''/status/'', 850503631505940480)', 1, 2, 2, '2020-05-04 13:00:06.107', 'Galaxy Note 7', 1, 1, 'en');

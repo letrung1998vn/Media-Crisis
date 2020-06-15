@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Administrator
  */
-@WebServlet(name = "ImportScriptFileRatioCase2Controller", urlPatterns = {"/ImportScriptFileRatioCase2Controller"})
-public class ImportScriptFileRatioCase2Controller extends HttpServlet {
+@WebServlet(name = "ImportScriptFileIncreaseCase3Controller", urlPatterns = {"/ImportScriptFileIncreaseCase3Controller"})
+public class ImportScriptFileIncreaseCase3Controller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,17 +47,17 @@ public class ImportScriptFileRatioCase2Controller extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> listQuery = new ArrayList<String>();
             try {
-                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataRatio_case2.txt"));
+                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataIncrease_case3.txt"));
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
                     listQuery.add(data);
                 }
                 myReader.close();
-//                for (int i = 0; i < listQuery.size(); i++) {
-//                    System.out.print("Query " + i + ": ");
-//                    System.out.println(listQuery.get(i));
-//                }
+                for (int i = 0; i < listQuery.size(); i++) {
+                    System.out.print("Query " + i + ": ");
+                    System.out.println(listQuery.get(i));
+                }
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
@@ -98,7 +98,7 @@ public class ImportScriptFileRatioCase2Controller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileIncreaseController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFileIncreaseCase3Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -116,7 +116,7 @@ public class ImportScriptFileRatioCase2Controller extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ImportScriptFileIncreaseController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImportScriptFileIncreaseCase3Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -79,7 +79,8 @@
                                     Start detect crisis server: 
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="http://localhost:8181/checkMeaning/check"><button class="btn btn-success">Start</button></a>
+                                    <a href="startCheckController"><button class="btn btn-success">Start</button></a>
+                                    <a href="stopCheckController"><button class="btn btn-success">Stop</button></a>
                                 </div>
                             </div>
                         </div>
@@ -106,26 +107,26 @@
                                 <div class="col-md-1"></div>
                                 <div class="col-md-5">Case no.2: Higher ratio of negative post</div>
                                 <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile2Controller"><button class="btn btn-primary">Run script 2 Case 1</button></a>
+                                    <a href="ImportScriptFileIncreaseController"><button class="btn btn-primary">Run script 2 Case 1</button></a>
                                 </div>
                                 <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile2Controller"><button class="btn btn-primary">Run script 2 Case 2</button></a>
+                                    <a href="ImportScriptFileIncreaseCase2Controller"><button class="btn btn-primary">Run script 2 Case 2</button></a>
                                 </div>
                                 <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile2Controller"><button class="btn btn-primary">Run script 2 Case 3</button></a>
+                                    <a href="ImportScriptFileIncreaseCase3Controller"><button class="btn btn-primary">Run script 2 Case 3</button></a>
                                 </div>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 10px">
                                 <div class="col-md-1"></div>
                                 <div class="col-md-5">Case no.3: Abnormal increased value of the react, replies and share number in negative post</div>
                                 <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile3Controller"><button class="btn btn-danger">Run script 3 Case 1</button></a>
+                                    <a href="ImportScriptFileRatioController"><button class="btn btn-danger">Run script 3 Case 1</button></a>
                                 </div>
                                  <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile3Controller"><button class="btn btn-danger">Run script 3 Case 2</button></a>
+                                    <a href="ImportScriptFileRatioCase2Controller"><button class="btn btn-danger">Run script 3 Case 2</button></a>
                                 </div>
                                  <div class="col-md-2 nopadding">
-                                    <a href="ImportScriptFile3Controller"><button class="btn btn-danger">Run script 3 Case 3</button></a>
+                                    <a href="ImportScriptFileRatioCase3Controller"><button class="btn btn-danger">Run script 3 Case 3</button></a>
                                 </div>
                             </div>
                         </div>

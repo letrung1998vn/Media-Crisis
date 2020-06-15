@@ -121,7 +121,7 @@ public class MainController extends HttpServlet {
         } else if (button.equals("getNegativePost")) {
             url = getNegativePost;
         } else if (button.equals("getNegativeComment")) {
-            url = getNegativePost;
+            url = getNegativeComment;
         }
         RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);

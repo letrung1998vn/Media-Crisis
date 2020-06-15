@@ -29,8 +29,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Administrator
  */
-@WebServlet(name = "ImportScriptFileRatioCase2Controller", urlPatterns = {"/ImportScriptFileRatioCase2Controller"})
-public class ImportScriptFileRatioCase2Controller extends HttpServlet {
+@WebServlet(name = "ImportScriptFileRatioCase3Controller", urlPatterns = {"/ImportScriptFileRatioCase3Controller"})
+public class ImportScriptFileRatioCase3Controller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,7 +47,7 @@ public class ImportScriptFileRatioCase2Controller extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             List<String> listQuery = new ArrayList<String>();
             try {
-                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataRatio_case2.txt"));
+                File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataRatio_case3.txt"));
                 Scanner myReader = new Scanner(myObj);
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();

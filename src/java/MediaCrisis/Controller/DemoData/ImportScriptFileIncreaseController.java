@@ -54,10 +54,10 @@ public class ImportScriptFileIncreaseController extends HttpServlet {
                     listQuery.add(data);
                 }
                 myReader.close();
-                for (int i = 0; i < listQuery.size(); i++) {
-                    System.out.print("Query " + i + ": ");
-                    System.out.println(listQuery.get(i));
-                }
+//                for (int i = 0; i < listQuery.size(); i++) {
+//                    System.out.print("Query " + i + ": ");
+//                    System.out.println(listQuery.get(i));
+//                }
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();

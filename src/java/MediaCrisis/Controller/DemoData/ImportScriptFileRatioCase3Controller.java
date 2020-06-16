@@ -48,7 +48,7 @@ public class ImportScriptFileRatioCase3Controller extends HttpServlet {
             List<String> listQuery = new ArrayList<String>();
             try {
                 File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataRatio_case3.txt"));
-                Scanner myReader = new Scanner(myObj);
+                Scanner myReader = new Scanner(myObj, "UTF-8");
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
                     listQuery.add(data);

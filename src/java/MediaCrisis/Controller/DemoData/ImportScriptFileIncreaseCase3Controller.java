@@ -48,16 +48,16 @@ public class ImportScriptFileIncreaseCase3Controller extends HttpServlet {
             List<String> listQuery = new ArrayList<String>();
             try {
                 File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestDataIncrease_case3.txt"));
-                Scanner myReader = new Scanner(myObj);
+                Scanner myReader = new Scanner(myObj,  "UTF-8");
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
                     listQuery.add(data);
                 }
                 myReader.close();
-                for (int i = 0; i < listQuery.size(); i++) {
-                    System.out.print("Query " + i + ": ");
-                    System.out.println(listQuery.get(i));
-                }
+//                for (int i = 0; i < listQuery.size(); i++) {
+//                    System.out.print("Query " + i + ": ");
+//                    System.out.println(listQuery.get(i));
+//                }
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();

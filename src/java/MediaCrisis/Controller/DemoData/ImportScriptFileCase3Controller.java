@@ -49,7 +49,7 @@ public class ImportScriptFileCase3Controller extends HttpServlet {
             List<String> listQuery = new ArrayList<String>();
             try {
                 File myObj = new File(this.getServletContext().getRealPath("/dataTest/TestData_case3.txt"));
-                Scanner myReader = new Scanner(myObj);
+                Scanner myReader = new Scanner(myObj, "UTF-8");
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
                     listQuery.add(data);
@@ -62,7 +62,7 @@ public class ImportScriptFileCase3Controller extends HttpServlet {
             } catch (FileNotFoundException e) {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
-            } catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
@@ -79,11 +79,10 @@ public class ImportScriptFileCase3Controller extends HttpServlet {
                 }
             } catch (SQLException ex) {
                 System.err.println("Cannot connect database, " + ex);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            String nextPage="Demo_Setup_Page.jsp";
+            String nextPage = "Demo_Setup_Page.jsp";
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         }

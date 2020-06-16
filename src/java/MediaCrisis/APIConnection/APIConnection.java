@@ -36,10 +36,12 @@ public class APIConnection {
         this.listName = listName;
         this.listValue = listValue;
     }
+
     public APIConnection(String url, String method) {
         this.url = url;
         this.method = method;
     }
+
     public String connect() {
         String output = "";
         try {
@@ -49,7 +51,7 @@ public class APIConnection {
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             Map<String, String> arguments = new HashMap<>();
-            for(int i=0;i<listName.size();i++){
+            for (int i = 0; i < listName.size(); i++) {
                 arguments.put(listName.get(i), listValue.get(i));
             }
             StringJoiner sj = new StringJoiner("&");
@@ -66,7 +68,7 @@ public class APIConnection {
 
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream(),"UTF-8"));
+                        new InputStreamReader(connection.getInputStream(), "UTF-8"));
                 while ((readLine = in.readLine()) != null) {
                     rp.append(readLine);
                 }
@@ -79,7 +81,7 @@ public class APIConnection {
         }
         return output;
     }
-    
+
     public String connectWithoutParam() {
         String output = "";
         try {
@@ -92,7 +94,7 @@ public class APIConnection {
 
             if (responeCod == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connection.getInputStream()));
+                        new InputStreamReader(connection.getInputStream(), "UTF-8"));
                 while ((readLine = in.readLine()) != null) {
                     rp.append(readLine);
                 }

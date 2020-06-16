@@ -32,7 +32,16 @@
         <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
     </head>
     <body>
-
+        <%
+                    String url = "";
+                    if (session.getAttribute("USERID") == null) {
+                        url = "login_JSP.jsp";
+                        session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+                        session.setAttribute("RESULT", 3);
+                        session.setAttribute("SEND", true);
+                        RequestDispatcher rd = request.getRequestDispatcher(url);
+                        rd.forward(request, response);
+        %>
         <div class="wrapper">
             <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
 
@@ -226,7 +235,8 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        if (<%=session.getAttribute("SEND")%>) {
+        if (<%=se
+            tribute("SEND")%>) {
             $.notify({
                 icon: "pe-7s-bell",
                 message: '<%=session.getAttribute("CREATE_MESSAGE")%>'

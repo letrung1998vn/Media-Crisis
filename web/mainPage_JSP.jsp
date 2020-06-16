@@ -31,6 +31,17 @@
     </head>
     <body>
 
+        <%
+            String url = "";
+            if (session.getAttribute("USERID") == null) {
+                url = "login_JSP.jsp";
+                session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+                session.setAttribute("RESULT", 3);
+                session.setAttribute("SEND", true);
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+        %>
+
         <div class="wrapper">
             <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
 
@@ -85,12 +96,12 @@
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
-                                 <li>
+                                <li>
                                     <a href="mainPage_JSP.jsp">
                                         <p>View Crisis Of All Keyword</p>
                                     </a>
                                 </li>
-                                 <li>
+                                <li>
                                     <a href="RatioHistory.jsp">
                                         <p>View Ratio Of All Keyword</p>
                                     </a>
@@ -175,7 +186,7 @@
                                     <%= listUserCrisis.get(i).getType()%> has reached <%= listUserCrisis.get(i).getPercentage()%>% of the top posts with the highest <%= listUserCrisis.get(i).getDetectType()%>
                                 </td>
                                 <td>
-                                    <a href="<%= listUserCrisis.get(i).getLink() %>" target="_blank"><%= listUserCrisis.get(i).getLink() %></a>
+                                    <a href="<%= listUserCrisis.get(i).getLink()%>" target="_blank"><%= listUserCrisis.get(i).getLink()%></a>
                                 </td>
                                 </tbody>
                                 <% } %>

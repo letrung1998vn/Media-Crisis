@@ -60,12 +60,7 @@ public class MainController extends HttpServlet {
         String url = "error.html";
         System.out.println(button);
         HttpSession session = request.getSession();
-        if (session.getAttribute("USERID") == null) {
-            url = loginPage;
-            session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
-            session.setAttribute("RESULT", 3);
-            session.setAttribute("SEND", true);
-        } else if (button == null) {
+        if (button == null) {
             System.out.println("Btn bị null");
             //do nothing
         } else if (button.equals("Login")) {
@@ -75,6 +70,11 @@ public class MainController extends HttpServlet {
         } else if (button.equals("LogOut")) {
             session.invalidate();
             url = loginPage;
+        } else if (session.getAttribute("USERID") == null) {
+            url = loginPage;
+            session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
         } else if (button.equals("DeleteKeyword")) {
             url = deleteKeyword;
         } else if (button.equals("CreateKeyword")) {

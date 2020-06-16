@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/MediaCrisis/Controller/DemoData/ImportScriptFileRatioCase3Controller.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>0</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Capstone/code/Media-Crisis/Web/web/Demo_Setup_Page.jsp</file>
-            <file>file:/D:/Capstone/code/Media-Crisis/Web/src/java/MediaCrisis/Controller/DemoData/ImportScriptFileCase3Controller.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

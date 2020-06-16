@@ -49,10 +49,6 @@ public class MainController extends HttpServlet {
     private final String checkNotiToken = "checkNotiTokenController";
     private final String disableNotiBrowserToken = "DisableNotiBrowserToken";
     private final String disableWebhook = "DisableWebhookController";
-    private final String getNewCrawlPost = "GetNewCrawlPostController";
-    private final String getNegativeCrawlPost = "GetAllNegativePostController";
-    private final String getNewCrawlComment = "GetNewCrawlCommentController";
-    private final String getNegativeCrawlComment = "GetAllNegativeCommentController";
     private final String getNegativePost = "GetNegativePostController";
     private final String getNegativeComment = "GetNegativeCommentController";
 
@@ -63,7 +59,13 @@ public class MainController extends HttpServlet {
         String button = request.getParameter("btnAction");
         String url = "error.html";
         System.out.println(button);
-        if (button == null) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("USERID") == null) {
+            url = loginPage;
+            session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+            session.setAttribute("RESULT", 3);
+            session.setAttribute("SEND", true);
+        } else if (button == null) {
             System.out.println("Btn bị null");
             //do nothing
         } else if (button.equals("Login")) {
@@ -71,7 +73,6 @@ public class MainController extends HttpServlet {
         } else if (button.equals("SignUp")) {
             url = signupController;
         } else if (button.equals("LogOut")) {
-            HttpSession session = request.getSession();
             session.invalidate();
             url = loginPage;
         } else if (button.equals("DeleteKeyword")) {
@@ -110,14 +111,6 @@ public class MainController extends HttpServlet {
             url = disableNotiBrowserToken;
         } else if (button.equals("DisableWebhook")) {
             url = disableWebhook;
-        } else if (button.equals("GetNewCrawlPost")) {
-            url = getNewCrawlPost;
-        } else if (button.equals("GetNegativeCrawlPost")) {
-            url = getNegativeCrawlPost;
-        } else if (button.equals("GetNewCrawlComment")) {
-            url = getNewCrawlComment;
-        } else if (button.equals("GetNegativeCrawlComment")) {
-            url = getNegativeCrawlComment;
         } else if (button.equals("getNegativePost")) {
             url = getNegativePost;
         } else if (button.equals("getNegativeComment")) {
@@ -125,7 +118,6 @@ public class MainController extends HttpServlet {
         }
         RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

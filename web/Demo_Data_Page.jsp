@@ -65,10 +65,10 @@
             </div>
 
             <div class="main-panel">
-                <a href="MainController?btnAction=GetNewCrawlPost&page=1" style="margin-right: 25px">Check new post</a>
-                <a href="MainController?btnAction=GetNegativeCrawlPost&page=1" style="margin-right: 25px">Check negative post</a>
-                <a href="MainController?btnAction=GetNewCrawlComment&page=1" style="margin-right: 25px">Check new comment</a>
-                <a href="MainController?btnAction=GetNegativeCrawlComment&page=1">Check negative comment</a>
+                <a href="DemoMainController?btnAction=GetNewCrawlPost&page=1" style="margin-right: 25px">Check new post</a>
+                <a href="DemoMainController?btnAction=GetNegativeCrawlPost&page=1" style="margin-right: 25px">Check negative post</a>
+                <a href="DemoMainController?btnAction=GetNewCrawlComment&page=1" style="margin-right: 25px">Check new comment</a>
+                <a href="DemoMainController?btnAction=GetNegativeCrawlComment&page=1">Check negative comment</a>
                 <div class="content">
                     <div class="col-md-12">
                         <div class="col-md-3">Total: <% if (session.getAttribute("totalPost") != null) {%><%= (int) session.getAttribute("totalPost")%><% } %></div>

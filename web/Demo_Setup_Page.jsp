@@ -71,8 +71,8 @@
                                     Start crawl server: 
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="http://127.0.0.1:8000/about/?csrfmiddlewaretoken=lhuQpebL5prrlNySD9OhsGY51dOnB2pT20cSxEAvvR7QR54blX1vFsieAzzLNMLk&lang=eng"><button class="btn btn-success">Start Eng</button></a>
-                                    <a href="http://127.0.0.1:8000/about/?csrfmiddlewaretoken=lhuQpebL5prrlNySD9OhsGY51dOnB2pT20cSxEAvvR7QR54blX1vFsieAzzLNMLk&lang=vie"><button class="btn btn-success">Start vie</button></a>
+                                    <a href="StartEngCrawl"><button class="btn btn-success">Start Eng</button></a>
+                                    <a href="StartVNCrawl"><button class="btn btn-success">Start vie</button></a>
                                 </div>
                             </div>
                             <div class="col-md-12 margin-top">

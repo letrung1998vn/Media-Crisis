@@ -37,7 +37,7 @@ public class stopCheckController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession session = request.getSession();
-           String url = "http://localhost:8181/checkMeaning/Stopcheck";
+            String url = "http://localhost:8181/checkMeaning/Stopcheck";
             APIConnection ac = new APIConnection(url, "GET");
             ac.connectWithoutParam();
             String nextPage = "Demo_Setup_Page.jsp";

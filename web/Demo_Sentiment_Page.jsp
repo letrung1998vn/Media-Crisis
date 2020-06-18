@@ -1,5 +1,3 @@
-<%@page import="MediaCrisis.Model.Post"%>
-<%@page import="java.util.List"%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -54,13 +52,13 @@
                                 <p>Demo setting</p>
                             </a>
                         </li>
-                        <li class="active">
+                        <li class="">
                             <a href="Demo_Data_Page.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Check data</p>
                             </a>
                         </li>
-                        <li class="">
+                        <li class="active">
                             <a href="Demo_Sentiment_Page.jsp">
                                 <i class="pe-7s-graph"></i>
                                 <p>Demo Sentiment</p>
@@ -71,66 +69,37 @@
             </div>
 
             <div class="main-panel">
-                <a href="DemoMainController?btnAction=GetNewCrawlPost&page=1" style="margin-right: 25px">Check new post</a>
-                <a href="DemoMainController?btnAction=GetNegativeCrawlPost&page=1" style="margin-right: 25px">Check negative post</a>
-                <a href="DemoMainController?btnAction=GetNewCrawlComment&page=1" style="margin-right: 25px">Check new comment</a>
-                <a href="DemoMainController?btnAction=GetNegativeCrawlComment&page=1">Check negative comment</a>
                 <div class="content">
-                    <div class="col-md-12">
-                        <div class="col-md-3">Total: <% if (session.getAttribute("totalPost") != null) {%><%= (int) session.getAttribute("totalPost")%><% } %></div>
-                        <div class="col-md-3">
-                            <% if (session.getAttribute("THISPAGE") != null) { %>
-                            <% if (((int) session.getAttribute("THISPAGE") != 0)) {%>
-                            <% if (((int) session.getAttribute("THISPAGE") > 1)) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
-                                        <% }%>
-                            <span style="padding-left: 25px; padding-right: 25px">
-                                Page <%= session.getAttribute("THISPAGE")%>/<%= session.getAttribute("MAXPAGE")%>
-                            </span>
-                            <% if (((int) session.getAttribute("THISPAGE")) != (int) (session.getAttribute("MAXPAGE"))) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
-
-                            <% }
-                                    }
-                                }%>
-                        </div>
-                    </div>
                     <div class="card margin-top">
-                        <table id="myTable" class="table table-hover table-striped">
-                            <thead>
-                            <th>NO</th>
-                            <th>Post Content</th>
-                            <th>Likes</th>
-                            <th>Comments</th>
-                            <th>Shares</th>
-                            <th>Post time</th>
-                            <th>Crawl time</th>
-                            </thead>
-                            <tbody>
-                                <% List<Post> list = (List) session.getAttribute("POSTS");
-                                    if (list != null) {
-                                %>
-                                <% for (int i = 0; i < list.size(); i++) {%>
-                                <% Post postDTO = list.get(i);%>
-
-                                <tr>
-                                    <td class="keywordsNo"><%= i + 1%></td>
-                                    <td><%= postDTO.getContent()%></td>
-                                    <td><%= postDTO.getLike()%></td>
-                                    <td><%= postDTO.getComment()%></td>
-                                    <td><%= postDTO.getShare()%></td>
-                                    <td><%= postDTO.getUploadDate()%></td>
-                                    <td><%= postDTO.getCrawlDate()%></td>
-                                </tr>
-                                <% } %>
-                                <% }%>
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-md-12 margin-top">
+                                <div class="col-md-3">
+                                    Demo English Sentiment 
+                                </div>
+                                <div class="col-md-6">
+                                    <form class="login100-form validate-form-login" action="EngSentimentController" method="post">
+                                        <input type="text" name="txtText">
+                                        <button  type="submit" class="btn btn-success">Sentiment Analyze</button>
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-12 margin-top">
+                                <div class="col-md-3">
+                                    Demo Vietnamese Sentiment 
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="VieSentimentController">
+                                        <input type="text" name="txtText">
+                                        <button  type="submit"class="btn btn-success">Sentiment Analyze</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
 
     </body>
 

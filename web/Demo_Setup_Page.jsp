@@ -58,6 +58,12 @@
                                 <p>Check data</p>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="Demo_Sentiment_Page.jsp">
+                                <i class="pe-7s-graph"></i>
+                                <p>Demo Sentiment</p>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -72,7 +78,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <a href="StartEngCrawl"><button class="btn btn-success">Start Eng</button></a>
-                                    <a href="StartVNCrawl"><button class="btn btn-success">Start vie</button></a>
+                                    <a href="StartVNCrawl"><button class="btn btn-success">Start Vie</button></a>
                                 </div>
                             </div>
                             <div class="col-md-12 margin-top">

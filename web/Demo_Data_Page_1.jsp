@@ -61,6 +61,12 @@
                                 <p>Check data</p>
                             </a>
                         </li>
+                        <li class="">
+                            <a href="Demo_Sentiment_Page.jsp">
+                                <i class="pe-7s-graph"></i>
+                                <p>Demo Sentiment</p>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

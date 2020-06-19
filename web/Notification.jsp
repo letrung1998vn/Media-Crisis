@@ -49,6 +49,7 @@
                 session.setAttribute("SEND", true);
                 RequestDispatcher rd = request.getRequestDispatcher(url);
                 rd.forward(request, response);
+            }
         %>
         <div class="wrapper">
             <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">

@@ -71,7 +71,7 @@
                                 <i class="zmdi zmdi-eye"></i>
                             </span>
                             <input class="input100" type="password" name="txtPasswordConf">
-                            <span class="focus-input100" data-placeholder="Password"></span>
+                            <span class="focus-input100" data-placeholder="Confirm"></span>
                         </div>
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">

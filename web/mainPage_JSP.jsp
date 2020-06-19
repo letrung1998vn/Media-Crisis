@@ -40,6 +40,7 @@
                 session.setAttribute("SEND", true);
                 RequestDispatcher rd = request.getRequestDispatcher(url);
                 rd.forward(request, response);
+            }
         %>
 
         <div class="wrapper">

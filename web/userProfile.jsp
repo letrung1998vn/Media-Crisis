@@ -33,14 +33,15 @@
     </head>
     <body>
         <%
-                    String url = "";
-                    if (session.getAttribute("USERID") == null) {
-                        url = "login_JSP.jsp";
-                        session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
-                        session.setAttribute("RESULT", 3);
-                        session.setAttribute("SEND", true);
-                        RequestDispatcher rd = request.getRequestDispatcher(url);
-                        rd.forward(request, response);
+            String url = "";
+            if (session.getAttribute("USERID") == null) {
+                url = "login_JSP.jsp";
+                session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+                session.setAttribute("RESULT", 3);
+                session.setAttribute("SEND", true);
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+            }
         %>
         <div class="wrapper">
             <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
@@ -224,19 +225,10 @@
 </html>
 
 <script>
-//    function showPassword() {
-//        var x = document.getElementById("inputPassword");
-//        if (x.type === "password") {
-//            x.type = "text";
-//        } else {
-//            x.type = "password";
-//  }
-//    }
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-        if (<%=se
-            tribute("SEND")%>) {
+        if (<%=session.getAttribute("SEND")%>) {
             $.notify({
                 icon: "pe-7s-bell",
                 message: '<%=session.getAttribute("CREATE_MESSAGE")%>'

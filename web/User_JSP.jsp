@@ -163,7 +163,7 @@
                                             <table id="myTable" class="table table-hover table-striped">
                                                 <thead>
                                                 <th>NO</th>
-                                                <th>Userename</th>
+                                                <th>Username</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Role</th>
@@ -173,7 +173,7 @@
                                                     <% List<User> users = (List<User>) session.getAttribute("LISTUSER");
                                                         if (users != null) {
                                                             for (int i = 0; i < users.size(); i++) {
-
+                                                                if (!users.get(i).getUsername().equals(session.getAttribute("USERID").toString())) {
                                                     %>
                                                     <tr>
                                                         <td><%= (((int) session.getAttribute("USERADMINTHISPAGE")) - 1) * 10 + (i + 1)%></td>
@@ -201,6 +201,7 @@
                                                                 %></a></td>
                                                     </tr>
                                                     <% }
+                                                            }
                                                         }%>
 
                                                 </tbody>

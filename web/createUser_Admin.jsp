@@ -36,7 +36,17 @@
         <!--===============================================================================================-->
     </head>
     <body>
-
+        <%
+                    String url = "";
+                    if (session.getAttribute("USERID") == null) {
+                        url = "login_JSP.jsp";
+                        session.setAttribute("CREATE_MESSAGE", "Your session has been time out");
+                        session.setAttribute("RESULT", 3);
+                        session.setAttribute("SEND", true);
+                        RequestDispatcher rd = request.getRequestDispatcher(url);
+                        rd.forward(request, response);
+                    }
+        %>
         <div class="limiter">
             <div class="container-login100">
                 <div class="wrap-login100">
@@ -81,7 +91,7 @@
                                 </button>
                             </div>
                         </div>
-                            
+
                     </form>
                 </div>
             </div>

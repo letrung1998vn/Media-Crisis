@@ -41,6 +41,7 @@
                 session.setAttribute("SEND", true);
                 RequestDispatcher rd = request.getRequestDispatcher(url);
                 rd.forward(request, response);
+            }
         %>
         <div class="wrapper">
             <div class="sidebar" data-color="purple" data-image="assets/img/sidebar-5.jpg">
@@ -220,6 +221,12 @@
 </html>
 
 <script type="text/javascript">
+                                function activateUpdateWindow() {
+                                    var updateWindow = document.getElementById("update-window");
+                                    var activateWindow = document.getElementById("activate-window");
+                                    activateWindow.classList.add("hidden");
+                                    updateWindow.classList.remove("hidden");
+                                }
                                 $(document).ready(function () {
                                     if (<%=session.getAttribute("SEND")%>) {
                                         $.notify({
@@ -234,10 +241,10 @@
                                                 align: 'left'
                                             }
                                         });
-                                    }
     <% session.removeAttribute("SEND"); %>
     <% session.removeAttribute("CREATE_MESSAGE"); %>
     <% session.removeAttribute("RESULT");%>
+                                    }
                                 });
 </script>
 <script src="js/main.js"></script>

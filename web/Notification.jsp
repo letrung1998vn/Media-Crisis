@@ -117,12 +117,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="">
+                                    <a href="userProfile.jsp">
                                         <p>Account</p>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                   <a href="MainController?btnAction=LogOut">
                                         <p>Log out</p>
                                     </a>
                                 </li>

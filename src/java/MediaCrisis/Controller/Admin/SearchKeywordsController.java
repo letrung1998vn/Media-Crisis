@@ -77,43 +77,43 @@ public class SearchKeywordsController extends HttpServlet {
 
             //Call API Connection get all keyword
             try {
-            URL urlForGetRequest = new URL(urlGetAllKeyword);
-            String readLine = null;
-            
-            HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-            conection.setRequestMethod("POST");
-            conection.setDoOutput(true);
-            Map<String, String> arguments = new HashMap<>();
-            arguments.put("page", page);
-            arguments.put("username", userId);
-            arguments.put("keyword", search);
-            StringJoiner sj = new StringJoiner("&");
-            for (Map.Entry<String, String> entry : arguments.entrySet()) {
-                sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                        + URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
-            try (OutputStream os = conection.getOutputStream()) {
-                os.write(out1);
-            }
-            int responseCode = conection.getResponseCode();
-            StringBuffer rp = new StringBuffer();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(conection.getInputStream()));
-                while ((readLine = in.readLine()) != null) {
-                    rp.append(readLine);
+                URL urlForGetRequest = new URL(urlGetAllKeyword);
+                String readLine = null;
+
+                HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+                conection.setRequestMethod("POST");
+                conection.setDoOutput(true);
+                Map<String, String> arguments = new HashMap<>();
+                arguments.put("page", page);
+                arguments.put("username", userId);
+                arguments.put("keyword", search);
+                StringJoiner sj = new StringJoiner("&");
+                for (Map.Entry<String, String> entry : arguments.entrySet()) {
+                    sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                            + URLEncoder.encode(entry.getValue(), "UTF-8"));
                 }
-                in.close();
-                System.out.println("JSON String Result " + rp.toString());
-                jsonString = rp.toString();
-            } else {
-                System.out.println("Loi api roi");
-                nextPage = error;
+                byte[] out1 = sj.toString().getBytes(StandardCharsets.UTF_8);
+                try (OutputStream os = conection.getOutputStream()) {
+                    os.write(out1);
+                }
+                int responseCode = conection.getResponseCode();
+                StringBuffer rp = new StringBuffer();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(conection.getInputStream()));
+                    while ((readLine = in.readLine()) != null) {
+                        rp.append(readLine);
+                    }
+                    in.close();
+                    System.out.println("JSON String Result " + rp.toString());
+                    jsonString = rp.toString();
+                } else {
+                    System.out.println("Loi api roi");
+                    nextPage = error;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
             //Parse JSONOBJ Keyword to Keyword class
             try {
@@ -125,14 +125,17 @@ public class SearchKeywordsController extends HttpServlet {
                 jsonString = jsonString.replace("},{", "}&nbsp;{");
                 String[] keywords = jsonString.split("&nbsp;");
                 for (int i = 0; i < keywords.length; i++) {
-                    JSONObject obj = new JSONObject(keywords[i]);
-                    JSONObject obj1 = new JSONObject(obj.get("user").toString());
-                    Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
-                            obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"), obj.getDouble("percent_of_crisis"));
-                    listKeyword.add(keyWord);
+                    if (!keywords[i].isEmpty()) {
+                        JSONObject obj = new JSONObject(keywords[i]);
+                        JSONObject obj1 = new JSONObject(obj.get("user").toString());
+                        Keyword keyWord = new Keyword(obj.getInt("id"), StringEscapeUtils.escapeHtml4(obj.get("keyword").toString()),
+                                obj1.get("userName").toString(), obj.getBoolean("available"), obj.getInt("version"), obj.getDouble("percent_of_crisis"));
+                        listKeyword.add(keyWord);
+                    }
                 }
             } catch (JSONException e) {
                 //Add logger later
+                e.printStackTrace();
                 System.out.println("Ko parse duoc json obj");
             }
 
@@ -144,7 +147,9 @@ public class SearchKeywordsController extends HttpServlet {
             jsonString = jsonString.substring(1, jsonString.length() - 1);
             usersList = jsonString.split(",");
             for (int i = 0; i < usersList.length; i++) {
-                usersList[i] = usersList[i].substring(1, usersList[i].length() - 1);
+                if (!usersList[i].isEmpty()) {
+                    usersList[i] = usersList[i].substring(1, usersList[i].length() - 1);
+                }
             }
             session.setAttribute("SEARCHINGKEYWORD", search);
             session.setAttribute("SEARCHINGUSERNAMEOFKEYWORD", userId);
@@ -157,6 +162,7 @@ public class SearchKeywordsController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher(nextPage);
             rd.forward(request, response);
         } catch (Exception e) {
+            e.printStackTrace();
             HttpSession session = request.getSession();
             e.printStackTrace();
             session.setAttribute("CREATE_MESSAGE", "Unexpected error, please try login again!");

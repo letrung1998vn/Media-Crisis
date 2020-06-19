@@ -82,13 +82,13 @@
                             <% if (session.getAttribute("THISPAGE") != null) { %>
                             <% if (((int) session.getAttribute("THISPAGE") != 0)) {%>
                             <% if (((int) session.getAttribute("THISPAGE") > 1)) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
+                            <a class="" href="DemoMainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) - 1%>"><button><i class="pe-7s-left-arrow" style="width: 20px; height: 20px"></i></button></a>
                                         <% }%>
                             <span style="padding-left: 25px; padding-right: 25px">
                                 Page <%= session.getAttribute("THISPAGE")%>/<%= session.getAttribute("MAXPAGE")%>
                             </span>
                             <% if (((int) session.getAttribute("THISPAGE")) != (int) (session.getAttribute("MAXPAGE"))) {%>
-                            <a class="" href="MainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
+                            <a class="" href="DemoMainController?btnAction=GetNewCrawlPost&page=<%= ((int) session.getAttribute("THISPAGE")) + 1%>"><button><i class="pe-7s-right-arrow" style="width: 20px; height: 20px"></i></button></a>
 
                             <% }
                                     }

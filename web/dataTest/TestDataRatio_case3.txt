@@ -6,8 +6,6 @@ delete from Negative_Ratio
 delete from Notification_Content
 delete from [Notification]
 delete from Crisis
-delete from Keyword
-delete from Keyword_Crawler
 insert into Keyword_Crawler(keyword) values(N'Coca cola Việt Nam')
 INSERT INTO Negative_Ratio(keyword, ratio, type, update_date) values(N'Coca cola Việt Nam',0.29,'post','2020-06-13 11:51:42.517')
 INSERT INTO Negative_Ratio(keyword, ratio, type, update_date) values(N'Coca cola Việt Nam',0.39,'comment','2020-06-13 11:51:43.777')
